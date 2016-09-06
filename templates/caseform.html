@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<form action="/cases/{{ _id }}" method="post">
+    <label>Título</label>
+    <input class="TextInput" name="title" value="{{ case['title'] }}">
+    <label>Exposición</label>
+    <textarea class="TextArea" name="overview">{{ case['overview'] }}</textarea>
+    <label>Fuente del requerimiento</label>
+    <select name='requester'>
+        <option value="0" {% if case['requester']|int() == 0 %}selected{% endif %}>Interno</option>
+        <option value="1" {% if case['requester']|int() == 1 %}selected{% endif %}>Externo</option>
+    </select>
+    <button>Enviar</button>
+</form>
+
+{% endblock %}

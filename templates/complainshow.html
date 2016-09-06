@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ complain['overview'] }}</h2>
+
+<div class="MenuItem"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
+
+<p>
+Denuncia: {{ complain['ref'] }}<br/>
+Fecha: {{ complain['date'] }}<br/>
+Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
+</p>
+
+<p>
+Oficina: {{ office['name'] }}<br/>
+Oficial de información: {{ office['officer'] }}<br/>
+Correo: {{ office['email'] }}<br/>
+</p>
+
+<p>
+Detalle:
+</p>
+
+{{ complain['detail'] | safe }}
+
+<p>
+Estado: {{ complain['status'] }}<br/>
+Resultado: {{ complain['result'] }}
+</p>
+
+<p>
+Comentarios:<br/>
+{{ complain['comment'] }}
+</p>
+
+<p>Actualizaciones:</p>
+<ul>
+    {% for update in updates %}
+        <li>{{ update['date'] }}: {{ update['detail'] }}</li>
+    {% endfor %}
+    <li>
+        <form action='/updates/new/' method="post">
+            <input type="hidden" name="source" value="complain">
+            <input type="hidden" name="source_id" value="{{ complain['_id'] }}">
+            <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
+            <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
+            <button>Actualizar</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}

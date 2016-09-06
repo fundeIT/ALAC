@@ -1,0 +1,178 @@
+body {
+    font-family: 'Tahoma', sans;
+    font-size: 14px;
+    margin: 0px;
+    padding-top: 0px;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+.Header {
+    background-color: #008CBA;
+    color: white;
+    margin: 0;
+    margin-top: 0px;
+    padding: 10px 10px 0px 10px;
+    position: fixed;
+    height: 100px;
+    width: 100%;
+    top: 0px;
+}
+
+.Header h1 {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.Main {
+    margin: 20px;
+    padding-bottom: 40px;
+    padding-top: 120px;
+}
+
+.Footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:40px;
+    width:100%;
+    color: white;
+    background-color: #008CBA;
+    background-color: #008CBA;
+}
+
+label, input, textarea, select {
+    display: block;
+    font-size: 12px;
+    font-family: 'Tahoma', sans;
+}
+
+.TextInput {
+    width: 440px;
+}
+
+.TextArea {
+    width: 450px;
+    height: 240px;
+}
+
+button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
+button:hover {
+   background-color: #00AFDE;
+}
+
+.Inline {
+    display: inline;
+    vertical-align: top;
+}
+
+.MenuBar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #008CBA;
+}
+
+.MenuItem {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
+.MenuItem a {
+    text-decoration: none;
+    color: white;
+}
+
+.MenuItem:hover {
+   background-color: #00AFDE;
+}
+
+.ListItem {
+    line-height: 160%;
+    list-style-type: none;
+}
+
+.List {
+    list-style-type: none;
+    padding: 0;
+}
+
+.ListItem a {
+    text-decoration: none;
+    color: black;
+}
+
+.ListItem:last-child {
+    border: none;
+}
+
+.ListItem a:hover {
+   background-color: #00AFDE;
+   color: white;
+}
+
+.ListItem:nth-child(odd) {
+    background-color: #E0EEEE;
+}
+
+ul.tab {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    font-size: 12px;
+}
+
+ul.tab li {
+    float: left;
+    margin-right: 5px;
+    background-color: #008CBA;
+}
+
+ul.tab li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 5px 5px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+ul.tab li a:hover {
+   background-color: #00AFDE;
+}
+
+ul.tab li a:focus, .active {
+   background-color: #00AFDE;
+}
+
+.tabcontent {
+    display: none;
+    border-top: none;
+    padding-top: 5px;
+}
+
+.Center {
+    text-align: center;
+}
+
+

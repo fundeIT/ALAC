@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ req['overview'] }}</h2>
+
+<div class="MenuItem"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
+
+<p>
+Petició: {{ req['ref'] }}<br/>
+Fecha: {{ req['date'] }}<br/>
+Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
+</p>
+
+<p>
+Oficina: {{ office['name'] }}<br/>
+Oficial de información: {{ office['officer'] }}<br/>
+Correo: {{ office['email'] }}<br/>
+</p>
+
+<p><strong>Detalle:</strong></p>
+
+{{ req['detail'] | safe }}
+
+<p>
+Estado: {{ req['status'] }}<br/>
+Resultado: {{ req['result'] }}
+</p>
+
+<p>
+Comentarios:<br/>
+{{ req['comment'] }}
+</p>
+
+<p><strong>Actualizaciones:</strong></p>
+<form action='/updates/new/' method="post">
+    <input type="hidden" name="source" value="request">
+    <input type="hidden" name="source_id" value="{{ req['_id'] }}">
+    <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
+    <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
+    <button>Actualizar</button>
+</form>
+<ul class="List">
+    {% for update in updates %}
+        <li class="ListItem">{{ update['date'] }}: {{ update['detail'] }}</li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="MenuItem"><a href="/cases/new/">Nuevo...</a></div>
+<ul class="List">
+{% for case in cases %}
+    <li class="ListItem"><a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

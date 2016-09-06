@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ALAC</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div class="Header">
+            <h1>Centro de Asesoría Legal Anticorrupción (ALAC)</h1>
+            <ul class='MenuBar'>
+                <li class="MenuItem"><a href="/cases">Casos</a></li>
+                <li class="MenuItem"><a href="/requests">Peticiones</a></li>
+                <li class="MenuItem"><a href="/complains">Denuncias</a></li>
+                <li class="MenuItem"><a href="/offices">Oficinas</a></li>
+            </ul>
+        </div>
+        <div class="Main">
+            {% block main %}{% endblock %}
+        </div>
+        <div class="Footer">
+        <div class="Center"><small>
+        (2016) Fundación Nacional para el Desarrollo (FUNDE)<br/>
+        San Salvador, El Salvador, C.A.
+        </small></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ office['name'] }}<br/></h2>
+
+<div class="MenuItem"><a href='/offices/{{ office['_id'] }}/edit'>Editar</a></div>
+
+<p>
+Siglas: {{ office['acronym'] }}<br/>
+Oficial: {{ office['officer'] }}<br/>
+Correo: {{ office['email'] }}<br/>
+Teléfono: {{ office['phone'] }}<br/>
+</p>
+
+
+{% endblock %}

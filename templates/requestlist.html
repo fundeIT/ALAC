@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="MenuItem"><a href="/requests/new/">Nueva...</a></div>
+
+<h3>Borradores</h3>
+
+<ul class="List">
+{% for request in drafts %}
+    <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+{% endfor %}
+</ul>
+
+<h3>En trámite</h3>
+
+<ul class="List">
+{% for request in running %}
+    <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+{% endfor %}
+</ul>
+
+<h3>Cerradas</h3>
+
+<ul class="List">
+{% for request in done %}
+    <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

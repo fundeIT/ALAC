@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="MenuItem"><a href="/complains/new/">Nueva...</a></div>
+<ul class="List">
+{% for complain in complains %}
+    <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}
