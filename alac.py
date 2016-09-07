@@ -179,7 +179,9 @@ def officeDetail(_id):
         Offices().update(_id, office)
         return redirect('/offices/%s' % _id)
     else:
-        return render_template('officeshow.html', office = Offices().get(_id))
+        requests = Requests().list(office_id=_id)  
+        complains = Complains().list(office_id=_id)
+        return render_template('officeshow.html', requests=requests, complains=complains, office = Offices().get(_id))
 
 @app.route('/offices/<string:_id>/edit')
 def officeEdit(_id):
