@@ -6,13 +6,13 @@
 <div class="MenuItem"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
 
 <p>
-Petició: {{ req['ref'] }}<br/>
+Petición: {{ req['ref'] }}<br/>
 Fecha: {{ req['date'] }}<br/>
 Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
 </p>
 
 <p>
-Oficina: {{ office['name'] }}<br/>
+Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
 Oficial de información: {{ office['officer'] }}<br/>
 Correo: {{ office['email'] }}<br/>
 </p>

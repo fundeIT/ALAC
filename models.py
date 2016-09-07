@@ -79,12 +79,14 @@ class Complains:
     }
     def new(self, req):
         return dbconn().complains.insert_one(req).inserted_id
-    def list(self, case_id=None, office_id=None):
+    def list(self, case_id=None, office_id=None, status=None):
         fields = {'case_id': 1, 'office_id': 1, 'ref': 1, 'date': 1, 'overview': 1}
         if case_id != None:
             return dbconn().complains.find({'case_id': case_id}, fields).sort('ref')
         elif office_id != None:
             return dbconn().complains.find({'office_id': office_id}, fields).sort('ref')
+        elif status != None:
+            return dbconn().complains.find({'status': status}, fields).sort('ref')
         else:
             return dbconn().complains.find({}, fields).sort('ref')
     def get(self, _id):

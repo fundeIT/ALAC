@@ -145,8 +145,16 @@ def updateNew():
 
 @app.route('/complains')
 def complains():
-    return render_template('complainlist.html', complains = Complains().list())
+    complains = Complains()
+    drafts = complains.list(status='0')
+    running = complains.list(status='1')
+    done = complains.list(status='2')
+    return render_template('complainlist.html', drafts=drafts, running=running, done=done)
 
+    drafts = r.list(status='0')
+    running = r.list(status='1')
+    done = r.list(status='2')
+    return render_template('requestlist.html', drafts=drafts, running=running, done=done)
 @app.route('/complains/new/', methods=['GET', 'POST'])
 def complainNew():
     if request.method == 'POST':
