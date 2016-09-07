@@ -1,4 +1,5 @@
 import pymongo
+import hashlib
 from bson.objectid import ObjectId
 
 def dbconn():
@@ -100,4 +101,45 @@ class Updates:
     def list(self, source, source_id):
         return dbconn().updates.find({'source': source, 'source_id': source_id}).sort('date')
 
-
+class Users:
+    keys = ['name', 'email', 'kind', 'password']
+    kinds = {
+        'QRY': 'Invitado', 
+        'USR': 'Editor', 
+        'MNG': 'Revisor', 
+        'OPR': 'Operador'
+    }
+    def encrypt(password):
+        m.hashlib.md5()
+        m.update(user['password'].encode('utf-8'))
+        return m.diggest()
+    def new(self, user):
+        user['password'] = encrypt(user['password']) 
+        return dbconn().users.insert_one(user).inserted_id
+    def get(self, _id):
+        return dbconn().users.find_one({'_id': ObjectId(_id)})
+    def list(self):
+        return dbconn().users.find({}, {'name': 1, 'email': 1, 'kind': 1}).sort('name')
+    def update(self, _id, userProfile):
+        dbconn().users.update({'_id': ObjectId(_id)}, {'$set': userProfile})
+    def checkPassword(self, _id, password):
+        user = self.get(_id)
+        if user['password'] == encrypt(password):
+            return True
+        else:
+            return False
+    def changePassword(self, _id, oldPassword, newPassword):
+        if self.checkPassword(_id, oldPassword):
+            userPass = {'password': encrypt(newPassword)} 
+            dbconn().users.update({'_id': ObjectId(_id)}, {'$set': userPass})
+            return True
+        else:
+            return False
+    def login(self, email, password):
+        user = dbconn().users.find_one({'email': email})
+        if user != None:
+            if self.checkPassword(user['_id'], password):
+                return user
+            else:
+                return None
+        return None
