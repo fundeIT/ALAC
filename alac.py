@@ -1,12 +1,10 @@
 from flask import Flask, request, render_template, redirect
-import pymongo
-from bson.objectid import ObjectId
 from markdown import markdown
-from models import Cases
+from models import *
 
 app = Flask(__name__)
 
-# Definición de los controladores
+# Controllers
 
 @app.route('/')
 def index():

@@ -1,3 +1,6 @@
+import pymongo
+from bson.objectid import ObjectId
+
 def dbconn():
     client = pymongo.MongoClient()
     db = client.alac
