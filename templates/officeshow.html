@@ -12,6 +12,10 @@ Correo: {{ office['email'] }}<br/>
 Teléfono: {{ office['phone'] }}<br/>
 </p>
 
+<p><strong>Notas:</strong></p>
+
+{{ office['notes'] | safe }}
+
 <ul class="tab">
     <li><a href="#" class="tablinks" onclick="openTab(event, 'requests')">Peticiones</a></li>
     <li><a href="#" class="tablinks" onclick="openTab(event, 'complains')">Denuncias</a></li>

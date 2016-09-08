@@ -17,6 +17,11 @@ Oficial de información: {{ office['officer'] }}<br/>
 Correo: {{ office['email'] }}<br/>
 </p>
 
+<p>
+Inicio del trámite: {{ req['start'] }}<br/>
+Finalización del trámite: {{ req['finish'] }}
+</p>
+
 <p><strong>Detalle:</strong></p>
 
 {{ req['detail'] | safe }}
@@ -28,7 +33,7 @@ Resultado: {{ req['result'] }}
 
 <p>
 Comentarios:<br/>
-{{ req['comment'] }}
+{{ req['comment'] | safe }}
 </p>
 
 <p><strong>Actualizaciones:</strong></p>

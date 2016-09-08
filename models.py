@@ -24,18 +24,21 @@ class Cases:
         dbconn().cases.update({'_id': ObjectId(_id)}, {'$set': case})
 
 class Offices:
-    keys = ['name', 'acronym', 'officer', 'email', 'phone']
+    keys = ['name', 'acronym', 'officer', 'email', 'phone', 'notes']
     def new(self, office):
         return dbconn().offices.insert_one(office).inserted_id
     def list(self):
         return dbconn().offices.find({}, {'name': 1, 'acronym': 1}).sort('acronym')
     def get(self, _id):
-        return dbconn().offices.find_one({'_id': ObjectId(_id)})
+        office = dbconn().offices.find_one({'_id': ObjectId(_id)})
+        if not 'notes' in office:
+            office['notes'] = ''
+        return office
     def update(self, _id, office):
         dbconn().offices.update({'_id': ObjectId(_id)}, {'$set': office})
 
 class Requests:
-    keys = ['case_id', 'office_id', 'ref', 'date', 'overview', 'detail', 'status', 'result', 'comment']
+    keys = ['case_id', 'office_id', 'ref', 'date', 'overview', 'detail', 'start', 'finish', 'status', 'result', 'comment']
     status = ['Borrador', 'En trámite', 'Cerrada']
     results = {
         'ND': 'No definido', 
@@ -62,7 +65,12 @@ class Requests:
         else:
             return dbconn().requests.find({}, fields).sort('ref')
     def get(self, _id):
-        return dbconn().requests.find_one({'_id': ObjectId(_id)})
+        request = dbconn().requests.find_one({'_id': ObjectId(_id)})
+        if not 'start' in request:
+            request['start'] = ''
+        if not 'finish' in request:
+            request['finish'] = ''
+        return request
     def update(self, _id, req):
         dbconn().requests.update({'_id': ObjectId(_id)}, {'$set': req})
 

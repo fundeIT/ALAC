@@ -1,6 +1,6 @@
 body {
-    font-family: 'Tahoma', sans;
-    font-size: 14px;
+    font-family: 'Ubuntu', 'Tahoma', sans;
+    font-size: 12px;
     margin: 0px;
     padding-top: 0px;
 }
@@ -16,7 +16,7 @@ h1, h2, h3 {
     margin-top: 0px;
     padding: 10px 10px 0px 10px;
     position: fixed;
-    height: 100px;
+    height: 95px;
     width: 100%;
     top: 0px;
 }
@@ -27,16 +27,16 @@ h1, h2, h3 {
 }
 
 .Main {
-    margin: 20px;
-    padding-bottom: 40px;
-    padding-top: 120px;
+    margin: 10px;
+    padding-top: 100px;
+    padding-bottom: 30px;
 }
 
 .Footer {
     position:fixed;
     left:0px;
     bottom:0px;
-    height:40px;
+    height:30px;
     width:100%;
     color: white;
     background-color: #008CBA;
@@ -46,7 +46,7 @@ h1, h2, h3 {
 label, input, textarea, select {
     display: block;
     font-size: 12px;
-    font-family: 'Tahoma', sans;
+    font-family: 'Ubuntu', 'Tahoma', sans;
 }
 
 .TextInput {
@@ -66,7 +66,6 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
 }
 
 button:hover {
@@ -93,7 +92,6 @@ button:hover {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
 }
 
 .MenuItem a {
@@ -139,7 +137,6 @@ ul.tab {
     margin: 10px 0px 10px 0;
     overflow: hidden;
     border-bottom: 1px solid #ccc;
-    font-size: 12px;
 }
 
 ul.tab li {

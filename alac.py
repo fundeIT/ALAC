@@ -78,9 +78,11 @@ def officeDetail(_id):
         Offices().update(_id, office)
         return redirect('/offices/%s' % _id)
     else:
+        office = Offices().get(_id)
+        office['notes'] = markdown(office['notes'])
         requests = Requests().list(office_id=_id)  
         complains = Complains().list(office_id=_id)
-        return render_template('officeshow.html', requests=requests, complains=complains, office = Offices().get(_id))
+        return render_template('officeshow.html', requests=requests, complains=complains, office=office)
 
 @app.route('/offices/<string:_id>/edit')
 def officeEdit(_id):
@@ -125,6 +127,7 @@ def requestDetail(_id):
         req['detail'] = markdown(req['detail'])
         req['status'] = r.status[int(req['status'])]
         req['result'] = r.results[req['result']]
+        req['comment'] = markdown(req['comment'])
         case = Cases().get(req['case_id'])
         office = Offices().get(req['office_id'])
         updates = Updates().list('request', _id)

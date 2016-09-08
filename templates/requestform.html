@@ -22,6 +22,10 @@
                 <option value="{{ office['_id'] }}" {% if office['_id']|string() == req['office_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
             {% endfor %}
         </select>
+        <label>Inicio del trámite</label>
+        <input class="TextInput" type="date" name="start" value="{{ req['start'] }}">
+        <label>Finalización del trámite</label>
+        <input class="TextInput" type="date" name="finish" value="{{ req['finish'] }}">
         <label>Estado</label>
         <select name='status'>
             {% for s in status %}
