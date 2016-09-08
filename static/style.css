@@ -30,6 +30,7 @@ h1, h2, h3 {
     margin: 10px;
     padding-top: 100px;
     padding-bottom: 30px;
+    line-height: 140%;
 }
 
 .Footer {
