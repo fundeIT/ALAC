@@ -136,7 +136,7 @@ button:hover {
 ul.tab {
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin: 10px 0px 10px 0;
     overflow: hidden;
     border-bottom: 1px solid #ccc;
     font-size: 12px;

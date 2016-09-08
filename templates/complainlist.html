@@ -3,28 +3,37 @@
 
 <div class="MenuItem"><a href="/complains/new/">Nueva...</a></div>
 
-<h3>Borradores</h3>
-
-<ul class="List">
-{% for complain in drafts %}
-    <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
-{% endfor %}
+<ul class="tab">
+    <li><a href="#" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>
+    <li><a href="#" class="tablinks" onclick="openTab(event, 'drafts')">Borradores</a></li>
+    <li><a href="#" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
 </ul>
 
-<h3>En trámite</h3>
 
-<ul class="List">
-{% for complain in running %}
-    <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
-{% endfor %}
-</ul>
+<div id="running" class="tabcontent">
+    <ul class="List">
+    {% for complain in drafts %}
+        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 
-<h3>Cerradas</h3>
+<div id="drafts" class="tabcontent">
+    <ul class="List">
+    {% for complain in running %}
+        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
 
-<ul class="List">
-{% for complain in done %}
-    <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
-{% endfor %}
-</ul>
+<div id="done" class="tabcontent">
+    <ul class="List">
+    {% for complain in done %}
+        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
 
 {% endblock %}
