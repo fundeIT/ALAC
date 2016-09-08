@@ -30,6 +30,8 @@ class Offices:
     def list(self):
         return dbconn().offices.find({}, {'name': 1, 'acronym': 1}).sort('acronym')
     def get(self, _id):
+        if _id == '':
+            return emptyDict(self.keys)
         office = dbconn().offices.find_one({'_id': ObjectId(_id)})
         if not 'notes' in office:
             office['notes'] = ''
@@ -75,7 +77,20 @@ class Requests:
         dbconn().requests.update({'_id': ObjectId(_id)}, {'$set': req})
 
 class Complains:
-    keys = ['case_id', 'office_id', 'ref', 'date', 'overview', 'detail', 'status', 'result', 'comment']
+    keys = [
+        'case_id', 
+        'office_id',    # Office that is been complained
+        'reviewer_id',  # Office that is reviewing the case
+        'ref',          
+        'date', 
+        'overview', 
+        'detail', 
+        'start',        # Starting date when formal procedure begin
+        'finish',       # Ending date when formal procedere become closed
+        'status', 
+        'result', 
+        'comment'
+    ]
     status = ['Borrador', 'En trámite', 'Cerrada']
     results = {
         'ND': 'No definido', 
@@ -83,7 +98,8 @@ class Complains:
         'RP': 'Parcial', 
         'RD': 'Desfavorable',
         'NC': 'Oficina no competente', 
-        'SR': 'Sin respuesta'
+        'SR': 'Sin respuesta',
+        'DS': 'Desistimiento'
     }
     def new(self, req):
         return dbconn().complains.insert_one(req).inserted_id
@@ -98,7 +114,11 @@ class Complains:
         else:
             return dbconn().complains.find({}, fields).sort('ref')
     def get(self, _id):
-        return dbconn().complains.find_one({'_id': ObjectId(_id)})
+        complain = dbconn().complains.find_one({'_id': ObjectId(_id)})
+        for key in ['reviewer_id', 'start', 'finish']:
+            if not key in complain:
+                complain[key] = ''
+        return complain
     def update(self, _id, req):
         dbconn().complains.update({'_id': ObjectId(_id)}, {'$set': req})
 

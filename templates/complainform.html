@@ -16,12 +16,22 @@
                 <option value="{{ case['_id'] }}" {% if case['_id']|string() == complain['case_id']|string() %}selected{% endif %}>{{ case['title'] }}</option>
             {% endfor %}
         </select>
-        <label>Oficina</label>
+        <label>Oficina denunciada</label>
         <select name="office_id">
             {% for office in offices %}
                 <option value="{{ office['_id'] }}" {% if office['_id']|string() == complain['office_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
             {% endfor %}
         </select>
+        <label>Oficina revisora</label>
+        <select name="reviewer_id">
+            {% for office in reviewers %}
+                <option value="{{ office['_id'] }}" {% if office['_id']|string() == complain['reviewer_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
+            {% endfor %}
+        </select>
+        <label>Inicio del trámite</label>
+        <input class="TextInput" type="date" name="start" value="{{ complain['start'] }}">
+        <label>Finalización del trámite</label>
+        <input class="TextInput" type="date" name="finish" value="{{ complain['finish'] }}">
         <label>Estado</label>
         <select name='status'>
             {% for s in status %}

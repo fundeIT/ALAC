@@ -191,12 +191,16 @@ def complainDetail(_id):
         complain['result'] = r.results[complain['result']]
         case = Cases().get(complain['case_id'])
         office = Offices().get(complain['office_id'])
+        reviewer = Offices().get(complain['reviewer_id'])
         updates = Updates().list('complain', _id)
-        return render_template('complainshow.html', _id=_id, complain = complain, office = office, case = case, updates=updates)
+        return render_template('complainshow.html', _id=_id, complain = complain, 
+            office = office, case=case, updates=updates, reviewer=reviewer)
 
 @app.route('/complains/<string:_id>/edit')
 def complainEdit(_id):
     r = Complains()
     complain = r.get(_id)
-    return render_template('complainform.html', _id=_id, complain = complain, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list())
+    return render_template('complainform.html', _id=_id, complain=complain, status=r.status, 
+        results = r.results, cases=Cases().list(), offices=Offices().list(),
+        reviewers=Offices().list())
 

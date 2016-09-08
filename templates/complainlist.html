@@ -12,7 +12,7 @@
 
 <div id="running" class="tabcontent">
     <ul class="List">
-    {% for complain in drafts %}
+    {% for complain in running %}
         <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
     {% endfor %}
     </ul>
@@ -20,7 +20,7 @@
 
 <div id="drafts" class="tabcontent">
     <ul class="List">
-    {% for complain in running %}
+    {% for complain in drafts %}
         <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
     {% endfor %}
     </ul>
