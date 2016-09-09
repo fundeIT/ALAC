@@ -154,6 +154,8 @@ class Users:
         return dbconn().users.insert_one(user).inserted_id
     def get(self, _id):
         return dbconn().users.find_one({'_id': ObjectId(_id)})
+    def getByName(self, name):
+        return dbconn().users.find_one({'name': name})
     def list(self):
         fields = {'name': 1, 'email': 1, 'kind': 1}
         return dbconn().users.find({}, fields).sort('name')

@@ -16,6 +16,20 @@ Download the source code:
 
     $ git clone https://github.com/fundeIT/ALAC.git
 
+Create a file named 'trust.py' with the following content:
+
+    secret_key = "CHOOSE_YOUR_SECRET_KEY"
+
+Run the utility program 'resetadmin.py' to create the admin user:
+
+    $ python resetadmin.py
+
+The new user admin is created has the following attributes:
+
+- Usarname: admin
+- Email: admin@localhost
+- Password: 1234
+
 ## Running
 
 To run the application:
