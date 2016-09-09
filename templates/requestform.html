@@ -2,14 +2,14 @@
 {% block form %}
 
     <form action="/requests/{{ _id }}" method="post">
-        <label>Referencia</label>
-        <input class="TextInput" name="ref" value="{{ req['ref'] }}">
-        <label>Fecha</label>
-        <input class="TextInput" type="date" name="date" value="{{ req['date'] }}">
         <label>Asunto</label>
         <input class="TextInput" name="overview" value="{{ req['overview'] }}">
         <label>Detalle</label>
         <textarea class="TextArea" name="detail">{{ req['detail'] }}</textarea>
+        <label>Referencia</label>
+        <input class="TextInput" name="ref" value="{{ req['ref'] }}">
+        <label>Fecha</label>
+        <input class="TextInput" type="date" name="date" value="{{ req['date'] }}">
         <label>Caso</label>
         <select name="case_id">
             {% for case in cases %}
@@ -22,6 +22,8 @@
                 <option value="{{ office['_id'] }}" {% if office['_id']|string() == req['office_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
             {% endfor %}
         </select>
+
+        {% if _id != 'new/' %}
         <label>Inicio del trámite</label>
         <input class="TextInput" type="date" name="start" value="{{ req['start'] }}">
         <label>Finalización del trámite</label>
@@ -38,6 +40,8 @@
                 <option value="{{ k }}" {% if req['result']|string() == k|string() %}selected{% endif %}>{{ results[k] }}</option>
             {% endfor %}
         </select>
+        {% endif %}
+
         <label>Comentarios</label>
         <textarea class="TextArea" name="comment">{{ req['comment'] }}</textarea>
         <button>Enviar</button>
