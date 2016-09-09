@@ -140,7 +140,7 @@ class Updates:
 class Users:
     keys = ['name', 'email', 'kind', 'password']
     kinds = {
-        'QRY': 'Invitado', 
+        'GSS': 'Invitado', 
         'USR': 'Editor', 
         'MNG': 'Revisor', 
         'OPR': 'Operador'
