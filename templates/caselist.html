@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block main %}
 
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
 <div class="MenuItem"><a href="/cases/new/">Nuevo...</a></div>
+
+{% endif %}
+
 <ul class="List">
 {% for case in cases %}
     <li class="ListItem"><a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a></li>

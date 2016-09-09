@@ -1,22 +1,39 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session
 from markdown import markdown
 from models import *
+import trust
 
 app = Flask(__name__)
+app.secret_key = trust.secret_key
 
 # Controllers
 
 @app.route('/')
 def index():
-    return render_template('index.html') 
+    if not 'user' in session:
+        session['user'] = {}
+        return redirect('/login')
+    print(session['user'])
+    return render_template('index.html', who=session['user']) 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = Users().login(email, password)
+        if user:
+            user['_id'] = str(user['_id'])
+            session['user'] = user
+            return redirect('/')
+        else:
+            message = 'Usuario no registrado o contraseña incorrecta'
+            return render_template('login.html', message=message, who=session['user'])
+    return render_template('login.html', message=None, who=session['user'])
 
 @app.route('/cases')
 def cases():
-    return render_template('caselist.html', cases = Cases().list())
+    return render_template('caselist.html', cases = Cases().list(), who=session['user'])
 
 @app.route('/cases/new/', methods=['GET', 'POST'])
 def caseNew():
@@ -30,7 +47,7 @@ def caseNew():
     else:
         case = emptyDict(Cases().keys)
         _id = 'new/'
-        return render_template('caseform.html', _id=_id, case = case)
+        return render_template('caseform.html', _id=_id, case = case, who=session['user'])
 
 @app.route('/cases/<string:_id>', methods=['GET', 'POST'])
 def caseDetail(_id):
@@ -47,17 +64,17 @@ def caseDetail(_id):
         advices = Updates().list('advise', _id)
         # for u in updates:
         #    u['detail'] = markdown(u['detail'])
-        return render_template('caseshow.html', case = case, requests = requests, complains=complains, updates=updates, advices=advices)
+        return render_template('caseshow.html', case = case, requests = requests, complains=complains, updates=updates, advices=advices, who=session['user'])
 
 @app.route('/cases/<string:_id>/edit')
 def caseEdit(_id):
     if request.method == 'GET':
         case = Cases().get(_id)
-        return render_template('caseform.html', _id = _id, case = case)
+        return render_template('caseform.html', _id = _id, case = case, who=session['user'])
 
 @app.route('/offices')
 def offices():
-    return render_template('officelist.html', offices = Offices().list())
+    return render_template('officelist.html', offices = Offices().list(), who=session['user'])
     
 @app.route('/offices/new/', methods=['GET', 'POST'])
 def officeNew():
@@ -69,7 +86,7 @@ def officeNew():
     else:
         office = emptyDict(Offices().keys)
         _id = 'new/'
-        return render_template('officeform.html', _id=_id, office=office)
+        return render_template('officeform.html', _id=_id, office=office, who=session['user'])
 
 @app.route('/offices/<string:_id>', methods=['GET', 'POST'])
 def officeDetail(_id):
@@ -82,11 +99,13 @@ def officeDetail(_id):
         office['notes'] = markdown(office['notes'])
         requests = Requests().list(office_id=_id)  
         complains = Complains().list(office_id=_id)
-        return render_template('officeshow.html', requests=requests, complains=complains, office=office)
+        updates = Updates().list('office', _id)
+        return render_template('officeshow.html', requests=requests,
+            complains=complains, office=office, updates=updates, who=session['user'])
 
 @app.route('/offices/<string:_id>/edit')
 def officeEdit(_id):
-        return render_template('officeform.html', _id = _id, office = Offices().get(_id))
+        return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=session['user'])
 
 @app.route('/requests')
 def requests():
@@ -94,7 +113,7 @@ def requests():
     drafts = r.list(status='0')
     running = r.list(status='1')
     done = r.list(status='2')
-    return render_template('requestlist.html', drafts=drafts, running=running, done=done)
+    return render_template('requestlist.html', drafts=drafts, running=running, done=done, who=session['user'])
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
@@ -113,7 +132,7 @@ def requestNew():
         if case_id != None:
             req['case_id'] = case_id
         _id = 'new/'
-        return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list())
+        return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
 
 @app.route('/requests/<string:_id>', methods=['GET', 'POST'])
 def requestDetail(_id):
@@ -131,13 +150,13 @@ def requestDetail(_id):
         case = Cases().get(req['case_id'])
         office = Offices().get(req['office_id'])
         updates = Updates().list('request', _id)
-        return render_template('requestshow.html', _id=_id, req = req, office = office, case = case, updates=updates)
+        return render_template('requestshow.html', _id=_id, req = req, office = office, case = case, updates=updates, who=session['user'])
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):
     r = Requests()
     req = r.get(_id)
-    return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list())
+    return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
 
 @app.route('/updates/new/', methods=['POST'])
 def updateNew():
@@ -152,12 +171,12 @@ def complains():
     drafts = complains.list(status='0')
     running = complains.list(status='1')
     done = complains.list(status='2')
-    return render_template('complainlist.html', drafts=drafts, running=running, done=done)
+    return render_template('complainlist.html', drafts=drafts, running=running, done=done, who=session['user'])
 
     drafts = r.list(status='0')
     running = r.list(status='1')
     done = r.list(status='2')
-    return render_template('requestlist.html', drafts=drafts, running=running, done=done)
+    return render_template('requestlist.html', drafts=drafts, running=running, done=done, who=session['user'])
 @app.route('/complains/new/', methods=['GET', 'POST'])
 def complainNew():
     if request.method == 'POST':
@@ -175,7 +194,7 @@ def complainNew():
         if case_id != None:
             complain['case_id'] = case_id
         _id = 'new/'
-        return render_template('complainform.html', _id=_id, complain = complain, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list())
+        return render_template('complainform.html', _id=_id, complain = complain, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
 
 @app.route('/complains/<string:_id>', methods=['GET', 'POST'])
 def complainDetail(_id):
@@ -194,7 +213,7 @@ def complainDetail(_id):
         reviewer = Offices().get(complain['reviewer_id'])
         updates = Updates().list('complain', _id)
         return render_template('complainshow.html', _id=_id, complain = complain, 
-            office = office, case=case, updates=updates, reviewer=reviewer)
+            office = office, case=case, updates=updates, reviewer=reviewer, who=session['user'])
 
 @app.route('/complains/<string:_id>/edit')
 def complainEdit(_id):
@@ -202,5 +221,52 @@ def complainEdit(_id):
     complain = r.get(_id)
     return render_template('complainform.html', _id=_id, complain=complain, status=r.status, 
         results = r.results, cases=Cases().list(), offices=Offices().list(),
-        reviewers=Offices().list())
+        reviewers=Offices().list(), who=session['user'])
+
+@app.route('/users')
+def users():
+    return render_template('userlist.html', users=Users().list(), who=session['user'])
+
+@app.route('/users/new/', methods=['GET', 'POST'])
+def userNew():
+    _id = 'new/'
+    u = Users()
+    if request.method == 'POST':
+        user = {key: request.form[key] for key in u.keys}
+        password1 = request.form['password1']
+        if password1 == user['password']:
+            u.new(user)
+            return redirect('/users')
+        else:
+            user['password'] = ''
+            message = 'Las contraseñas deben ser iguales. Verifique.'
+            return render_template('userform.html', _id=_id, user=user, message=message, password1='', kinds=u.kinds, who=session['user'])
+    else:
+        user = emptyDict(u.keys)
+        return render_template('userform.html', _id=_id, user=user, message='', password1='', kinds=u.kinds, who=session['user'])
+
+@app.route('/users/<string:_id>', methods=['GET', 'POST'])
+def userDetail(_id):
+    u = Users()
+    if request.method == 'POST':
+        user = {key: request.form[key] for key in u.keys}
+        if user['password'] != '':
+            password1 = request.form['password1']
+            if password1 == user['password']:
+                u.update(_id, user)
+                return redirect('/users/%s' % _id)
+            else:
+                user['password'] = ''
+                message = 'Las contraseñas deben ser iguales. Verifique.'
+                return render_template('userform.html', _id=_id, user=user, message=message, password1='', kinds=u.kinds, who=session['user'])
+        else:
+            del user['password']
+            u.update(_id, user)
+            return redirect('/users/%s' % _id)
+    else:
+        user = u.get(_id)
+        user['password'] = ''
+        return render_template('userform.html', _id=_id, user=user, message='', password1='', kinds=u.kinds, who=session['user'])
+
+
 

@@ -3,7 +3,11 @@
 
 <h2>{{ case['title'] }}</h2>
 
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
 <div class="MenuItem"><a href='/cases/{{ case['_id'] }}/edit'>Editar</a></div>
+
+{% endif %}
 
 {{ case['overview'] | safe }}
 
@@ -24,22 +28,34 @@
 </ul>
 
 <div id="updates" class="tabcontent">
-    <form action='/updates/new/' method="post">
-        <input type="hidden" name="source" value="case">
-        <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-        <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
-        <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
-        <button>Actualizar</button>
-    </form>
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <form action='/updates/new/' method="post">
+            <input type="hidden" name="source" value="case">
+            <input type="hidden" name="source_id" 
+                   value="{{ case['_id'] }}">
+            <input class="Inline" type="date" size="8" 
+                   name="date" placeholder="Fecha">
+            <textarea class="Inline" name="detail" 
+                      cols="60" rows="10" placeholder="Detalle"></textarea>
+            <button>Actualizar</button>
+        </form>
+    {% endif %}
+
     <ul class="List">
         {% for update in updates %}
-            <li class="ListItem">{{ update['date'] }}: {{ update['detail'] | safe }}</li>
+            <li class="ListItem">{{ update['date'] }}: 
+                {{ update['detail'] | safe }}</li>
         {% endfor %}
     </ul>
 </div>
 
 <div id="requests" class="tabcontent">
-    <div class="MenuItem"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+    
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <div class="MenuItem"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+    {% endif %}
+
     <ul class="List">
     {% for request in requests %}
         <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
@@ -48,7 +64,11 @@
 </div>
 
 <div id="complains" class="tabcontent">
-    <div class="MenuItem"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+    
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <div class="MenuItem"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+    {% endif %}
+
     <ul class="List">
     {% for complain in complains %}
         <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
@@ -57,13 +77,17 @@
 </div>
 
 <div id="advises" class="tabcontent">
-    <form action='/updates/new/' method="post">
-        <input type="hidden" name="source" value="advise">
-        <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-        <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
-        <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
-        <button>Actualizar</button>
-    </form>
+    
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <form action='/updates/new/' method="post">
+            <input type="hidden" name="source" value="advise">
+            <input type="hidden" name="source_id" value="{{ case['_id'] }}">
+            <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
+            <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
+            <button>Actualizar</button>
+        </form>
+    {% endif %}
+
     <ul class="List">
         {% for advice in advices %}
             <li class="ListItem">{{ advice['date'] }}: {{ advice['detail'] | safe }}</li>

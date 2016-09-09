@@ -104,6 +104,26 @@ button:hover {
    background-color: #00AFDE;
 }
 
+.MenuCaution {
+    background-color: #FF3300;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.MenuCaution a {
+    text-decoration: none;
+    color: white;
+}
+
+.MenuCaution:hover {
+   background-color: #FF5C33;
+}
+
+
 .ListItem {
     line-height: 160%;
     list-style-type: none;

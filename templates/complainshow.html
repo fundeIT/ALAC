@@ -3,7 +3,11 @@
 
 <h2>{{ complain['overview'] }}</h2>
 
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
 <div class="MenuItem"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
+
+{% endif %}
 
 <p>
 Denuncia: {{ complain['ref'] }}<br/>
@@ -34,11 +38,8 @@ Comentarios:<br/>
 </p>
 
 <p>Actualizaciones:</p>
-<ul>
-    {% for update in updates %}
-        <li>{{ update['date'] }}: {{ update['detail'] }}</li>
-    {% endfor %}
-    <li>
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <form action='/updates/new/' method="post">
             <input type="hidden" name="source" value="complain">
             <input type="hidden" name="source_id" value="{{ complain['_id'] }}">
@@ -46,7 +47,12 @@ Comentarios:<br/>
             <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
             <button>Actualizar</button>
         </form>
-    </li>
+{% endif %}
+
+<ul>
+    {% for update in updates %}
+        <li>{{ update['date'] }}: {{ update['detail'] }}</li>
+    {% endfor %}
 </ul>
 
 {% endblock %}

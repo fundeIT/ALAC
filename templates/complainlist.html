@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 {% block main %}
 
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
 <div class="MenuItem"><a href="/complains/new/">Nueva...</a></div>
+
+{% endif %}
 
 <ul class="tab">
     <li><a href="#" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>

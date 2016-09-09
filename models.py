@@ -57,7 +57,13 @@ class Requests:
     def new(self, req):
         return dbconn().requests.insert_one(req).inserted_id
     def list(self, case_id=None, office_id=None, status=None):
-        fields = {'case_id': 1, 'office_id': 1, 'ref': 1, 'date': 1, 'overview': 1}
+        fields = {
+            'case_id': 1, 
+            'office_id': 1, 
+            'ref': 1, 
+            'date': 1,
+            'overview': 1
+        }
         if case_id != None:
             return dbconn().requests.find({'case_id': case_id}, fields).sort('date', -1)
         elif office_id != None:
@@ -139,22 +145,25 @@ class Users:
         'MNG': 'Revisor', 
         'OPR': 'Operador'
     }
-    def encrypt(password):
-        m.hashlib.md5()
-        m.update(user['password'].encode('utf-8'))
-        return m.diggest()
+    def encrypt(self, password):
+        m = hashlib.md5()
+        m.update(password.encode('utf-8'))
+        return m.digest()
     def new(self, user):
-        user['password'] = encrypt(user['password']) 
+        user['password'] = self.encrypt(user['password']) 
         return dbconn().users.insert_one(user).inserted_id
     def get(self, _id):
         return dbconn().users.find_one({'_id': ObjectId(_id)})
     def list(self):
-        return dbconn().users.find({}, {'name': 1, 'email': 1, 'kind': 1}).sort('name')
-    def update(self, _id, userProfile):
-        dbconn().users.update({'_id': ObjectId(_id)}, {'$set': userProfile})
+        fields = {'name': 1, 'email': 1, 'kind': 1}
+        return dbconn().users.find({}, fields).sort('name')
+    def update(self, _id, user):
+        if 'password' in user:
+            user['password'] = self.encrypt(user['password'])
+        dbconn().users.update({'_id': ObjectId(_id)}, {'$set': user})
     def checkPassword(self, _id, password):
         user = self.get(_id)
-        if user['password'] == encrypt(password):
+        if user['password'] == self.encrypt(password):
             return True
         else:
             return False

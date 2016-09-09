@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block main %}
 
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
 <div class="MenuItem"><a href="/offices/new/">Nuevo...</a></div>
+
+{% endif %}
+
 <ul class="List">
 {% for office in offices %}
     <li class="ListItem"><a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a></li>
