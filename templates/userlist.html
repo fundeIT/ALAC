@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="MenuItem"><a href="/users/new/">Nuevo...</a></div>
+    <ul class="List">
+    {% for user in users %}
+        <li class="ListItem">
+            <a href="/users/{{ user['_id'] }}">{{ user['name'] }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block main %}
+
+{% if message != '' %}
+  <span class="MenuCaution">{{ mesage }}</span>
+{% endif %}
+
+<form action="/users/{{ _id }}" method="post">
+    <label>Nombre</label>
+    <input class="TextInput" name="name" value="{{ user['name'] }}">
+    <label>Correo</label>
+    <input class="TextInput" name="email" type="email" 
+           value="{{ user['email'] }}">
+    <label>Contraseña</label>
+    <input class="TextInput" name="password" type="password">
+    <label>Repetir contraseña</label>
+    <input class="TextInput" name="password1" type="password">
+    <label>Tipo de usuario</label>
+    <select name='kind'>
+        {% for key in kinds %}
+            <option value="{{ key }}" 
+                {% if user['kind']|string() == key|string() %}
+                    selected
+                {% endif %}>{{ kinds[key] }}</option>
+        {% endfor %}
+    </select>
+    <button>Enviar</button>
+</form>
+
+{% endblock %}
