@@ -1,5 +1,6 @@
 import pymongo
 import hashlib
+import datetime
 from bson.objectid import ObjectId
 
 def dbconn():
@@ -9,6 +10,26 @@ def dbconn():
     
 def emptyDict(keys):
     return {key: '' for key in keys}
+
+class Dates:
+    def __init__(self):
+        self.now = datetime.datetime.now()
+    def getDate(self):
+        return self.now.strftime("%Y-%m-%d")
+    def getDatePath(self):
+        return self.now.strftime("%Y/%m/")
+
+class DBconn:
+    """It is the base data connection class. All data models classes will be
+    derivated from this base class. Building this class is an in progress
+    work as part as refactoring tasks"""
+    def __init__(self, collection):
+        client = pymongo.MongoClient()
+        db = client.alac
+        self.collection = db[collection]
+    def new(self, doc):
+        _id = self.collection.insert_one(doc).inserted_id
+        return _id
 
 # Clases para la consulta y actualización de la base de datos
 
@@ -184,3 +205,14 @@ class Users:
             else:
                 return None
         return None
+
+class Documents:
+    keys = ['title', 'overview', 'tags', 'date', 'path']
+    def new(self, doc):
+        return dbconn().docs.insert_one(doc).inserted_id
+    def list(self):
+        return dbconn().docs.find().sort('title')
+    def get(self, _id):
+        return dbconn().docs.find_one({'_id': ObjectId(_id)})
+    def update(self, _id, doc):
+        dbconn().docs.update({'_id': ObjectId(_id)}, {'$set': doc})

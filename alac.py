@@ -1,10 +1,15 @@
 from flask import Flask, request, render_template, redirect, session
+from werkzeug.utils import secure_filename
 from markdown import markdown
+import os
 from models import *
 import trust
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
+app.config['UPLOAD_FOLDER'] = trust.docs_path
+
+ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx'])
 
 # Controllers
 
@@ -13,7 +18,6 @@ def index():
     if not 'user' in session:
         session['user'] = {}
         return redirect('/login')
-    print(session['user'])
     return render_template('index.html', who=session['user']) 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -171,12 +175,9 @@ def complains():
     drafts = complains.list(status='0')
     running = complains.list(status='1')
     done = complains.list(status='2')
-    return render_template('complainlist.html', drafts=drafts, running=running, done=done, who=session['user'])
+    return render_template('complainlist.html', drafts=drafts, running=running,
+        done=done, who=session['user'])
 
-    drafts = r.list(status='0')
-    running = r.list(status='1')
-    done = r.list(status='2')
-    return render_template('requestlist.html', drafts=drafts, running=running, done=done, who=session['user'])
 @app.route('/complains/new/', methods=['GET', 'POST'])
 def complainNew():
     if request.method == 'POST':
@@ -266,7 +267,20 @@ def userDetail(_id):
     else:
         user = u.get(_id)
         user['password'] = ''
-        return render_template('userform.html', _id=_id, user=user, message='', password1='', kinds=u.kinds, who=session['user'])
+        return render_template('userform.html', _id=_id, user=user, 
+            message='', password1='', kinds=u.kinds, who=session['user'])
 
-
-
+@app.route('/docs/new/', methods=['GET', 'POST'])
+def newDoc():
+    if request.method == 'POST':
+        doc = {}
+        doc['title'] = request.form['title']
+        doc['overview'] = request.form['overview']
+        doc['tags'] = request.form['tags']
+        docfile = request.files['file']
+        filename = secure_filename(docfile.filename)
+        docfile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    else:
+        _id = 'new/'
+        doc = emptyDict(Documents().keys)
+        return render_template('docform.html', _id=_id, doc=doc, who=session['user'])
