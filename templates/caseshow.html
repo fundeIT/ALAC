@@ -25,6 +25,7 @@
     <li><a href="#" class="tablinks" onclick="openTab(event, 'requests')">Peticiones</a></li>
     <li><a href="#" class="tablinks" onclick="openTab(event, 'complains')">Denuncias</a></li>
     <li><a href="#" class="tablinks" onclick="openTab(event, 'advises')">Asesoría</a></li>
+    <li><a href="#" class="tablinks" onclick="openTab(event, 'docs')">Documentos</a></li>
 </ul>
 
 <div id="updates" class="tabcontent">
@@ -91,6 +92,28 @@
     <ul class="List">
         {% for advice in advices %}
             <li class="ListItem">{{ advice['date'] }}: {{ advice['detail'] | safe }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="docs" class="tabcontent">
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    <form action="/docrels/new/" method="post">
+        <select name="doc_id">
+            {% for doc in docs %}
+                <option value="{{ doc['_id'] }}">{{ doc['title'] }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="source" value="case">
+        <input type="hidden" name="source_id" value="{{ case['_id'] }}">
+        <button>Agregar</button>
+    </form>
+    {% endif %}
+    
+    <ul class="List">
+        {% for dr in docrels %}
+        <li class="ListItem"><a href="/docs/{{ dr['doc_id'] }}">{{ dr['doc_id'] }}</a></li>
         {% endfor %}
     </ul>
 </div>

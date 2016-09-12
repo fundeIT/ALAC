@@ -18,6 +18,11 @@ class Dates:
         return self.now.strftime("%Y-%m-%d")
     def getDatePath(self):
         return self.now.strftime("%Y/%m/")
+    def getYear(self):
+        return self.now.strftime("%Y")
+    def getMonth(self):
+        return self.now.strftime("%m")
+
 
 class DBconn:
     """It is the base data connection class. All data models classes will be
@@ -216,3 +221,13 @@ class Documents:
         return dbconn().docs.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
         dbconn().docs.update({'_id': ObjectId(_id)}, {'$set': doc})
+
+class DocRels:
+    keys = ['source', 'source_id', 'doc_id']
+    def new(self, docrel):
+        return dbconn().docrels.insert_one(docrel).inserted_id 
+    def list(self, source, source_id):
+        return dbconn().docrels.find({'source': source, 
+            'source_id': source_id}).sort('doc_id')
+
+

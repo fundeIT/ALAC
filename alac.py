@@ -66,9 +66,13 @@ def caseDetail(_id):
         case['overview'] = markdown(case['overview'])
         updates = Updates().list('case', _id)
         advices = Updates().list('advise', _id)
+        docrels = DocRels().list('case', _id)
+        docs = Documents().list()
         # for u in updates:
         #    u['detail'] = markdown(u['detail'])
-        return render_template('caseshow.html', case = case, requests = requests, complains=complains, updates=updates, advices=advices, who=session['user'])
+        return render_template('caseshow.html', case = case,
+            requests = requests, complains=complains, updates=updates,
+            advices=advices, docs=docs, docrels=docrels, who=session['user'])
 
 @app.route('/cases/<string:_id>/edit')
 def caseEdit(_id):
@@ -270,17 +274,59 @@ def userDetail(_id):
         return render_template('userform.html', _id=_id, user=user, 
             message='', password1='', kinds=u.kinds, who=session['user'])
 
+@app.route('/docs')
+def documents():
+    docs = Documents().list()
+    return render_template('doclist.html', docs=docs, who=session['user']) 
+
 @app.route('/docs/new/', methods=['GET', 'POST'])
 def newDoc():
+    _id = 'new/'
+    message = ''
     if request.method == 'POST':
+        d = Dates()
         doc = {}
         doc['title'] = request.form['title']
         doc['overview'] = request.form['overview']
         doc['tags'] = request.form['tags']
         docfile = request.files['file']
-        filename = secure_filename(docfile.filename)
-        docfile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        path = app.config['UPLOAD_FOLDER'] + '/' + d.getYear()
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path += '/' + d.getMonth()
+        if not os.path.exists(path):
+            os.makedirs(path)
+        path += '/' + secure_filename(docfile.filename)
+        if not os.path.exists(path):
+            docfile.save(path)
+            doc['path'] = d.getDatePath() + docfile.filename 
+            Documents().new(doc)
+        else:
+            message = 'File %s exists' % docfile.filename
+        return render_template('docform.html', _id=_id, doc=doc,
+            who=session['user'], message=message)
     else:
-        _id = 'new/'
         doc = emptyDict(Documents().keys)
-        return render_template('docform.html', _id=_id, doc=doc, who=session['user'])
+        return render_template('docform.html', _id=_id, doc=doc,
+            who=session['user'], message=message)
+
+@app.route('/docs/<string:_id>', methods=['GET', 'POST'])
+def docDetail(_id):
+    d = Documents()
+    if request.method == 'POST':
+        doc = {key: request.form[key] for key in d.keys}
+        d.update(_id, doc)
+        return redirect('/docs/%s' % _id)
+    else:
+        doc = d.get(_id)
+        return render_template('docform.html', _id=_id, doc=doc,
+            who=session['user'], message='')
+
+@app.route('/docrels/new/', methods=['POST'])
+def docrelNew():
+    dr = DocRels()
+    docrel = {key: request.form[key] for key in dr.keys}
+    _id = dr.new(docrel)
+    return redirect(request.referrer)
+
+
