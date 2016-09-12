@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block main %}
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="MenuItem"><a href="/docs/new/">Nuevo...</a></div>
+
+{% endif %}
+
+<ul class="List">
+{% for doc in docs %}
+    <li class="ListItem"><a href="/docs/{{ doc['_id'] }}">{{ doc['title'] }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}
