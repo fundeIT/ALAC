@@ -1,6 +1,6 @@
 # ALAC's information system
 
-This app supports ALAC's information system. Right now it includes recording information requests and complains to differente El Salvador's government offices.
+This app supports ALAC's information system. Right now it includes recording information requests and complains to different El Salvador's government offices.
 
 ## Requeriments
 

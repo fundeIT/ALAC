@@ -113,7 +113,7 @@
     
     <ul class="List">
         {% for dr in docrels %}
-        <li class="ListItem"><a href="/docs/{{ dr['doc_id'] }}">{{ dr['doc_id'] }}</a></li>
+        <li class="ListItem"><a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a></li>
         {% endfor %}
     </ul>
 </div>

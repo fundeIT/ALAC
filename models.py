@@ -23,7 +23,6 @@ class Dates:
     def getMonth(self):
         return self.now.strftime("%m")
 
-
 class DBconn:
     """It is the base data connection class. All data models classes will be
     derivated from this base class. Building this class is an in progress
@@ -54,7 +53,8 @@ class Offices:
     def new(self, office):
         return dbconn().offices.insert_one(office).inserted_id
     def list(self):
-        return dbconn().offices.find({}, {'name': 1, 'acronym': 1}).sort('acronym')
+        return dbconn().offices.find({}, {'name': 1, 
+	    'acronym': 1}).sort('acronym')
     def get(self, _id):
         if _id == '':
             return emptyDict(self.keys)
@@ -91,7 +91,8 @@ class Requests:
             'overview': 1
         }
         if case_id != None:
-            return dbconn().requests.find({'case_id': case_id}, fields).sort('date', -1)
+            return dbconn().requests.find({'case_id': case_id}, 
+                fields).sort('date', -1)
         elif office_id != None:
             return dbconn().requests.find({'office_id': office_id}, fields).sort('date', -1)
         elif status != None:
@@ -227,7 +228,8 @@ class DocRels:
     def new(self, docrel):
         return dbconn().docrels.insert_one(docrel).inserted_id 
     def list(self, source, source_id):
-        return dbconn().docrels.find({'source': source, 
+        temp = dbconn().docrels.find({'source': source, 
             'source_id': source_id}).sort('doc_id')
-
+        docs = [Documents().get(dr['_id']) for dr in temp]
+        return docs
 
