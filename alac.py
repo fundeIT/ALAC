@@ -33,7 +33,8 @@ def login():
         else:
             message = 'Usuario no registrado o contraseña incorrecta'
             return render_template('login.html', message=message, who=session['user'])
-    return render_template('login.html', message=None, who=session['user'])
+    return render_template('login.html', 
+        message=None, who=session['user'])
 
 @app.route('/cases')
 def cases():
