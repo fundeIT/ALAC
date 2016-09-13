@@ -199,7 +199,12 @@ def complainNew():
         if case_id != None:
             complain['case_id'] = case_id
         _id = 'new/'
-        return render_template('complainform.html', _id=_id, complain = complain, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
+        o = Offices()
+        offices = o.list()
+        reviewers = o.list()
+        return render_template('complainform.html', _id=_id, complain = complain, status = r.status, 
+            results = r.results, cases = Cases().list(), offices = offices, reviewers = reviewers,
+            who=session['user'])
 
 @app.route('/complains/<string:_id>', methods=['GET', 'POST'])
 def complainDetail(_id):
@@ -224,9 +229,12 @@ def complainDetail(_id):
 def complainEdit(_id):
     r = Complains()
     complain = r.get(_id)
+    o = Offices()
+    offices = o.list()
+    reviewers = o.list()
     return render_template('complainform.html', _id=_id, complain=complain, status=r.status, 
-        results = r.results, cases=Cases().list(), offices=Offices().list(),
-        reviewers=Offices().list(), who=session['user'])
+        results = r.results, cases=Cases().list(), offices=offices,
+        reviewers=reviewers, who=session['user'])
 
 @app.route('/users')
 def users():
@@ -245,7 +253,14 @@ def userNew():
         else:
             user['password'] = ''
             message = 'Las contraseñas deben ser iguales. Verifique.'
-            return render_template('userform.html', _id=_id, user=user, message=message, password1='', kinds=u.kinds, who=session['user'])
+            return render_template('userform.html', 
+                _id = _id, 
+                user = user, 
+                message = message, 
+                password1 = '', 
+                kinds = u.kinds, 
+                who = session['user']
+            )
     else:
         user = emptyDict(u.keys)
         return render_template('userform.html', _id=_id, user=user, message='', password1='', kinds=u.kinds, who=session['user'])
