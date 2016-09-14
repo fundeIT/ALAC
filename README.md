@@ -20,6 +20,10 @@ Create a file named 'trust.py' with the following content:
 
     secret_key = "CHOOSE_YOUR_SECRET_KEY"
     docs_path = "DIRECTORY_WHERE_FILES_WILL_STORED"
+    db_server = "DATABASE_SERVER_HOST_NAME"
+    db_port = SERVER_PORT
+    db_user = "DATABASE USERNAME ACCESS"
+    db_password = "DATABASE PASSWORD ACCESS"
 
 Run the utility program 'resetadmin.py' to create the admin user:
 

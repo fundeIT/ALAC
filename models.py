@@ -1,10 +1,11 @@
 import pymongo
 import hashlib
 import datetime
+import trust
 from bson.objectid import ObjectId
 
 def dbconn():
-    client = pymongo.MongoClient()
+    client = pymongo.MongoClient(trust.db_server, trust.db_port)
     db = client.alac
     return db
     
@@ -103,6 +104,7 @@ class Requests:
         request = dbconn().requests.find_one({'_id': ObjectId(_id)})
         if not 'start' in request:
             request['start'] = ''
+            request['start'] = ''
         if not 'finish' in request:
             request['finish'] = ''
         return request
@@ -198,7 +200,6 @@ class Users:
             return False
     def changePassword(self, _id, oldPassword, newPassword):
         if self.checkPassword(_id, oldPassword):
-            userPass = {'password': encrypt(newPassword)} 
             dbconn().users.update({'_id': ObjectId(_id)}, {'$set': userPass})
             return True
         else:
