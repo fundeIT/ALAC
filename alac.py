@@ -129,10 +129,7 @@ def requestNew():
     if request.method == 'POST':
         req = {key: request.form[key] for key in Requests().keys}
         _id = Requests().new(req)
-        if request.referrer != '/requests/new/':
-            return redirect(request.referrer)
-        else:
-            return redirect('/requests')
+        return redirect('/requests')
     else:
         r = Requests()
         req = emptyDict(r.keys)

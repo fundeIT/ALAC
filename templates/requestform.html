@@ -3,47 +3,77 @@
 
     <form action="/requests/{{ _id }}" method="post">
         <label>Asunto</label>
-        <input class="TextInput" name="overview" value="{{ req['overview'] }}">
+        <input class="TextInput" name="overview" 
+            value="{{ req['overview'] }}">
         <label>Detalle</label>
         <textarea class="TextArea" name="detail">{{ req['detail'] }}</textarea>
         <label>Referencia</label>
         <input class="TextInput" name="ref" value="{{ req['ref'] }}">
         <label>Fecha</label>
-        <input class="TextInput" type="date" name="date" value="{{ req['date'] }}">
+        <input class="TextInput" type="date" name="date" 
+            value="{{ req['date'] }}">
         <label>Caso</label>
         <select name="case_id">
             {% for case in cases %}
-                <option value="{{ case['_id'] }}" {% if case['_id']|string() == req['case_id']|string() %}selected{% endif %}>{{ case['title'] }}</option>
+                <option value="{{ case['_id'] }}" 
+                    {% if case['_id']|string() == req['case_id']|string() %}
+                        selected
+                    {% endif %}>
+                    {{ case['title'] }}
+                </option>
             {% endfor %}
         </select>
         <label>Oficina</label>
         <select name="office_id">
             {% for office in offices %}
-                <option value="{{ office['_id'] }}" {% if office['_id']|string() == req['office_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
+                <option value="{{ office['_id'] }}" 
+                    {% if office['_id']|string() == req['office_id']|string() %}
+                        selected
+                    {% endif %}>
+                    {{ office['acronym'] }} - {{ office['name'] }}
+                </option>
             {% endfor %}
         </select>
 
         {% if _id != 'new/' %}
-        <label>Inicio del trámite</label>
-        <input class="TextInput" type="date" name="start" value="{{ req['start'] }}">
-        <label>Finalización del trámite</label>
-        <input class="TextInput" type="date" name="finish" value="{{ req['finish'] }}">
-        <label>Estado</label>
-        <select name='status'>
-            {% for s in status %}
-                <option value="{{ loop.index0 }}" {% if req['status']|int() == loop.index0 %}selected{% endif %}>{{ s }}</option>
-            {% endfor %}             
-        </select>
-        <label>Resultado</label>
-        <select name='result'>
-            {% for k in results %}
-                <option value="{{ k }}" {% if req['result']|string() == k|string() %}selected{% endif %}>{{ results[k] }}</option>
-            {% endfor %}
-        </select>
+            <label>Inicio del trámite</label>
+            <input class="TextInput" type="date" name="start" 
+                value="{{ req['start'] }}">
+            <label>Finalización del trámite</label>
+            <input class="TextInput" type="date" name="finish"
+                value="{{ req['finish'] }}">
+            <label>Estado</label>
+            <select name='status'>
+                {% for s in status %}
+                    <option value="{{ loop.index0 }}" 
+                        {% if req['status']|int() == loop.index0 %}
+                            selected
+                        {% endif %}>
+                        {{ s }}
+                    </option>
+                {% endfor %}             
+            </select>
+            <label>Resultado</label>
+            <select name='result'>
+                {% for k in results %}
+                    <option value="{{ k }}" 
+                        {% if req['result']|string() == k|string() %}
+                            selected
+                        {% endif %}>
+                        {{ results[k] }}
+                    </option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <input type="hidden" name="start" value="">
+            <input type="hidden" name="finish" value="">
+            <input type="hidden" name="status" value="">
+            <input type="hidden" name="result" value="">
         {% endif %}
 
         <label>Comentarios</label>
-        <textarea class="TextArea" name="comment">{{ req['comment'] }}</textarea>
+        <textarea class="TextArea" 
+            name="comment">{{ req['comment'] }}</textarea>
         <button>Enviar</button>
     </form>
 
