@@ -44,13 +44,13 @@ Comentarios:<br/>
 </p>
 {% endif %}
 
-<p><strong>Actualizaciones:</strong></p>
+<p><strong>Bitácora:</strong></p>
 
 <table>
     {% for update in updates %}
         <tr class="ListItem">
 			<td>{{ update['date'] }}</td>
-			<td>{{ update['detail'] }}</td>
+			<td>{{ update['detail'] | safe }}</td>
 		</tr>
     {% endfor %}
 </table>

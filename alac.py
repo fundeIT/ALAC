@@ -52,7 +52,8 @@ def caseNew():
     else:
         case = emptyDict(Cases().keys)
         _id = 'new/'
-        return render_template('caseform.html', _id=_id, case = case, who=session['user'])
+        return render_template('caseform.html', _id=_id, case = case, 
+            who=session['user'])
 
 @app.route('/cases/<string:_id>', methods=['GET', 'POST'])
 def caseDetail(_id):
@@ -79,11 +80,13 @@ def caseDetail(_id):
 def caseEdit(_id):
     if request.method == 'GET':
         case = Cases().get(_id)
-        return render_template('caseform.html', _id = _id, case = case, who=session['user'])
+        return render_template('caseform.html', _id = _id, case = case, 
+            who=session['user'])
 
 @app.route('/offices')
 def offices():
-    return render_template('officelist.html', offices = Offices().list(), who=session['user'])
+    return render_template('officelist.html', offices = Offices().list(), 
+        who=session['user'])
     
 @app.route('/offices/new/', methods=['GET', 'POST'])
 def officeNew():
@@ -95,7 +98,8 @@ def officeNew():
     else:
         office = emptyDict(Offices().keys)
         _id = 'new/'
-        return render_template('officeform.html', _id=_id, office=office, who=session['user'])
+        return render_template('officeform.html', _id=_id, office=office, 
+            who=session['user'])
 
 @app.route('/offices/<string:_id>', methods=['GET', 'POST'])
 def officeDetail(_id):
@@ -122,7 +126,8 @@ def requests():
     drafts = r.list(status='0')
     running = r.list(status='1')
     done = r.list(status='2')
-    return render_template('requestlist.html', drafts=drafts, running=running, done=done, who=session['user'])
+    return render_template('requestlist.html', drafts=drafts, running=running, 
+        done=done, who=session['user'])
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
@@ -138,7 +143,9 @@ def requestNew():
         if case_id != None:
             req['case_id'] = case_id
         _id = 'new/'
-        return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
+        return render_template('requestform.html', _id=_id, req = req, 
+            status = r.status, results = r.results, cases = Cases().list(), 
+            offices = Offices().list(), who=session['user'])
 
 @app.route('/requests/<string:_id>', methods=['GET', 'POST'])
 def requestDetail(_id):
@@ -147,7 +154,7 @@ def requestDetail(_id):
         req = {key: request.form[key] for key in r.keys}
         r.update(_id, req)
         return redirect('/requests/%s' % _id)
-    else:
+    else: # It's GET
         req = r.get(_id)
         req['detail'] = markdown(req['detail'])
         req['status'] = r.status[int(req['status'])]
@@ -156,7 +163,13 @@ def requestDetail(_id):
         case = Cases().get(req['case_id'])
         office = Offices().get(req['office_id'])
         updates = Updates().list('request', _id)
-        return render_template('requestshow.html', _id=_id, req = req, office = office, case = case, updates=updates, who=session['user'])
+        updates_mod = []
+        for element in updates:
+            element['detail'] = markdown(element['detail'])
+            updates_mod.append(element)
+        return render_template('requestshow.html', _id=_id, req = req, 
+            office = office, case = case, updates=updates_mod,
+            who=session['user'])
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):

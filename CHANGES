@@ -1,0 +1,6 @@
+2016-09-26:
+
+- Request show template now shows updates in a table. Detail of each update is
+  converted from markdown to html. Form to insert a new update was move to
+below.
+
