@@ -4,14 +4,15 @@
     <form action="/requests/{{ _id }}" method="post">
         <label>Asunto</label>
         <input class="TextInput" name="overview" 
-            value="{{ req['overview'] }}">
+            value="{{ req['overview'] }}" required>
         <label>Detalle</label>
-        <textarea class="TextArea" name="detail">{{ req['detail'] }}</textarea>
+        <textarea class="TextArea" name="detail" 
+            required>{{ req['detail'] }}</textarea>
         <label>Referencia</label>
         <input class="TextInput" name="ref" value="{{ req['ref'] }}">
         <label>Fecha</label>
         <input class="TextInput" type="date" name="date" 
-            value="{{ req['date'] }}">
+            value="{{ req['date'] }}" required>
         <label>Caso</label>
         <select name="case_id">
             {% for case in cases %}
@@ -67,8 +68,8 @@
         {% else %}
             <input type="hidden" name="start" value="">
             <input type="hidden" name="finish" value="">
-            <input type="hidden" name="status" value="">
-            <input type="hidden" name="result" value="">
+            <input type="hidden" name="status" value="0">
+            <input type="hidden" name="result" value="ND">
         {% endif %}
 
         <label>Comentarios</label>

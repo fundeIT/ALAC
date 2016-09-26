@@ -342,4 +342,5 @@ def docrelNew():
     _id = dr.new(docrel)
     return redirect(request.referrer)
 
-
+if __name__ == '__main__':
+    app.run()

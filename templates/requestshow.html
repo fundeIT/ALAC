@@ -42,21 +42,24 @@ Comentarios:<br/>
 
 <p><strong>Actualizaciones:</strong></p>
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-    <form action='/updates/new/' method="post">
-        <input type="hidden" name="source" value="request">
-        <input type="hidden" name="source_id" value="{{ req['_id'] }}">
-        <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
-        <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
-        <button>Actualizar</button>
-    </form>
-{% endif %}
-
 <ul class="List">
     {% for update in updates %}
         <li class="ListItem">{{ update['date'] }}: {{ update['detail'] }}</li>
     {% endfor %}
-
 </ul>
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+    <form action='/updates/new/' method="post">
+        <input type="hidden" name="source" value="request">
+        <input type="hidden" name="source_id" value="{{ req['_id'] }}">
+        <input class="Inline" type="date" size="8" name="date" 
+	    placeholder="Fecha">
+        <textarea class="Inline" name="detail" cols="60" rows="10" 
+	    placeholder="Detalle"></textarea>
+        <button>Actualizar</button>
+    </form>
+
+{% endif %}
 
 {% endblock %}
