@@ -22,31 +22,38 @@ Correo: {{ office['email'] }}<br/>
 </p>
 
 <p>
+Estado: {{ req['status'] }}<br/>
+Resultado: {{ req['result'] }}
+</p>
+
+{% if req['start'] %}
+<p>
 Inicio del trámite: {{ req['start'] }}<br/>
 Finalización del trámite: {{ req['finish'] }}
 </p>
+{% endif %}
 
 <p><strong>Detalle:</strong></p>
 
 {{ req['detail'] | safe }}
 
-<p>
-Estado: {{ req['status'] }}<br/>
-Resultado: {{ req['result'] }}
-</p>
-
+{% if req['comment'] %}
 <p>
 Comentarios:<br/>
 {{ req['comment'] | safe }}
 </p>
+{% endif %}
 
 <p><strong>Actualizaciones:</strong></p>
 
-<ul class="List">
+<table>
     {% for update in updates %}
-        <li class="ListItem">{{ update['date'] }}: {{ update['detail'] }}</li>
+        <tr class="ListItem">
+			<td>{{ update['date'] }}</td>
+			<td>{{ update['detail'] }}</td>
+		</tr>
     {% endfor %}
-</ul>
+</table>
 
 {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
 
@@ -54,9 +61,9 @@ Comentarios:<br/>
         <input type="hidden" name="source" value="request">
         <input type="hidden" name="source_id" value="{{ req['_id'] }}">
         <input class="Inline" type="date" size="8" name="date" 
-	    placeholder="Fecha">
+			placeholder="Fecha">
         <textarea class="Inline" name="detail" cols="60" rows="10" 
-	    placeholder="Detalle"></textarea>
+			placeholder="Detalle"></textarea>
         <button>Actualizar</button>
     </form>
 
