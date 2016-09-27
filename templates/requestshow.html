@@ -44,29 +44,68 @@ Comentarios:<br/>
 </p>
 {% endif %}
 
-<p><strong>Bitácora:</strong></p>
+<ul class="tab">
+    <li><a href="#" class="tablinks" 
+        onclick="openTab(event, 'updates')">Actualizaciones</a></li>
+    <li><a href="#" class="tablinks" 
+        onclick="openTab(event, 'docs')">Documentos</a></li>
+</ul>
 
-<table>
-    {% for update in updates %}
-        <tr class="ListItem">
-			<td>{{ update['date'] }}</td>
-			<td>{{ update['detail'] | safe }}</td>
-		</tr>
-    {% endfor %}
-</table>
+<div id="updates" class="tabcontent">
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    <table>
+        {% for update in updates %}
+            <tr class="ListItem">
+    			<td>{{ update['date'] }}</td>
+    			<td>{{ update['detail'] | safe }}</td>
+    		</tr>
+        {% endfor %}
+    </table>
+    
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    
+        <form action='/updates/new/' method="post">
+            <input type="hidden" name="source" value="request">
+            <input type="hidden" name="source_id" value="{{ req['_id'] }}">
+            <input class="Inline" type="date" size="8" name="date" 
+    			placeholder="Fecha">
+            <textarea class="Inline" name="detail" cols="60" rows="10" 
+    			placeholder="Detalle"></textarea>
+            <button>Actualizar</button>
+        </form>
+    
+    {% endif %}
+    
+</div>
 
-    <form action='/updates/new/' method="post">
+<div id="docs" class="tabcontent">
+
+    <table>
+        {% for dr in docrels %}
+	  <tr class="ListItem">
+              <td>{{ dr['date'] }}</td>
+	      <td>
+		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
+              </td>
+	     </tr>
+        {% endfor %}
+    </table>
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    <form action="/docrels/new/" method="post">
+        <select name="doc_id">
+            {% for doc in docs %}
+                <option value="{{ doc['_id'] }}">{{ doc['title'] }}</option>
+            {% endfor %}
+        </select>
         <input type="hidden" name="source" value="request">
-        <input type="hidden" name="source_id" value="{{ req['_id'] }}">
-        <input class="Inline" type="date" size="8" name="date" 
-			placeholder="Fecha">
-        <textarea class="Inline" name="detail" cols="60" rows="10" 
-			placeholder="Detalle"></textarea>
-        <button>Actualizar</button>
+        <input type="hidden" name="source_id" value="{{ request['_id'] }}">
+        <button>Agregar</button>
     </form>
+    {% endif %}
+ 
+</div>
 
-{% endif %}
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
 
 {% endblock %}

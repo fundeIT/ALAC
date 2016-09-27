@@ -1,7 +1,10 @@
+2016-09-27
+
+- Option to attach documents in cases, requests and complais was added
+
 2016-09-26:
 
 - Request show template now shows updates in a table. Detail of each update is
   converted from markdown to html. Form to insert a new update was move to
-below.
+  below.
 - Function to download documents was added.
-

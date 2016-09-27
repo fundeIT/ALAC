@@ -123,6 +123,16 @@ button:hover {
    background-color: #FF5C33;
 }
 
+.SmallButton {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 0 8px 0 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 80%;
+    display: inline-block;
+}
 
 .ListItem {
     line-height: 160%;
@@ -205,3 +215,5 @@ td p {
 td a {
 	color: #553;
 }
+
+

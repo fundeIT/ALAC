@@ -218,7 +218,7 @@ class Documents:
     def new(self, doc):
         return dbconn().docs.insert_one(doc).inserted_id
     def list(self):
-        return dbconn().docs.find().sort('title')
+        return dbconn().docs.find().sort('date', -1)
     def get(self, _id):
         return dbconn().docs.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
@@ -229,8 +229,10 @@ class DocRels:
     def new(self, docrel):
         return dbconn().docrels.insert_one(docrel).inserted_id 
     def list(self, source, source_id):
+        # Getting document IDs related with the source
         temp = dbconn().docrels.find({'source': source, 
             'source_id': source_id}).sort('doc_id')
-        docs = [Documents().get(dr['_id']) for dr in temp]
+        # Based on their IDs, getting documents related with the source
+        docs = [Documents().get(dr['doc_id']) for dr in temp]
         return docs
 

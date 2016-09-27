@@ -5,7 +5,7 @@
   <span class="MenuCaution">{{ message }}</span>
 {% endif %}
 
-<form action="/docs/{{ _id }}" method="post" enctype="multipart/form-data">
+<form action="/docs/{{ _id }}/edit" method="post" enctype="multipart/form-data">
     <label>Título</label>
     <input class="TextInput" name="title" value="{{ doc['title'] }}">
     <label>Fecha</label>

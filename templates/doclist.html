@@ -7,14 +7,19 @@
 
 {% endif %}
 
-<ul class="List">
-{% for doc in docs %}
-    <li class="ListItem">
-        <a href="/docs/{{ doc['_id'] }}/download">{{ doc['title'] }}</a>
-        [<a href="/docs/{{ doc['_id'] }}">Editar</a>]
-    </li>
-{% endfor %}
-</ul>
-
+<table>
+    {% for doc in docs %}
+        <tr class="ListItem">
+            <td>{{ doc['date'] }}</td>
+            <td><a href="/docs/{{ doc['_id'] }}">{{ doc['title'] }}</a></td>
+	        {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+                <td>    
+                    <a class="SmallButton" 
+	                    href="/docs/{{ doc['_id'] }}/edit">Editar</a>
+	            </td>
+	        {% endif %}
+        </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

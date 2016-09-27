@@ -37,22 +37,67 @@ Comentarios:<br/>
 {{ complain['comment'] }}
 </p>
 
-<p>Actualizaciones:</p>
+<ul class="tab">
+    <li><a href="#" class="tablinks" 
+        onclick="openTab(event, 'updates')">Actualizaciones</a></li>
+    <li><a href="#" class="tablinks" 
+        onclick="openTab(event, 'docs')">Documentos</a></li>
+</ul>
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+<div id="updates" class="tabcontent">
+
+    <table>
+        {% for update in updates %}
+            <tr class="ListItem">
+                <td>{{ update['date'] }}</td>
+                <td>{{ update['detail'] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <form action='/updates/new/' method="post">
             <input type="hidden" name="source" value="complain">
-            <input type="hidden" name="source_id" value="{{ complain['_id'] }}">
-            <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
-            <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
+            <input type="hidden" name="source_id" 
+                value="{{ complain['_id'] }}">
+            <input class="Inline" type="date" size="8" name="date"
+                placeholder="Fecha">
+            <textarea class="Inline" name="detail" cols="60" rows="10"
+                placeholder="Detalle"></textarea>
             <button>Actualizar</button>
         </form>
 {% endif %}
 
-<ul>
-    {% for update in updates %}
-        <li>{{ update['date'] }}: {{ update['detail'] }}</li>
-    {% endfor %}
-</ul>
+</div>
+
+<div id="docs" class="tabcontent">
+
+    <table>
+        {% for dr in docrels %}
+	  <tr class="ListItem">
+              <td>{{ dr['date'] }}</td>
+	      <td>
+		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
+              </td>
+	     </tr>
+        {% endfor %}
+    </table>
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    <form action="/docrels/new/" method="post">
+        <select name="doc_id">
+            {% for doc in docs %}
+                <option value="{{ doc['_id'] }}">{{ doc['title'] }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="source" value="complain">
+        <input type="hidden" name="source_id" value="{{ complain['_id'] }}">
+        <button>Agregar</button>
+    </form>
+    {% endif %}
+ 
+</div>
+
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
 
 {% endblock %}
