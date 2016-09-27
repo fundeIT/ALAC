@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session
+from flask import Flask, request, render_template, redirect, session, send_file
 from werkzeug.utils import secure_filename
 from markdown import markdown
 import os
@@ -347,6 +347,14 @@ def docDetail(_id):
         doc = d.get(_id)
         return render_template('docform.html', _id=_id, doc=doc,
             who=session['user'], message='')
+
+@app.route('/docs/<string:_id>/download')
+def docDownload(_id):
+    d = Documents()
+    doc = d.get(_id)
+    path = app.config['UPLOAD_FOLDER'] + '/' + doc['path']
+    filename = path.split('/')[-1]
+    return send_file(path, as_attachment=True, attachment_filename=filename)
 
 @app.route('/docrels/new/', methods=['POST'])
 def docrelNew():

@@ -9,7 +9,10 @@
 
 <ul class="List">
 {% for doc in docs %}
-    <li class="ListItem"><a href="/docs/{{ doc['_id'] }}">{{ doc['title'] }}</a></li>
+    <li class="ListItem">
+        <a href="/docs/{{ doc['_id'] }}/download">{{ doc['title'] }}</a>
+        [<a href="/docs/{{ doc['_id'] }}">Editar</a>]
+    </li>
 {% endfor %}
 </ul>
 
