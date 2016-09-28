@@ -8,3 +8,4 @@
   converted from markdown to html. Form to insert a new update was move to
   below.
 - Function to download documents was added.
+- Permission to access the application for any URL, not only '/'

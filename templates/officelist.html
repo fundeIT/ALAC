@@ -7,11 +7,18 @@
 
 {% endif %}
 
-<ul class="List">
-{% for office in offices %}
-    <li class="ListItem"><a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a></li>
-{% endfor %}
-</ul>
+<table>
+    {% for office in offices %}
+        <tr class="ListItem">
+            <td>{{ office['acronym'] }}</td>
+            <td>
+                <a href="/offices/{{ office['_id'] }}">
+                    {{ office['name'] }}
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
 
 
 {% endblock %}

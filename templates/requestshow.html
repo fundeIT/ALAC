@@ -45,9 +45,9 @@ Comentarios:<br/>
 {% endif %}
 
 <ul class="tab">
-    <li><a href="#" class="tablinks" 
+    <li><a href="#updates" class="tablinks" 
         onclick="openTab(event, 'updates')">Actualizaciones</a></li>
-    <li><a href="#" class="tablinks" 
+    <li><a href="#documents" class="tablinks" 
         onclick="openTab(event, 'docs')">Documentos</a></li>
 </ul>
 
@@ -99,7 +99,7 @@ Comentarios:<br/>
             {% endfor %}
         </select>
         <input type="hidden" name="source" value="request">
-        <input type="hidden" name="source_id" value="{{ request['_id'] }}">
+        <input type="hidden" name="source_id" value="{{ req['_id'] }}">
         <button>Agregar</button>
     </form>
     {% endif %}
