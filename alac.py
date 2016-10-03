@@ -22,6 +22,8 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if not 'user' in session:
+        session['user'] = {}
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
