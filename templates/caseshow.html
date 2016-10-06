@@ -110,16 +110,17 @@
     </table>
 
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-    <form action="/docrels/new/" method="post">
-        <select name="doc_id">
-            {% for doc in docs %}
-                <option value="{{ doc['_id'] }}">{{ doc['title'] }}</option>
-            {% endfor %}
-        </select>
+
+    <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
+        <input class="TextInput" name="title" placeholder="Título del documento"
+            required>
+        <input class="TextInput" name="file" type="file" required>
+        <input type="hidden" name="prefix" value="{{ case['title'] }}">
         <input type="hidden" name="source" value="case">
         <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-        <button>Agregar</button>
+        <button>Enviar</button>
     </form>
+
     {% endif %}
  
 </div>

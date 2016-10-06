@@ -38,9 +38,9 @@ Comentarios:<br/>
 </p>
 
 <ul class="tab">
-    <li><a href="#" class="tablinks" 
+    <li><a href="#updates" class="tablinks" 
         onclick="openTab(event, 'updates')">Actualizaciones</a></li>
-    <li><a href="#" class="tablinks" 
+    <li><a href="#documents" class="tablinks" 
         onclick="openTab(event, 'docs')">Documentos</a></li>
 </ul>
 
@@ -84,16 +84,17 @@ Comentarios:<br/>
     </table>
 
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-    <form action="/docrels/new/" method="post">
-        <select name="doc_id">
-            {% for doc in docs %}
-                <option value="{{ doc['_id'] }}">{{ doc['title'] }}</option>
-            {% endfor %}
-        </select>
+
+    <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
+        <input class="TextInput" name="title" placeholder="Título del documento"
+            required>
+        <input class="TextInput" name="file" type="file" required>
+        <input type="hidden" name="prefix" value="{{ complain['overview'] }}">
         <input type="hidden" name="source" value="complain">
         <input type="hidden" name="source_id" value="{{ complain['_id'] }}">
-        <button>Agregar</button>
+        <button>Enviar</button>
     </form>
+
     {% endif %}
  
 </div>

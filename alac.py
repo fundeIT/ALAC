@@ -11,6 +11,22 @@ app.config['UPLOAD_FOLDER'] = trust.docs_path
 
 ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx'])
 
+def uploadFile(docfile):
+    d = Dates()
+    path = app.config['UPLOAD_FOLDER'] + '/' + d.getYear()
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path += '/' + d.getMonth()
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path += '/' + secure_filename(docfile.filename)
+    print(path)
+    if not os.path.exists(path):
+        docfile.save(path)
+        return path 
+    else:
+        return None
+
 # Controllers
 
 @app.route('/')
@@ -418,10 +434,36 @@ def docDownload(_id):
 def docrelNew():
     if not 'user' in session:
         session['user'] = {}
-    dr = DocRels()
-    docrel = {key: request.form[key] for key in dr.keys}
-    _id = dr.new(docrel)
-    return redirect(request.referrer)
+        return redirect(request.referrer)
+    else:
+        dr = DocRels()
+        docrel = {key: request.form[key] for key in dr.keys}
+        _id = dr.new(docrel)
+        return redirect(request.referrer)
+
+@app.route('/docrels/newdoc/', methods=['POST'])
+def docrelNewWithDoc():
+    if not 'user' in session:
+        session['user'] = {}
+        return redirect(request.referrer)
+    else:
+        doc = {}
+        doc['title'] = request.form['prefix'] + ' - ' + request.form['title']
+        doc['overview'] = ''
+        doc['tags'] = ''
+        doc['date'] = Dates().getDate() 
+        docfile = request.files['file']
+        path = uploadFile(docfile)
+        if path:
+            doc['path'] = Dates().getDatePath() + docfile.filename 
+            doc_id = Documents().new(doc)
+            docrel = {}
+            docrel['source'] = request.form['source']
+            docrel['source_id'] = request.form['source_id']
+            docrel['doc_id'] = doc_id
+            print(docrel)
+            DocRels().new(docrel)
+        return redirect(request.referrer)
 
 if __name__ == '__main__':
     app.run()
