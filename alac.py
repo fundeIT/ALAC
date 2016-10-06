@@ -12,6 +12,7 @@ app.config['UPLOAD_FOLDER'] = trust.docs_path
 ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx'])
 
 def uploadFile(docfile):
+    docfile.filename = secure_filename(docfile.filename)
     d = Dates()
     path = app.config['UPLOAD_FOLDER'] + '/' + d.getYear()
     if not os.path.exists(path):
@@ -384,13 +385,14 @@ def newDoc():
         doc['tags'] = request.form['tags']
         doc['date'] = request.form['date']
         docfile = request.files['file']
+        docfile.filename = secure_filename(docfile.filename)
         path = app.config['UPLOAD_FOLDER'] + '/' + d.getYear()
         if not os.path.exists(path):
             os.makedirs(path)
         path += '/' + d.getMonth()
         if not os.path.exists(path):
             os.makedirs(path)
-        path += '/' + secure_filename(docfile.filename)
+        path += '/' + docfile.filename
         if not os.path.exists(path):
             docfile.save(path)
             doc['path'] = d.getDatePath() + docfile.filename 
