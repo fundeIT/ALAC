@@ -169,10 +169,17 @@ def requests():
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/requests')
+    user = session['user']
     if request.method == 'POST':
         req = {key: request.form[key] for key in Requests().keys}
         _id = Requests().new(req)
+        right = {
+            'source': 'request',
+            'source_id': _id,
+            'user_id': user['_id']
+        }
+        Rights().new(right)
         return redirect('/requests')
     else:
         r = Requests()
@@ -245,14 +252,18 @@ def complains():
 @app.route('/complains/new/', methods=['GET', 'POST'])
 def complainNew():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/complains')
+    user = session['user']
     if request.method == 'POST':
         complain = {key: request.form[key] for key in Complains().keys}
         _id = Complains().new(complain)
-        if request.referrer != '/complainuests/new/':
-            return redirect(request.referrer)
-        else:
-            return redirect('/complains')
+        right = {
+            'source': 'complain',
+            'source_id': _id,
+            'user_id': user['_id']
+        }
+        Rights().new(right)
+        return redirect('/complains')
     else:
         r = Complains()
         complain = emptyDict(r.keys)
@@ -264,15 +275,16 @@ def complainNew():
         o = Offices()
         offices = o.list()
         reviewers = o.list()
-        return render_template('complainform.html', _id=_id, complain = complain, status = r.status, 
-            results = r.results, cases = Cases().list(), offices = offices, reviewers = reviewers,
-            who=session['user'])
+        return render_template('complainform.html', _id=_id, complain=complain,
+            status = r.status, results = r.results, cases = Cases().list(),
+            offices = offices, reviewers = reviewers, who=session['user'])
 
 @app.route('/complains/<string:_id>', methods=['GET', 'POST'])
 def complainDetail(_id):
     if not 'user' in session:
         session['user'] = {}
     r = Complains()
+    user = session['user']
     if request.method == 'POST':
         req = {key: request.form[key] for key in r.keys}
         r.update(_id, req)
@@ -282,6 +294,14 @@ def complainDetail(_id):
         complain['detail'] = markdown(complain['detail'])
         complain['status'] = r.status[int(complain['status'])]
         complain['result'] = r.results[complain['result']]
+        has_right = False
+        right = {
+            'source': 'complain',
+            'source_id': _id,
+            'user_id': user['_id']
+        }
+        if Rights().lookup(right):
+            has_right = True
         case = Cases().get(complain['case_id'])
         office = Offices().get(complain['office_id'])
         reviewer = Offices().get(complain['reviewer_id'])
@@ -290,7 +310,8 @@ def complainDetail(_id):
         docs = Documents().list()
         return render_template('complainshow.html', _id=_id, 
             complain = complain, office = office, case=case, updates=updates,
-            reviewer=reviewer, docrels=docrels, docs=docs, who=session['user'])
+            reviewer=reviewer, docrels=docrels, docs=docs, who=user,
+            has_right=has_right)
 
 @app.route('/complains/<string:_id>/edit')
 def complainEdit(_id):

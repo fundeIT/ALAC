@@ -236,3 +236,9 @@ class DocRels:
         docs = [Documents().get(dr['doc_id']) for dr in temp]
         return docs
 
+class Rights:
+    keys = ['source', 'source_id', 'user']
+    def new(self, right):
+        return dbconn().rights.insert_one(right).inserted_id
+    def lookup(self, right):
+        return dbconn().rights.find(right)
