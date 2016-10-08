@@ -243,7 +243,7 @@ class Rights:
     def lookup(self, right):
         right['source_id'] = ObjectId(right['source_id'])
         return dbconn().rights.find_one(right)
-    def list(self, user_id, source):
+    def listByUser(self, user_id, source):
         cursor = dbconn().rights.find({'source': source, 'user_id': user_id})
         source_list = None
         if source == 'request':
@@ -251,3 +251,8 @@ class Rights:
         elif source == 'complain':
             source_list = [Complains().get(element['source_id']) for element in cursor]
         return source_list
+    def listBySource(self, source, source_id):
+        cursor = dbconn().rights.find({'source': source, 'source_id':
+            source_id})
+        users_list = [Users().get(element['user_id']) for element in cursor]
+        return users_list

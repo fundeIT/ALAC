@@ -176,7 +176,7 @@ def requestNew():
         _id = Requests().new(req)
         right = {
             'source': 'request',
-            'source_id': _id,
+            'source_id': str(_id),
             'user_id': user['_id']
         }
         Rights().new(right)
@@ -240,7 +240,11 @@ def requestEdit(_id):
         session['user'] = {}
     r = Requests()
     req = r.get(_id)
-    return render_template('requestform.html', _id=_id, req = req, status = r.status, results = r.results, cases = Cases().list(), offices = Offices().list(), who=session['user'])
+    users_right = Rights().listBySource('request', _id)
+    users_list = Users().list()
+    return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results,
+            cases = Cases().list(), offices = Offices().list(),
+            users_right=users_right, users_list=users_list, who=session['user'])
 
 @app.route('/updates/new/', methods=['POST'])
 def updateNew():
@@ -272,7 +276,7 @@ def complainNew():
         _id = Complains().new(complain)
         right = {
             'source': 'complain',
-            'source_id': _id,
+            'source_id': str(_id),
             'user_id': user['_id']
         }
         Rights().new(right)
@@ -334,9 +338,11 @@ def complainEdit(_id):
     o = Offices()
     offices = o.list()
     reviewers = o.list()
+    users_right = Rights().listBySource('complain', _id)
+    users_list = Users().list()
     return render_template('complainform.html', _id=_id, complain=complain, status=r.status, 
         results = r.results, cases=Cases().list(), offices=offices,
-        reviewers=reviewers, who=session['user'])
+        reviewers=reviewers, users_right=users_right, users_list=users_list, who=session['user'])
 
 @app.route('/users')
 def users():
@@ -500,15 +506,25 @@ def docrelNewWithDoc():
             DocRels().new(docrel)
         return redirect(request.referrer)
 
+@app.route('/rights/new/', methods=['POST'])
+def newRight():
+    if not 'user' in session:
+        return redirect(request.referrer)
+    right = {}
+    right['source'] = request.form['source'] 
+    right['source_id'] = request.form['source_id']
+    right['user_id'] = request.form['user_id']
+    Rights().new(right)
+    return redirect(request.referrer)
+
 @app.route('/mine')
 def mine():
     if not 'user' in session:
         session['user'] = {}
     user = session['user']
     r = Rights()
-    requests = r.list(user['_id'], 'request')
-    complains = r.list(user['_id'], 'complain')
-    print(requests)
+    requests = r.listByUser(user['_id'], 'request')
+    complains = r.listByUser(user['_id'], 'complain')
     return render_template('minelist.html', requests=requests,
             complains=complains, who=session['user'])
 

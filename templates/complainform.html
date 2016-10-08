@@ -51,4 +51,33 @@
         <button>Enviar</button>
     </form>
 
+    {% if who['kind'] == 'OPR' and _id != 'new/' %}
+
+    <div class="CautionSet">
+
+        <p><strong>Usuarios con derechos de edición:</strong></p>
+
+            <table>
+            {% for user in users_right%}
+            <tr class="ListItem">
+                <td>{{ user['name'] }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+
+        <form action='/rights/new/' method='post'>
+            <select name='user_id'>
+                {% for user in users_list %}
+                    <option value="{{ user['_id'] }}">{{ user['name'] }}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="source" value="complain">
+            <input type="hidden" name='source_id' value="{{ complain['_id'] }}">
+            <button class="MenuCaution">Agregar</button>
+        </form>
+
+    </div>
+
+    {% endif %}
+        
 {% endblock %}

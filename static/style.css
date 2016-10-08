@@ -60,6 +60,7 @@ label, input, textarea, select {
 }
 
 button {
+    margin-top: 5px;
     background-color: #008CBA;
     border: none;
     color: white;
@@ -216,4 +217,11 @@ td a {
 	color: #553;
 }
 
-
+.CautionSet {
+    margin-top: 10px;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: red;
+    background: #FEF;
+}
