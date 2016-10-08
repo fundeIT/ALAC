@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<ul class="tab">
+    <li><a href="#" class="tablinks" onclick="openTab(event,
+            'requests')">Peticiones</a></li>
+    <li><a href="#" class="tablinks" onclick="openTab(event,
+            'complains')">Denuncias</a></li>
+</ul>
+
+<div id="requests" class="tabcontent">
+    {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
+        <div class="MenuItem"><a href="/requests/new/">Nueva...</a></div>
+    {% endif %}
+
+    <ul class="List">
+    {% for request in requests%}
+        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div id="complains" class="tabcontent">
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <div class="MenuItem"><a href="/complains/new/">Nueva...</a></div>
+    {% endif %}
+    <ul class="List">
+    {% for complain in complains %}
+        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
+
+{% endblock %}
