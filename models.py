@@ -237,8 +237,17 @@ class DocRels:
         return docs
 
 class Rights:
-    keys = ['source', 'source_id', 'user']
+    keys = ['source', 'source_id', 'user_id']
     def new(self, right):
         return dbconn().rights.insert_one(right).inserted_id
     def lookup(self, right):
-        return dbconn().rights.find(right)
+        right['source_id'] = ObjectId(right['source_id'])
+        return dbconn().rights.find_one(right)
+    def list(self, user_id, source):
+        cursor = dbconn().rights.find({'source': source, 'user_id': user_id})
+        source_list = None
+        if source == 'request':
+            source_list = [Requests().get(element['source_id']) for element in cursor]
+        elif source == 'complain':
+            source_list = [Complains().get(element['source_id']) for element in cursor]
+        return source_list

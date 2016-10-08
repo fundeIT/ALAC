@@ -10,6 +10,9 @@
         <div class="Header">
             <h1>Centro de Asesoría Legal Anticorrupción (ALAC)</h1>
             <ul class='MenuBar'>
+                {% if who['kind'] %}
+                    <li class="MenuItem"><a href="/mine">Míos</a></li>
+                {% endif %}
                 <li class="MenuItem"><a href="/cases">Casos</a></li>
                 <li class="MenuItem"><a href="/requests">Peticiones</a></li>
                 <li class="MenuItem"><a href="/complains">Denuncias</a></li>

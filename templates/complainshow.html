@@ -3,7 +3,7 @@
 
 <h2>{{ complain['overview'] }}</h2>
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+{% if has_right %}
 
 <div class="MenuItem"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
 
@@ -55,7 +55,7 @@ Comentarios:<br/>
         {% endfor %}
     </table>
 
-    {% if has_right or who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    {% if has_right %}
         <form action='/updates/new/' method="post">
             <input type="hidden" name="source" value="complain">
             <input type="hidden" name="source_id" 
@@ -83,7 +83,7 @@ Comentarios:<br/>
         {% endfor %}
     </table>
 
-    {% if has_right or who['kind'] in ['OPR', 'USR', 'MNR'] %}
+    {% if has_right %}
 
     <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
         <input class="TextInput" name="title" placeholder="Título del documento"

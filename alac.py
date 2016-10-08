@@ -195,12 +195,25 @@ def requestNew():
 
 @app.route('/requests/<string:_id>', methods=['GET', 'POST'])
 def requestDetail(_id):
+    """
+    This section show an specific request.
+    It has options to append updates and documents.
+    """
+    # Checking privileges
     if not 'user' in session:
         session['user'] = {}
-    r = Requests()
+    user = session['user']
+    right = {
+            'source': 'request',
+            'source_id': _id,
+            'user_id': user['_id']
+    }
+    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+    r = Requests() # Object used to access request methods
     if request.method == 'POST':
-        req = {key: request.form[key] for key in r.keys}
-        r.update(_id, req)
+        if has_right:
+            req = {key: request.form[key] for key in r.keys}
+            r.update(_id, req)
         return redirect('/requests/%s' % _id)
     else: # It's GET
         req = r.get(_id)
@@ -217,9 +230,9 @@ def requestDetail(_id):
             updates_mod.append(element)
         docrels = DocRels().list('request', _id)
         docs = Documents().list()
-        return render_template('requestshow.html', _id=_id, req = req, 
-            office = office, case = case, updates=updates_mod,
-            docrels=docrels, docs=docs, who=session['user'])
+        return render_template('requestshow.html', _id=_id, req=req, 
+            office=office, case=case, updates=updates_mod,
+            docrels=docrels, docs=docs, has_right=has_right, who=user)
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):
@@ -283,25 +296,24 @@ def complainNew():
 def complainDetail(_id):
     if not 'user' in session:
         session['user'] = {}
-    r = Complains()
     user = session['user']
+    right = {
+            'source': 'complain',
+            'source_id': _id,
+            'user_id': user['_id']
+    }
+    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+    r = Complains()
     if request.method == 'POST':
-        req = {key: request.form[key] for key in r.keys}
-        r.update(_id, req)
+        if has_right:
+            req = {key: request.form[key] for key in r.keys}
+            r.update(_id, req)
         return redirect('/complains/%s' % _id)
     else:
         complain = r.get(_id)
         complain['detail'] = markdown(complain['detail'])
         complain['status'] = r.status[int(complain['status'])]
         complain['result'] = r.results[complain['result']]
-        has_right = False
-        right = {
-            'source': 'complain',
-            'source_id': _id,
-            'user_id': user['_id']
-        }
-        if Rights().lookup(right):
-            has_right = True
         case = Cases().get(complain['case_id'])
         office = Offices().get(complain['office_id'])
         reviewer = Offices().get(complain['reviewer_id'])
@@ -487,6 +499,18 @@ def docrelNewWithDoc():
             print(docrel)
             DocRels().new(docrel)
         return redirect(request.referrer)
+
+@app.route('/mine')
+def mine():
+    if not 'user' in session:
+        session['user'] = {}
+    user = session['user']
+    r = Rights()
+    requests = r.list(user['_id'], 'request')
+    complains = r.list(user['_id'], 'complain')
+    print(requests)
+    return render_template('minelist.html', requests=requests,
+            complains=complains, who=session['user'])
 
 if __name__ == '__main__':
     app.run()
