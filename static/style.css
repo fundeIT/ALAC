@@ -10,13 +10,13 @@ h1, h2, h3 {
 }
 
 .Header {
-    background-color: #008CBA;
+    background-color: #01b1af;
     color: white;
     margin: 0;
     margin-top: 0px;
     padding: 10px 10px 0px 10px;
     position: fixed;
-    height: 30px;
+    height: 24px;
     width: 100%;
     top: 0px;
 }
@@ -28,7 +28,7 @@ h1, h2, h3 {
 
 .Main {
     margin: 10px;
-    padding-top: 35px;
+    padding-top: 25px;
     padding-bottom: 30px;
 }
 
@@ -39,8 +39,7 @@ h1, h2, h3 {
     height:30px;
     width:100%;
     color: white;
-    background-color: #008CBA;
-    background-color: #008CBA;
+    background-color: #01b1af;
 }
 
 .Footer a {
@@ -67,9 +66,9 @@ label {
     height: 240px;
 }
 
-button {
+button, .Button {
     margin-top: 5px;
-    background-color: #008CBA;
+    background-color: #0ea09e;
     border: none;
     color: white;
     padding: 5px;
@@ -78,8 +77,13 @@ button {
     display: inline-block;
 }
 
-button:hover {
-   background-color: #00AFDE;
+button:hover, .Button:hover {
+   background-color: #057e7d;
+}
+
+.Button a {
+    color: white;
+    text-decoration: none;
 }
 
 .Inline {
@@ -91,17 +95,18 @@ button:hover {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: #008CBA;
+    background-color: #01b1af;
 }
 
 .MenuItem {
-    background-color: #008CBA;
+    background-color: #0ea09e;
     border: none;
     color: white;
     padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    border-radius: 5px 5px 0 0;
 }
 
 .MenuItem a {
@@ -110,7 +115,7 @@ button:hover {
 }
 
 .MenuItem:hover {
-   background-color: #00AFDE;
+   background-color: #057e7d;
 }
 
 .MenuCaution {
@@ -121,6 +126,7 @@ button:hover {
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    border-radius: 5px 5px 0 0;
 }
 
 .MenuCaution a {
@@ -129,11 +135,11 @@ button:hover {
 }
 
 .MenuCaution:hover {
-   background-color: #FF5C33;
+   background-color: #057e7d;
 }
 
 .SmallButton {
-    background-color: #008CBA;
+    background-color: #0ea09e;
     border: none;
     color: white;
     padding: 0 8px 0 8px;
@@ -163,12 +169,11 @@ button:hover {
 }
 
 .ListItem a:hover {
-   background-color: #00AFDE;
-   color: white;
+   color: #555;
 }
 
 .ListItem:nth-child(odd) {
-    background-color: #E0EEEE;
+   background-color: #ddffff;
 }
 
 ul.tab {
@@ -181,8 +186,9 @@ ul.tab {
 
 ul.tab li {
     float: left;
-    margin-right: 5px;
-    background-color: #008CBA;
+    margin-right: 3px;
+    background-color: #0ea09e;
+    border-radius: 5px 5px 0 0;
 }
 
 ul.tab li a {
@@ -195,11 +201,13 @@ ul.tab li a {
 }
 
 ul.tab li a:hover {
-   background-color: #00AFDE;
+   background-color: #057e7d;
+    border-radius: 5px 5px 0 0;
 }
 
 ul.tab li a:focus, .active {
-   background-color: #00AFDE;
+   background-color: #057e7d;
+    border-radius: 5px 5px 0 0;
 }
 
 .tabcontent {

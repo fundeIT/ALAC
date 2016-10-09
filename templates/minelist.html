@@ -10,7 +10,7 @@
 
 <div id="requests" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
-        <div class="MenuItem"><a href="/requests/new/">Nueva...</a></div>
+        <div class="Button"><a href="/requests/new/">Nueva...</a></div>
     {% endif %}
 
     <table>
@@ -26,7 +26,7 @@
 
 <div id="complains" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="MenuItem"><a href="/complains/new/">Nueva...</a></div>
+        <div class="Button"><a href="/complains/new/">Nueva...</a></div>
     {% endif %}
     <table>
     {% for complain in complains %}

@@ -5,7 +5,7 @@
 
 {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
 
-<div class="MenuItem"><a href='/cases/{{ case['_id'] }}/edit'>Editar</a></div>
+<div class="Button"><a href='/cases/{{ case['_id'] }}/edit'>Editar</a></div>
 
 {% endif %}
 
@@ -56,7 +56,7 @@
 <div id="requests" class="tabcontent">
     
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="MenuItem"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+        <div class="Button"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
 
     <table>
@@ -73,7 +73,7 @@
 <div id="complains" class="tabcontent">
     
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="MenuItem"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+        <div class="Button"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
 
     <table>
