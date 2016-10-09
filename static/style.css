@@ -43,6 +43,11 @@ h1, h2, h3 {
     background-color: #008CBA;
 }
 
+.Footer a {
+    color: white;
+    text-decoration: none;
+}
+
 label, input, textarea, select {
     display: block;
     font-size: 12px;
