@@ -21,7 +21,6 @@ def uploadFile(docfile):
     if not os.path.exists(path):
         os.makedirs(path)
     path += '/' + secure_filename(docfile.filename)
-    print(path)
     if not os.path.exists(path):
         docfile.save(path)
         return path 
@@ -527,7 +526,6 @@ def docrelNewWithDoc():
             docrel['source'] = request.form['source']
             docrel['source_id'] = request.form['source_id']
             docrel['doc_id'] = doc_id
-            print(docrel)
             DocRels().new(docrel)
         return redirect(request.referrer)
 
@@ -550,8 +548,9 @@ def mine():
     r = Rights()
     requests = r.listByUser(user['_id'], 'request')
     complains = r.listByUser(user['_id'], 'complain')
+    notes = r.listByUser(user['_id'], 'note')
     return render_template('minelist.html', requests=requests,
-            complains=complains, who=session['user'])
+            complains=complains, notes=notes, who=session['user'])
 
 @app.route('/notes')
 def notes():
@@ -591,7 +590,6 @@ def detailNote(_id):
         has_right = False
     else:
         user = session['user']
-        print('hola')
         user_id = user['_id']
         right = {
                 'source': 'note',
@@ -616,7 +614,10 @@ def editNote(_id):
         return redirect('/notes')
     n = Notes()
     note = n.get(_id)
-    return render_template('noteform.html', _id=_id, note=note, who=session['user'])
+    users_right = Rights().listBySource('note', _id)
+    print(users_right)
+    users_list = Users().list()
+    return render_template('noteform.html', _id=_id, note=note, users_right=users_right, users_list=users_list, who=session['user'])
 
 if __name__ == '__main__':
     app.run()

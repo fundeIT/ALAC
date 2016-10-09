@@ -57,13 +57,10 @@
 
         <p><strong>Usuarios con derechos de edición:</strong></p>
 
-            <table>
             {% for user in users_right%}
-            <tr class="ListItem">
-                <td>{{ user['name'] }}</td>
-            </tr>
+                {{ user['name'] }}
+		{% if not loop.last %}, {% endif %}
             {% endfor %}
-            </table>
 
         <form action='/rights/new/' method='post'>
             <select name='user_id'>

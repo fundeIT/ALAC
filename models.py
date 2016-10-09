@@ -182,7 +182,8 @@ class Users:
         user['password'] = self.encrypt(user['password']) 
         return dbconn().users.insert_one(user).inserted_id
     def get(self, _id):
-        return dbconn().users.find_one({'_id': ObjectId(_id)})
+        fields = {'name': 1, 'email': 1, 'kind': 1}
+        return dbconn().users.find_one({'_id': ObjectId(_id)}, fields)
     def getByName(self, name):
         return dbconn().users.find_one({'name': name})
     def list(self):
@@ -251,6 +252,9 @@ class Rights:
                     for element in cursor]
         elif source == 'complain':
             source_list = [Complains().get(element['source_id']) 
+                    for element in cursor]
+        elif source == 'note':
+            source_list = [Notes().get(element['source_id']) 
                     for element in cursor]
         return source_list
     def listBySource(self, source, source_id):

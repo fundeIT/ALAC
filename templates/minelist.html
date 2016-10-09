@@ -6,17 +6,19 @@
             'requests')">Peticiones</a></li>
     <li><a href="#" class="tablinks" onclick="openTab(event,
             'complains')">Denuncias</a></li>
+    <li><a href="#" class="tablinks" onclick="openTab(event,
+            'notes')">Notas</a></li>
 </ul>
 
 <div id="requests" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
-        <div class="Button"><a href="/requests/new/">Nueva...</a></div>
+        <div class="Button"><a href="/requests/new/">Nueva</a></div>
     {% endif %}
 
     <table>
     {% for request in requests%}
     <tr class="ListItem">
-        <td>{{ request['ref'] }}</td>
+        <td>{{ request['date'] }}</td>
         <td><a href="/requests/{{ request['_id'] }}">{{ request['overview']
                 }}</a></td>
     </tr>
@@ -26,18 +28,35 @@
 
 <div id="complains" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="Button"><a href="/complains/new/">Nueva...</a></div>
+        <div class="Button"><a href="/complains/new/">Nueva</a></div>
     {% endif %}
     <table>
     {% for complain in complains %}
     <tr class="ListItem">
-        <td>{{ complain['ref'] }}</td>
+        <td>{{ complain['date'] }}</td>
         <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
                 }}</a></td>
     </tr>
     {% endfor %}
     </table>
 </div>
+
+<div id="notes" class="tabcontent">
+    {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
+        <div class="Button"><a href="/notes/new/">Nueva</a></div>
+    {% endif %}
+
+    <table>
+    {% for note in notes %}
+    <tr class="ListItem">
+        <td>{{ note['date'] }}</td>
+        <td><a href="/notes/{{ note['_id'] }}">{{ note['title']
+                }}</a></td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
 
