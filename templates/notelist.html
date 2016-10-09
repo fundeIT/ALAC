@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block main %}
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="Button"><a href="/notes/new/">Nueva</a></div>
+
+{% endif %}
+
+<table>
+    {% for note in notes %}
+        <tr class="ListItem">
+            <td>{{ note['date'] }}</td>
+            <td><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

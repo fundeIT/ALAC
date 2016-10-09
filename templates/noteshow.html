@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ note['title'] }}<br/></h2>
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="Button"><a href='/notes/{{ note['_id'] }}/edit'>Editar</a></div>
+
+{% endif %}
+
+<p>{{ note['date'] }}</p>
+
+{{ note['content'] | safe }}
+
+{% if note['tags'] %}
+
+<p>Etiquetas:</p>
+
+<p>{{ note['tags'] }}</p>
+
+{% endif %}
+
+{% endblock %}
