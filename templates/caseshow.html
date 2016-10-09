@@ -43,12 +43,14 @@
         </form>
     {% endif %}
 
-    <ul class="List">
+    <table>
         {% for update in updates %}
-            <li class="ListItem">{{ update['date'] }}: 
-                {{ update['detail'] | safe }}</li>
+        <tr class="ListItem">
+            <td>{{ update['date'] }}</td>
+            <td>{{ update['detail'] | safe }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="requests" class="tabcontent">
@@ -57,11 +59,15 @@
         <div class="MenuItem"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
 
-    <ul class="List">
+    <table>
     {% for request in requests %}
-        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+        <tr class="ListItem">
+            <td>{{ request['ref'] }}</td>
+            <td><a href="/requests/{{ request['_id'] }}">{{ request['overview']
+                    }}</a></td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="complains" class="tabcontent">
@@ -70,11 +76,15 @@
         <div class="MenuItem"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
 
-    <ul class="List">
+    <table>
     {% for complain in complains %}
-        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+        <tr class="ListItem">
+            <td>{{ complain['ref'] }}</td>
+            <td><a href="/complains/{{ complain['_id'] }}">{{
+                    complain['overview'] }}</a></td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="advises" class="tabcontent">
@@ -89,11 +99,14 @@
         </form>
     {% endif %}
 
-    <ul class="List">
+    <table>
         {% for advice in advices %}
-            <li class="ListItem">{{ advice['date'] }}: {{ advice['detail'] | safe }}</li>
+        <tr class="ListItem">
+            <td>{{ advice['date'] }}</td>
+            <td>{{ advice['detail'] | safe }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="docs" class="tabcontent">

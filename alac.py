@@ -55,6 +55,11 @@ def login():
     return render_template('login.html', 
         message=None, who=session['user'])
 
+@app.route('/logout')
+def logout():
+    del session['user']
+    return redirect('/')
+
 @app.route('/cases')
 def cases():
     if not 'user' in session:
@@ -392,7 +397,8 @@ def userDetail(_id):
             else:
                 user['password'] = ''
                 message = 'Las contraseñas deben ser iguales. Verifique.'
-                return render_template('userform.html', _id=_id, user=user, message=message, password1='', kinds=u.kinds, who=session['user'])
+                return render_template('userform.html', _id=_id, user=user,
+                        message=message, password1='', kinds=u.kinds, who=session['user'])
         else:
             del user['password']
             u.update(_id, user)

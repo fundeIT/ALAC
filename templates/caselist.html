@@ -7,11 +7,12 @@
 
 {% endif %}
 
-<ul class="List">
+<table>
 {% for case in cases %}
-    <li class="ListItem"><a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a></li>
+<tr class="ListItem">
+    <td><a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a></td>
+</tr>
 {% endfor %}
-</ul>
-
+</table>
 
 {% endblock %}

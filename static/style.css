@@ -16,7 +16,7 @@ h1, h2, h3 {
     margin-top: 0px;
     padding: 10px 10px 0px 10px;
     position: fixed;
-    height: 95px;
+    height: 30px;
     width: 100%;
     top: 0px;
 }
@@ -28,9 +28,8 @@ h1, h2, h3 {
 
 .Main {
     margin: 10px;
-    padding-top: 100px;
+    padding-top: 35px;
     padding-bottom: 30px;
-    line-height: 140%;
 }
 
 .Footer {
@@ -48,6 +47,10 @@ label, input, textarea, select {
     display: block;
     font-size: 12px;
     font-family: 'Ubuntu', 'Tahoma', sans;
+}
+
+label {
+    margin-top: 10px;
 }
 
 .TextInput {
@@ -224,4 +227,20 @@ td a {
     border-style: solid;
     border-color: red;
     background: #FEF;
+}
+
+table {
+    width: 100%;
+}
+
+.Login {
+    position: fixed;
+    right: 5px;
+    color: white;
+    font-size: 90%;
+}
+
+.Login a {
+    color: white;
+    text-decoration: none;
 }

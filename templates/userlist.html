@@ -2,12 +2,14 @@
 {% block main %}
 
 <div class="MenuItem"><a href="/users/new/">Nuevo...</a></div>
-    <ul class="List">
+    <table>
     {% for user in users %}
-        <li class="ListItem">
+    <tr class="ListItem">
+        <td>
             <a href="/users/{{ user['_id'] }}">{{ user['name'] }}</a>
-        </li>
+        </td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 
 {% endblock %}

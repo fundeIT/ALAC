@@ -14,27 +14,39 @@
 </ul>
 
 <div id="running" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for request in running %}
-        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ request['date'] }}</td>
+        <td><a href="/requests/{{ request['_id'] }}">{{
+                request['overview'] }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="drafts" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for request in drafts %}
-        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ request['date'] }}</td>
+        <td><a href="/requests/{{ request['_id'] }}">{{
+                request['overview'] }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="done" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for request in done %}
-        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ request['date'] }}</td>
+        <td><a href="/requests/{{ request['_id'] }}">{{
+                request['overview'] }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

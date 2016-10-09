@@ -11,10 +11,13 @@
     <label>Correo</label>
     <input class="TextInput" name="email" type="email" 
            value="{{ user['email'] }}">
+    <p>Si no desea cambiar la contraseña, deje los siguientes campos en
+    blanco. En cambio, si desea cambiarla, digite la nueva contraseña dos veces.</p>
     <label>Contraseña</label>
     <input class="TextInput" name="password" type="password">
     <label>Repetir contraseña</label>
     <input class="TextInput" name="password1" type="password">
+    {% if who['kind'] == 'OPR' %}
     <label>Tipo de usuario</label>
     <select name='kind'>
         {% for key in kinds %}
@@ -24,6 +27,9 @@
                 {% endif %}>{{ kinds[key] }}</option>
         {% endfor %}
     </select>
+    {% else %}
+        <input type="hidden" name="kind" value="{{ user['kind'] }}">
+    {% endif %}
     <button>Enviar</button>
 </form>
 

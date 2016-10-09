@@ -35,11 +35,14 @@ Teléfono: {{ office['phone'] }}<br/>
         <div class="MenuItem"><a href="/requests/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
     {% endif %}
 
-    <ul class="List">
+    <table>
     {% for request in requests %}
-        <li class="ListItem">{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{ request['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{
+                request['overview'] }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="complains" class="tabcontent">
@@ -48,11 +51,14 @@ Teléfono: {{ office['phone'] }}<br/>
         <div class="MenuItem"><a href="/complains/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
     {% endif %}
 
-    <ul class="List">
+    <table>
     {% for complain in complains %}
-        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{
+                complain['overview'] }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="updates" class="tabcontent">
@@ -70,12 +76,14 @@ Teléfono: {{ office['phone'] }}<br/>
         </form>
     {% endif %}
 
-    <ul class="List">
+    <table>
         {% for update in updates %}
-            <li class="ListItem">{{ update['date'] }}: 
-                {{ update['detail'] | safe }}</li>
+        <tr class="ListItem">
+            <td>{{ update['date'] }}</td> 
+            <td>{{ update['detail'] | safe }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

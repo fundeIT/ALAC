@@ -15,27 +15,38 @@
 
 
 <div id="running" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for complain in running %}
-        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ complain['date'] }}</td>
+        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
+                }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="drafts" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for complain in drafts %}
-        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ complain['date'] }}</td>
+        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
+                }}</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <div id="done" class="tabcontent">
-    <ul class="List">
+    <table>
     {% for complain in done %}
-        <li class="ListItem">{{ complain['ref'] }}. <a href="/complains/{{ complain['_id'] }}">{{ complain['overview'] }}</a></li>
+    <tr class="ListItem">
+        <td>{{ complain['date'] }}</td>
+        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
+                }}</a></td>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

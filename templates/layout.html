@@ -8,7 +8,6 @@
     </head>
     <body>
         <div class="Header">
-            <h1>Centro de Asesoría Legal Anticorrupción (ALAC)</h1>
             <ul class='MenuBar'>
                 {% if who['kind'] %}
                     <li class="MenuItem"><a href="/mine">Míos</a></li>
@@ -22,6 +21,16 @@
                     <li class="MenuCaution"><a href="/users">Usuarios</a></li>
                 {% endif %}
             </ul>
+        </div>
+        <div class="Login">
+            {% if who['name'] %}
+            <a href="/users/{{ who['_id'] }}">{{ who['name'] }}</a>.
+                <span class="MenuItem">
+                    <a href="/logout">Salir</a>
+                </span>
+            {% else %}
+                <a class="MenuItem" href="/login">Login</a>
+            {% endif %}
         </div>
         <div class="Main">
              {% block main %}{% endblock %}
