@@ -159,16 +159,16 @@ button:hover, .Button:hover {
     padding: 0;
 }
 
-.ListItem a {
+a, .ListItem a {
     text-decoration: none;
-    color: black;
+    color: #005000;
 }
 
 .ListItem:last-child {
     border: none;
 }
 
-.ListItem a:hover {
+a:hover, .ListItem a:hover {
    color: #555;
 }
 

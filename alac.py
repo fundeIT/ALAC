@@ -346,10 +346,14 @@ def complainDetail(_id):
         office = Offices().get(complain['office_id'])
         reviewer = Offices().get(complain['reviewer_id'])
         updates = Updates().list('complain', _id)
+        updates_mod = []
+        for u in updates:
+           u['detail'] = markdown(u['detail'])
+           updates_mod.append(u)
         docrels = DocRels().list('complain', _id)
         docs = Documents().list()
         return render_template('complainshow.html', _id=_id, 
-            complain = complain, office = office, case=case, updates=updates,
+            complain = complain, office = office, case=case, updates=updates_mod,
             reviewer=reviewer, docrels=docrels, docs=docs, who=user,
             has_right=has_right)
 

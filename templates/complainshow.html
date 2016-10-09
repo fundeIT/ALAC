@@ -5,7 +5,7 @@
 
 {% if has_right %}
 
-<div class="MenuItem"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
+<div class="Button"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
 
 {% endif %}
 
@@ -50,7 +50,7 @@ Comentarios:<br/>
         {% for update in updates %}
             <tr class="ListItem">
                 <td>{{ update['date'] }}</td>
-                <td>{{ update['detail'] }}</td>
+                <td>{{ update['detail'] | safe }}</td>
             </tr>
         {% endfor %}
     </table>
