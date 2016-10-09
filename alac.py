@@ -33,14 +33,11 @@ def uploadFile(docfile):
 @app.route('/')
 def index():
     if not 'user' in session:
-        session['user'] = {}
         return redirect('/login')
     return render_template('index.html', who=session['user']) 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if not 'user' in session:
-        session['user'] = {}
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -51,9 +48,12 @@ def login():
             return redirect('/')
         else:
             message = 'Usuario no registrado o contraseña incorrecta'
-            return render_template('login.html', message=message, who=session['user'])
-    return render_template('login.html', 
-        message=None, who=session['user'])
+            return render_template('login.html', message=message, who={})
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    return render_template('login.html', message=None, who=user)
 
 @app.route('/logout')
 def logout():
@@ -63,13 +63,16 @@ def logout():
 @app.route('/cases')
 def cases():
     if not 'user' in session:
-        session['user'] = {}
-    return render_template('caselist.html', cases = Cases().list(), who=session['user'])
+        user = {}
+    else:
+        user = session['user']
+    return render_template('caselist.html', cases = Cases().list(), who=user)
 
 @app.route('/cases/new/', methods=['GET', 'POST'])
 def caseNew():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/cases')
+    user = session['user']
     if request.method == 'POST':
         case = {key: request.form[key] for key in Cases().keys} 
         _id = Cases().new(case)
@@ -81,17 +84,20 @@ def caseNew():
         case = emptyDict(Cases().keys)
         _id = 'new/'
         return render_template('caseform.html', _id=_id, case = case, 
-            who=session['user'])
+            who=user)
 
 @app.route('/cases/<string:_id>', methods=['GET', 'POST'])
 def caseDetail(_id):
-    if not 'user' in session:
-        session['user'] = {}
     if request.method == 'POST':
-        case = {key: request.form[key] for key in Cases().keys} 
-        Cases().update(_id, case)
+        if 'user' in session:
+            case = {key: request.form[key] for key in Cases().keys} 
+            Cases().update(_id, case)
         return redirect('/cases/%s' % _id)
     else:
+        if 'user' in session:
+            user = session['user']
+        else:
+            user = {}
         case = Cases().get(_id)
         requests = Requests().list(case_id=_id)  
         complains = Complains().list(case_id=_id)
@@ -100,16 +106,14 @@ def caseDetail(_id):
         advices = Updates().list('advise', _id)
         docrels = DocRels().list('case', _id)
         docs = Documents().list()
-        # for u in updates:
-        #    u['detail'] = markdown(u['detail'])
         return render_template('caseshow.html', case = case,
             requests = requests, complains=complains, updates=updates,
-            advices=advices, docs=docs, docrels=docrels, who=session['user'])
+            advices=advices, docs=docs, docrels=docrels, who=user)
 
 @app.route('/cases/<string:_id>/edit')
 def caseEdit(_id):
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/cases/%s' % _id)
     if request.method == 'GET':
         case = Cases().get(_id)
         return render_template('caseform.html', _id = _id, case = case, 
@@ -117,15 +121,18 @@ def caseEdit(_id):
 
 @app.route('/offices')
 def offices():
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     return render_template('officelist.html', offices = Offices().list(), 
-        who=session['user'])
+        who=user)
     
 @app.route('/offices/new/', methods=['GET', 'POST'])
 def officeNew():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/offices')
+    user = session['user']
     if request.method == 'POST':
         office = {key: request.form[key] for key in Offices().keys}
         office['0'] = 'Sin caso asociado'
@@ -135,12 +142,14 @@ def officeNew():
         office = emptyDict(Offices().keys)
         _id = 'new/'
         return render_template('officeform.html', _id=_id, office=office, 
-            who=session['user'])
+            who=user)
 
 @app.route('/offices/<string:_id>', methods=['GET', 'POST'])
 def officeDetail(_id):
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     if request.method == 'POST':
         office = {key: request.form[key] for key in Offices().keys} 
         Offices().update(_id, office)
@@ -152,24 +161,28 @@ def officeDetail(_id):
         complains = Complains().list(office_id=_id)
         updates = Updates().list('office', _id)
         return render_template('officeshow.html', requests=requests,
-            complains=complains, office=office, updates=updates, who=session['user'])
+            complains=complains, office=office, updates=updates, who=user)
 
 @app.route('/offices/<string:_id>/edit')
 def officeEdit(_id):
-    if not 'user' in session:
-        session['user'] = {}
-        return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=session['user'])
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=user)
 
 @app.route('/requests')
 def requests():
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     r = Requests()
     drafts = r.list(status='0')
     running = r.list(status='1')
     done = r.list(status='2')
     return render_template('requestlist.html', drafts=drafts, running=running, 
-        done=done, who=session['user'])
+        done=done, who=user)
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
@@ -205,15 +218,17 @@ def requestDetail(_id):
     It has options to append updates and documents.
     """
     # Checking privileges
-    if not 'user' in session:
-        session['user'] = {}
-    user = session['user']
-    right = {
+    if 'user' in session:
+        user = session['user']
+        right = {
             'source': 'request',
             'source_id': _id,
             'user_id': user['_id']
-    }
-    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+        }
+        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+    else:
+        user = {}
+        has_right = False
     r = Requests() # Object used to access request methods
     if request.method == 'POST':
         if has_right:
@@ -241,35 +256,36 @@ def requestDetail(_id):
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     r = Requests()
     req = r.get(_id)
     users_right = Rights().listBySource('request', _id)
     users_list = Users().list()
-    return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results,
-            cases = Cases().list(), offices = Offices().list(),
-            users_right=users_right, users_list=users_list, who=session['user'])
+    return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
 
 @app.route('/updates/new/', methods=['POST'])
 def updateNew():
-    if not 'user' in session:
-        session['user'] = {}
-    u = Updates()
-    update = {key: request.form[key] for key in u.keys}
-    _id = u.new(update)
+    if 'user' in session:
+        u = Updates()
+        update = {key: request.form[key] for key in u.keys}
+        _id = u.new(update)
     return redirect(request.referrer)
 
 @app.route('/complains')
 def complains():
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     complains = Complains()
     drafts = complains.list(status='0')
     running = complains.list(status='1')
     done = complains.list(status='2')
     return render_template('complainlist.html', drafts=drafts, running=running,
-        done=done, who=session['user'])
+        done=done, who=user)
 
 @app.route('/complains/new/', methods=['GET', 'POST'])
 def complainNew():
@@ -303,15 +319,17 @@ def complainNew():
 
 @app.route('/complains/<string:_id>', methods=['GET', 'POST'])
 def complainDetail(_id):
-    if not 'user' in session:
-        session['user'] = {}
-    user = session['user']
-    right = {
+    if 'user' in session:
+        user = session['user']
+        right = {
             'source': 'complain',
             'source_id': _id,
             'user_id': user['_id']
-    }
-    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+        }
+        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+    else:
+        user = {}
+        has_right = False
     r = Complains()
     if request.method == 'POST':
         if has_right:
@@ -336,8 +354,10 @@ def complainDetail(_id):
 
 @app.route('/complains/<string:_id>/edit')
 def complainEdit(_id):
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     r = Complains()
     complain = r.get(_id)
     o = Offices()
@@ -345,20 +365,19 @@ def complainEdit(_id):
     reviewers = o.list()
     users_right = Rights().listBySource('complain', _id)
     users_list = Users().list()
-    return render_template('complainform.html', _id=_id, complain=complain, status=r.status, 
-        results = r.results, cases=Cases().list(), offices=offices,
-        reviewers=reviewers, users_right=users_right, users_list=users_list, who=session['user'])
+    return render_template('complainform.html', _id=_id, complain=complain, status=r.status, results = r.results, cases=Cases().list(), offices=offices, reviewers=reviewers, users_right=users_right, users_list=users_list, who=user)
 
 @app.route('/users')
 def users():
     if not 'user' in session:
-        session['user'] = {}
-    return render_template('userlist.html', users=Users().list(), who=session['user'])
+        return redirect('/')
+    else:
+        return render_template('userlist.html', users=Users().list(), who=session['user'])
 
 @app.route('/users/new/', methods=['GET', 'POST'])
 def userNew():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/')
     _id = 'new/'
     u = Users()
     if request.method == 'POST':
@@ -385,7 +404,7 @@ def userNew():
 @app.route('/users/<string:_id>', methods=['GET', 'POST'])
 def userDetail(_id):
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/')
     u = Users()
     if request.method == 'POST':
         user = {key: request.form[key] for key in u.keys}
@@ -411,15 +430,17 @@ def userDetail(_id):
 
 @app.route('/docs')
 def documents():
-    if not 'user' in session:
-        session['user'] = {}
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     docs = Documents().list()
-    return render_template('doclist.html', docs=docs, who=session['user']) 
+    return render_template('doclist.html', docs=docs, who=user) 
 
 @app.route('/docs/new/', methods=['GET', 'POST'])
 def newDoc():
     if not 'user' in session:
-        session['user'] = {}
+        redirect('/docs')
     _id = 'new/'
     message = ''
     if request.method == 'POST':
@@ -455,7 +476,7 @@ def newDoc():
 @app.route('/docs/<string:_id>/edit', methods=['GET', 'POST'])
 def docDetail(_id):
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/docs')
     d = Documents()
     if request.method == 'POST':
         doc = {key: request.form[key] for key in d.keys}
@@ -469,8 +490,6 @@ def docDetail(_id):
 
 @app.route('/docs/<string:_id>')
 def docDownload(_id):
-    if not 'user' in session:
-        session['user'] = {}
     d = Documents()
     doc = d.get(_id)
     path = app.config['UPLOAD_FOLDER'] + '/' + doc['path']
@@ -480,7 +499,6 @@ def docDownload(_id):
 @app.route('/docrels/new/', methods=['POST'])
 def docrelNew():
     if not 'user' in session:
-        session['user'] = {}
         return redirect(request.referrer)
     else:
         dr = DocRels()
@@ -491,7 +509,6 @@ def docrelNew():
 @app.route('/docrels/newdoc/', methods=['POST'])
 def docrelNewWithDoc():
     if not 'user' in session:
-        session['user'] = {}
         return redirect(request.referrer)
     else:
         doc = {}
@@ -526,13 +543,78 @@ def newRight():
 @app.route('/mine')
 def mine():
     if not 'user' in session:
-        session['user'] = {}
+        return redirect('/')
     user = session['user']
     r = Rights()
     requests = r.listByUser(user['_id'], 'request')
     complains = r.listByUser(user['_id'], 'complain')
     return render_template('minelist.html', requests=requests,
             complains=complains, who=session['user'])
+
+@app.route('/notes')
+def notes():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    notes = Notes().list()
+    return render_template('notelist.html', notes=notes, who=user)
+
+@app.route('/notes/new/', methods=['GET', 'POST'])
+def newNote():
+    if not 'user' in session:
+        return redirect('/notes')
+    user = session['user']
+    n = Notes()
+    if request.method == 'POST':
+        note = {key: request.form[key] for key in Notes().keys}
+        _id = n.new(note)
+        right = {
+                'source': 'note',
+                'source_id': str(_id),
+                'user_id': user['_id']
+                }
+        Rights().new(right)
+        return redirect('/notes')
+    else:
+        note = emptyDict(n.keys)
+        note['date'] = Dates().getDate()
+        _id = 'new/'
+        return render_template('noteform.html', _id=_id, note=note, who=user)
+
+@app.route('/notes/<string:_id>', methods=['GET', 'POST'])
+def detailNote(_id):
+    if not 'user' in session:
+        user = {} 
+        has_right = False
+    else:
+        user = session['user']
+        print('hola')
+        user_id = user['_id']
+        right = {
+                'source': 'note',
+                'source_id': _id,
+                'user_id': user_id
+        }
+        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+    n = Notes()
+    if request.method == 'POST':
+        if has_right:
+            note = {key: request.form[key] for key in n.keys}
+            n.update(_id, note)
+        return redirect('/notes/%s' % _id)
+    else:
+        note = n.get(_id)
+        note['content'] = markdown(note['content'])
+        return render_template('noteshow.html', _id=_id, note=note, who=user)
+
+@app.route('/notes/<string:_id>/edit')
+def editNote(_id):
+    if not 'user' in session:
+        return redirect('/notes')
+    n = Notes()
+    note = n.get(_id)
+    return render_template('noteform.html', _id=_id, note=note, who=session['user'])
 
 if __name__ == '__main__':
     app.run()

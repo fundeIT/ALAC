@@ -247,12 +247,25 @@ class Rights:
         cursor = dbconn().rights.find({'source': source, 'user_id': user_id})
         source_list = None
         if source == 'request':
-            source_list = [Requests().get(element['source_id']) for element in cursor]
+            source_list = [Requests().get(element['source_id']) 
+                    for element in cursor]
         elif source == 'complain':
-            source_list = [Complains().get(element['source_id']) for element in cursor]
+            source_list = [Complains().get(element['source_id']) 
+                    for element in cursor]
         return source_list
     def listBySource(self, source, source_id):
         cursor = dbconn().rights.find({'source': source, 'source_id':
             source_id})
         users_list = [Users().get(element['user_id']) for element in cursor]
         return users_list
+
+class Notes:
+    keys = ['title', 'date', 'content', 'tags']
+    def new(self, note):
+        return dbconn().notes.insert_one(note).inserted_id
+    def list(self):
+        return dbconn().notes.find().sort('date', -1)
+    def get(self, _id):
+        return dbconn().notes.find_one({'_id': ObjectId(_id)})
+    def update(self, _id, note):
+        dbconn().notes.update({'_id': ObjectId(_id)}, {'$set': note})
