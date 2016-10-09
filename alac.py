@@ -32,9 +32,11 @@ def uploadFile(docfile):
 
 @app.route('/')
 def index():
-    if not 'user' in session:
-        return redirect('/login')
-    return render_template('index.html', who=session['user']) 
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    return render_template('index.html', who=user) 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
