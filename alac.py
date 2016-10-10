@@ -223,7 +223,7 @@ def requestDetail(_id):
         user = session['user']
         right = {
             'source': 'request',
-            'source_id': _id,
+            'source_id': str(_id),
             'user_id': user['_id']
         }
         has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
@@ -231,6 +231,7 @@ def requestDetail(_id):
         user = {}
         has_right = False
     r = Requests() # Object used to access request methods
+    print(has_right)
     if request.method == 'POST':
         if has_right:
             req = {key: request.form[key] for key in r.keys}

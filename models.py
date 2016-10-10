@@ -241,7 +241,7 @@ class Rights:
     def new(self, right):
         return dbconn().rights.insert_one(right).inserted_id
     def lookup(self, right):
-        right['source_id'] = ObjectId(right['source_id'])
+        # right['source_id'] = ObjectId(right['source_id'])
         return dbconn().rights.find_one(right)
     def listByUser(self, user_id, source):
         cursor = dbconn().rights.find({'source': source, 'user_id': user_id})
