@@ -9,8 +9,10 @@ function openTab(evt, tabName) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     if (tabName) {
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
+        el = document.getElementById(tabName) // .style.display = "block";
+		el.style.display = "block";
+		// el.className += " active";
+        // evt.currentTarget.className += " active";
     }
     else {
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -22,4 +24,8 @@ function openTab(evt, tabName) {
 
 window.onload = function() {
     openTab(null, null);
+	var pos = window.location.href.indexOf("#");
+	var tag = window.location.href.substr(pos + 1);
+	if (tag)
+		openTab(null, tag);
 }
