@@ -78,7 +78,7 @@ def caseNew():
         case = {key: request.form[key] for key in Cases().keys} 
         _id = Cases().new(case)
         if request.referrer != '/cases/new/':
-            return redirect(request.referrer)
+            return redirect('/cases/%s' % str(_id))
         else:
             return redirect('/cases') 
     else:
