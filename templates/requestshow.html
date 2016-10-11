@@ -5,7 +5,21 @@
 
 {% if has_right %}
 
+{% if req['status'] != 'Cerrada' %}
 <div class="Button"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
+{% endif %}
+
+{% if who['kind'] in ['OPR', 'MNG'] %} 
+    {% if req['status'] == 'Borrador' %}
+    <div class="Button">
+        <a href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
+    </div>
+    {% elif req['status'] == 'En trámite' %}
+    <div class="Button">
+        <a href="/requests/{{ req['_id'] }}/close">Cerrar</a>
+    </div>
+    {% endif %}
+{% endif %}
 
 {% endif %}
 
@@ -39,7 +53,7 @@ Finalización del trámite: {{ req['finish'] }}
 
 {% if req['comment'] %}
 <p>
-Comentarios:<br/>
+<strong>Comentarios:</strong><br/>
 {{ req['comment'] | safe }}
 </p>
 {% endif %}
@@ -58,6 +72,7 @@ Comentarios:<br/>
             <tr class="ListItem">
     			<td>{{ update['date'] }}</td>
     			<td>{{ update['detail'] | safe }}</td>
+    			<td>{{ update['user_name'] }}</td>
     		</tr>
         {% endfor %}
     </table>

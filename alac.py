@@ -199,11 +199,23 @@ def requestNew():
             'user_id': user['_id']
         }
         Rights().new(right)
+        d = Dates().getDate()
+        msg = 'Petición creada'
+        update = {
+                'source': 'request',
+                'source_id': str(_id),
+                'date': d,
+                'detail': msg,
+                'user_id': str(user['_id'])
+        }
+        Updates().new(update)
         return redirect('/requests')
     else:
         r = Requests()
         req = emptyDict(r.keys)
+        req['date'] = Dates().getDate()
         req['result'] = 'ND'
+        req['status'] = '0'
         case_id = request.args.get('case_id')
         if case_id != None:
             req['case_id'] = case_id
@@ -226,12 +238,12 @@ def requestDetail(_id):
             'source_id': str(_id),
             'user_id': user['_id']
         }
-        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR', 'USR']
+        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR',
+                'USR']
     else:
         user = {}
         has_right = False
     r = Requests() # Object used to access request methods
-    print(has_right)
     if request.method == 'POST':
         if has_right:
             req = {key: request.form[key] for key in r.keys}
@@ -243,12 +255,17 @@ def requestDetail(_id):
         req['status'] = r.status[int(req['status'])]
         req['result'] = r.results[req['result']]
         req['comment'] = markdown(req['comment'])
-        case = Cases().get(req['case_id'])
+        if req['case_id']:
+            case = Cases().get(req['case_id'])
+        else:
+            case = {}
         office = Offices().get(req['office_id'])
         updates = Updates().list('request', _id)
         updates_mod = []
         for element in updates:
             element['detail'] = markdown(element['detail'])
+            if 'user_id' in element:
+                element['user_name'] = Users().get(element['user_id'])['name']
             updates_mod.append(element)
         docrels = DocRels().list('request', _id)
         docs = Documents().list()
@@ -264,9 +281,82 @@ def requestEdit(_id):
         user = {}
     r = Requests()
     req = r.get(_id)
+    if int(req['status']) == 2:
+        return redirect('/requests/%s' % _id)
     users_right = Rights().listBySource('request', _id)
     users_list = Users().list()
     return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
+
+@app.route('/requests/<string:_id>/forward', methods=['GET'])
+def forwardRequest(_id):
+    r = Requests()
+    req = r.get(_id)
+    if int(req['status']) != 0:
+        return redirect('/requests/%s' % _id)
+    if not 'user' in session:
+        return redirect('/requests/%s' % _id)
+    user = session['user']
+    right = {
+            'source': 'request',
+            'source_id': str(_id),
+            'user_id': user['_id']
+    }
+    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR']
+    if has_right:
+        d = Dates().getDate()
+        req['status'] = '1'
+        req['start'] = d
+        r.update(_id, req)
+        msg = 'Petición pasa de borrador a en trámite'
+        update = {
+                'source': 'request',
+                'source_id': _id,
+                'date': d,
+                'detail': msg,
+                'user_id': str(user['_id'])
+        }
+        Updates().new(update)
+    return redirect('/requests/%s' % _id)
+
+@app.route('/requests/<string:_id>/close', methods=['GET', 'POST'])
+def closeRequest(_id):
+    r = Requests()
+    req = r.get(_id)
+    if int(req['status']) != 1:
+        return redirect('/requests/%s' % _id)
+    if not 'user' in session:
+        return redirect('/requests/%s' % _id)
+    user = session['user']
+    right = {
+            'source': 'request',
+            'source_id': str(_id),
+            'user_id': user['_id']
+    }
+    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR']
+    if not has_right:
+        return redirect('/requests/%s' % _id)
+    if request.method == 'GET':
+        req['result'] = r.results[req['result']]
+        return render_template('requestclose.html', _id=_id, req=req, results=r.results,
+                referrer=request.referrer, who=user)
+    else:
+        d = Dates().getDate()
+        req['status'] = '2'
+        req['result'] = request.form['result']
+        req['comment'] = request.form['comment']
+        req['finish'] = d 
+        r.update(_id, req)
+        msg = 'Petición pasa a cerrada'
+        update = {
+                'source': 'request',
+                'source_id': _id,
+                'date': d,
+                'detail': msg,
+                'user_id': str(user['_id'])
+        }
+        Updates().new(update)
+        referrer = request.form['referrer']
+        return redirect('/requests/%s' % _id)
 
 @app.route('/updates/new/', methods=['POST'])
 def updateNew():

@@ -9,8 +9,7 @@ function openTab(evt, tabName) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     if (tabName) {
-        el = document.getElementById(tabName) // .style.display = "block";
-		el.style.display = "block";
+        el = document.getElementById(tabName).style.display = "block";
 		// el.className += " active";
         // evt.currentTarget.className += " active";
     }
@@ -25,7 +24,9 @@ function openTab(evt, tabName) {
 window.onload = function() {
     openTab(null, null);
 	var pos = window.location.href.indexOf("#");
-	var tag = window.location.href.substr(pos + 1);
-	if (tag)
-		openTab(null, tag);
+    if (pos > 0) {
+	    var tag = window.location.href.substr(pos + 1);
+	    if (tag)
+		    openTab(null, tag);
+    }
 }

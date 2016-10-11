@@ -1,0 +1,25 @@
+{% extends "form.html" %}
+{% block form %}
+
+<h2>{{ req['overview'] }}</h2>
+
+<form action="/requests/{{ _id }}/close" method="post">
+    <label>Resultado</label>
+    <select name='result'>
+        {% for k in results %}
+            <option value="{{ k }}" 
+                {% if req['result']|string() == k|string() %}
+                    selected
+                {% endif %}>
+                {{ results[k] }}
+            </option>
+        {% endfor %}
+    </select>
+    <label>Comentarios</label>
+    <textarea class="TextArea" 
+        name="comment">{{ req['comment'] }}</textarea>
+    <input type="hidden" name="referrer" value="{{ referrer }}">
+    <button>Enviar</button>
+</form>
+
+{% endblock %}
