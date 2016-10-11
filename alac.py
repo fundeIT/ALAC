@@ -265,7 +265,9 @@ def requestDetail(_id):
         for element in updates:
             element['detail'] = markdown(element['detail'])
             if 'user_id' in element:
-                element['user_name'] = Users().get(element['user_id'])['name']
+                u = Users().get(element['user_id'])
+                if u:
+                    element['user_name'] = u['name']
             updates_mod.append(element)
         docrels = DocRels().list('request', _id)
         docs = Documents().list()
@@ -361,8 +363,12 @@ def closeRequest(_id):
 @app.route('/updates/new/', methods=['POST'])
 def updateNew():
     if 'user' in session:
+        user = session['user']
+        print(user)
         u = Updates()
         update = {key: request.form[key] for key in u.keys}
+        update['user_id'] = str(user['_id'])
+        print(update)
         _id = u.new(update)
     return redirect(request.referrer)
 

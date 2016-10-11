@@ -72,7 +72,11 @@ Finalización del trámite: {{ req['finish'] }}
             <tr class="ListItem">
     			<td>{{ update['date'] }}</td>
     			<td>{{ update['detail'] | safe }}</td>
-    			<td>{{ update['user_name'] }}</td>
+    			<td>
+    			    {% if has_right %}
+    			        {{ update['user_name'] }}
+    			    {% endif %}
+    			</td>
     		</tr>
         {% endfor %}
     </table>

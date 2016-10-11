@@ -9,6 +9,10 @@ h1, h2, h3 {
     font-weight: normal;
 }
 
+table {
+    width: 100%;
+}
+
 .Header {
     background-color: #01b1af;
     color: white;
@@ -242,10 +246,6 @@ td a {
     background: #FEF;
 }
 
-table {
-    width: 100%;
-}
-
 .Login {
     position: fixed;
     right: 5px;
@@ -256,10 +256,4 @@ table {
 .Login a {
     color: white;
     text-decoration: none;
-}
-
-p {
-    max-width: 540px;
-    line-height: 140%;
-    text-align: justify;
 }
