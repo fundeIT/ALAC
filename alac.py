@@ -364,11 +364,9 @@ def closeRequest(_id):
 def updateNew():
     if 'user' in session:
         user = session['user']
-        print(user)
         u = Updates()
         update = {key: request.form[key] for key in u.keys}
         update['user_id'] = str(user['_id'])
-        print(update)
         _id = u.new(update)
     return redirect(request.referrer)
 
