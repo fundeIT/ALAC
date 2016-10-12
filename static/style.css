@@ -13,6 +13,34 @@ table {
     width: 100%;
 }
 
+td {
+	vertical-align: top;
+	padding: 2px;
+}
+
+td a {
+	color: #553;
+}
+
+td p {
+	margin: 0;
+}
+
+.Footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
+    color: white;
+    background-color: #01b1af;
+}
+
+.Footer a {
+    color: white;
+    text-decoration: none;
+}
+
 .Header {
     background-color: #01b1af;
     color: white;
@@ -36,29 +64,14 @@ table {
     padding-bottom: 30px;
 }
 
-.Footer {
-    position:fixed;
-    left:0px;
-    bottom:0px;
-    height:30px;
-    width:100%;
-    color: white;
-    background-color: #01b1af;
-}
-
-.Footer a {
-    color: white;
-    text-decoration: none;
-}
-
 label, input, textarea, select {
     display: block;
     font-size: 12px;
     font-family: 'Ubuntu', 'Tahoma', sans;
+    margin-top: 10px;
 }
 
 label {
-    margin-top: 10px;
 }
 
 .TextInput {
@@ -183,9 +196,8 @@ a:hover, .ListItem a:hover {
 ul.tab {
     list-style-type: none;
     padding: 0;
-    margin: 10px 0px 10px 0;
+    margin: 10px 0px 0px 0;
     overflow: hidden;
-    border-bottom: 1px solid #ccc;
 }
 
 ul.tab li {
@@ -210,31 +222,18 @@ ul.tab li a:hover {
 }
 
 ul.tab li a:focus, .active {
-   background-color: #057e7d;
+    background-color: #057e7d;
     border-radius: 5px 5px 0 0;
 }
 
 .tabcontent {
     display: none;
-    border-top: none;
-    padding-top: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
 }
 
 .Center {
     text-align: center;
-}
-
-td {
-	vertical-align: top;
-	padding: 2px;
-}
-
-td p {
-	margin: 0;
-}
-
-td a {
-	color: #553;
 }
 
 .CautionSet {

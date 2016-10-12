@@ -582,11 +582,11 @@ def docDetail(_id):
         doc = {key: request.form[key] for key in d.keys}
         del doc['path']
         d.update(_id, doc)
-        return redirect('/docs/%s/edit' % _id)
+        return redirect(request.form['referrer'])
     else:
         doc = d.get(_id)
         return render_template('docform.html', _id=_id, doc=doc,
-            who=session['user'], message='')
+            referrer=request.referrer, who=session['user'], message='')
 
 @app.route('/docs/<string:_id>')
 def docDownload(_id):
