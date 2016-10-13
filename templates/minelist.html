@@ -15,14 +15,14 @@
     {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
         <div class="Button"><a href="/requests/new/">Nueva</a></div>
     {% endif %}
-    {{ macro.listItems(requests) }}
+    {{ macro.listItems('requests', requests) }}
 </div>
 
 <div id="complains" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="Button"><a href="/complains/new/">Nueva</a></div>
     {% endif %}
-    {{ macro.listItems(complains) }}
+    {{ macro.listItems('complains', complains) }}
 </div>
 
 <div id="notes" class="tabcontent">

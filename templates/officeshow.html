@@ -35,7 +35,7 @@ Teléfono: {{ office['phone'] }}<br/>
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="MenuItem"><a href="/requests/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
     {% endif %}
-    {{ macro.listItems(requests) }}
+    {{ macro.listItems('requests', requests) }}
 </div>
 
 <div id="complains" class="tabcontent">
@@ -43,7 +43,7 @@ Teléfono: {{ office['phone'] }}<br/>
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="MenuItem"><a href="/complains/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
     {% endif %}
-    {{ macro.listItems(complains) }}
+    {{ macro.listItems('complains', complains) }}
 </div>
 
 <div id="updates" class="tabcontent">

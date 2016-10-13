@@ -1,10 +1,10 @@
-{% macro listItems(items) %}
+{% macro listItems(type, items) %}
     <table>
     {% for item in items%}
         <tr class="ListItem">
             <td>{{ item['date'] }}</td>
             <td>{{ item['office'] }}</td>
-            <td><a href="/items/{{ item['_id'] }}">{{
+            <td><a href="/{{ type }}/{{ item['_id'] }}">{{
                     item['overview'] }}</a></td>
         </tr>
     {% endfor %}

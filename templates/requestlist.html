@@ -15,15 +15,15 @@
 </ul>
 
 <div id="running" class="tabcontent">
-    {{ macro.listItems(running) }}
+    {{ macro.listItems('requests', running) }}
 </div>
 
 <div id="drafts" class="tabcontent">
-    {{ macro.listItems(drafts) }}
+    {{ macro.listItems('requests', drafts) }}
 </div>
 
 <div id="done" class="tabcontent">
-    {{ macro.listItems(done) }}
+    {{ macro.listItems('requests', done) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
