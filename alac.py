@@ -669,7 +669,7 @@ def docrelNewWithDoc():
         doc['title'] = request.form['prefix'] + ' - ' + request.form['title']
         doc['overview'] = ''
         doc['tags'] = ''
-        doc['date'] = Dates().getDate() 
+        doc['date'] = request.form['date'] 
         docfile = request.files['file']
         path = uploadFile(docfile)
         if path:
@@ -680,7 +680,7 @@ def docrelNewWithDoc():
             docrel['source_id'] = request.form['source_id']
             docrel['doc_id'] = doc_id
             DocRels().new(docrel)
-        return redirect(request.referrer)
+        return redirect("%s#documents" % request.referrer)
 
 @app.route('/rights/new/', methods=['POST'])
 def newRight():

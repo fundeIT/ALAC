@@ -72,32 +72,7 @@
 </div>
 
 <div id="docs" class="tabcontent">
-
-    <table>
-        {% for dr in docrels %}
-	  <tr class="ListItem">
-              <td>{{ dr['date'] }}</td>
-	      <td>
-		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
-              </td>
-	     </tr>
-        {% endfor %}
-    </table>
-
-    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-
-    <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
-        <input class="TextInput" name="title" placeholder="Título del documento"
-            required>
-        <input class="TextInput" name="file" type="file" required>
-        <input type="hidden" name="prefix" value="{{ case['title'] }}">
-        <input type="hidden" name="source" value="case">
-        <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-        <button>Enviar</button>
-    </form>
-
-    {% endif %}
- 
+{{ macro.listDocs(docrels, 'case', case['_id'], case['title'], has_right, date) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

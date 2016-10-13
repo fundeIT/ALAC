@@ -41,3 +41,33 @@
         </form>
     {% endif %}
 {% endmacro %}
+
+{% macro listDocs(docrels, source, source_id, prefix, has_right, date) %}
+    <table>
+        {% for dr in docrels %}
+	  <tr class="ListItem">
+              <td>{{ dr['date'] }}</td>
+	      <td>
+		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
+              </td>
+	     </tr>
+        {% endfor %}
+    </table>
+    {% if has_right %}
+    <p>Agregar documento:</p>
+    <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
+        <input class="Inline" type="date" size="8" name="date" 
+               value="{{ date }}">
+        <input class="Inline" name="title" size="60" 
+               placeholder="Título del documento. Ej. Peticion." required>
+        <input class="Inline" name="file" type="file" required>
+        <p>Nombre el archivo con el siguiente esquema:
+        entidad-titulo-tipo-año.<br/>
+        Por ejemplo bcr-existencia-colones-apelacion-2016.pdf</p>
+        <input type="hidden" name="prefix" value="{{ prefix }}">
+        <input type="hidden" name="source" value="request">
+        <input type="hidden" name="source_id" value="{{ source_id }}">
+        <button>Enviar</button>
+    </form>
+    {% endif %}
+{% endmacro %} 

@@ -72,35 +72,7 @@ Finalización del trámite: {{ req['finish'] }}
 </div>
 
 <div id="docs" class="tabcontent">
-
-    <table>
-        {% for dr in docrels %}
-	  <tr class="ListItem">
-              <td>{{ dr['date'] }}</td>
-	      <td>
-		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
-              </td>
-	     </tr>
-        {% endfor %}
-    </table>
-
-    {% if has_right %}
-
-    <p>Agregar documento:</p>
-    <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
-        <input class="TextInput" name="title" placeholder="Título del documento.
-        Ej. Peticion." required>
-        <p>Nombre el archivo con el siguiente esquema: entidad-titulo-tipo-año.<br/>
-    Por ejemplo bcr-existencia-colones-apelacion-2016.pdf</p>
-        <input class="TextInput" name="file" type="file" required>
-        <input type="hidden" name="prefix" value="{{ req['overview'] }}">
-        <input type="hidden" name="source" value="request">
-        <input type="hidden" name="source_id" value="{{ req['_id'] }}">
-        <button>Enviar</button>
-    </form>
-
-    {% endif %}
- 
+    {{ macro.listDocs(docrels, 'request', req['_id'], req['overview'], has_right, date) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
