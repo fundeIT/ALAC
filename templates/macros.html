@@ -11,4 +11,33 @@
     </table>
 {% endmacro %}
 
-
+{% macro listUpdates(updates, source, source_id, user_id, has_right, date) %}
+    <table>
+        {% for update in updates %}
+            <tr class="ListItem">
+    			<td>{{ update['date'] }}</td>
+    			<td>{{ update['detail'] | safe }}</td>
+    			{% if has_right %}
+    			    <td>
+    			        {{ update['user_name'] }}
+    			    </td>
+    			{% endif %}
+    		</tr>
+        {% endfor %}
+    </table>
+    {% if has_right %}
+        <form action='/updates/new/' method="post">
+            <input type="hidden" name="source" value="{{ source }}">
+            <input type="hidden" name="source_id" value="{{ source_id }}">
+            <input class="Inline" 
+                   type="date" 
+                   size="8" 
+                   name="date" 
+                   value="{{ date }}">
+            <textarea class="Inline" name="detail" cols="60" rows="5" 
+    		    placeholder="Detalle"></textarea>
+    		<input type="hidden" name="user_id" value="{{ user_id }}">
+            <button>Actualizar</button>
+        </form>
+    {% endif %}
+{% endmacro %}

@@ -37,6 +37,36 @@ def replaceOfficeinRequests(requests):
         mod.append(req)
     return mod
 
+def joinUserData(items):
+    u = Users()
+    mod = []
+    for item in items:
+        if 'user_id' in item:
+            item['user_name'] = u.get(item['user_id'])['name']
+        else:
+            item['user_name'] = ''
+        mod.append(item)
+    return mod
+
+def getRegistedUser():
+    if 'user' in session:
+        return session['user']
+    else:
+        return {}
+
+def hasRight(source, source_id, categories):
+    if 'user' in session:
+        user = session['user']
+        right = {
+            'source': source,
+            'source_id': str(source_id),
+            'user_id': user['_id']
+        }
+        has_right = Rights().lookup(right) or user['kind'] in categories 
+        return has_right
+    else:
+        return False
+
 # Controllers
 
 @app.route('/')
@@ -105,21 +135,24 @@ def caseDetail(_id):
             Cases().update(_id, case)
         return redirect('/cases/%s' % _id)
     else:
-        if 'user' in session:
-            user = session['user']
-        else:
-            user = {}
         case = Cases().get(_id)
         requests = replaceOfficeinRequests(Requests().list(case_id=_id))
         complains = replaceOfficeinRequests(Complains().list(case_id=_id))
         case['overview'] = markdown(case['overview'])
-        updates = Updates().list('case', _id)
         advices = Updates().list('advise', _id)
         docrels = DocRels().list('case', _id)
         docs = Documents().list()
-        return render_template('caseshow.html', case = case,
-            requests = requests, complains=complains, updates=updates,
-            advices=advices, docs=docs, docrels=docrels, who=user)
+        return render_template('caseshow.html', 
+                case=case,
+                requests=requests, 
+                complains=complains, 
+                updates=joinUserData(Updates().list('case', _id)), 
+                advices=advices, 
+                docs=docs, 
+                docrels=docrels, 
+                date=Dates().getDate(),
+                has_right = hasRight('case', _id, ['OPR', 'MNR', 'USR']),
+                who=getRegistedUser())
 
 @app.route('/cases/<string:_id>/edit')
 def caseEdit(_id):
@@ -157,10 +190,6 @@ def officeNew():
 
 @app.route('/offices/<string:_id>', methods=['GET', 'POST'])
 def officeDetail(_id):
-    if 'user' in session:
-        user = session['user']
-    else:
-        user = {}
     if request.method == 'POST':
         office = {key: request.form[key] for key in Offices().keys} 
         Offices().update(_id, office)
@@ -170,9 +199,15 @@ def officeDetail(_id):
         office['notes'] = markdown(office['notes'])
         requests = replaceOfficeinRequests(Requests().list(office_id=_id))
         complains = replaceOfficeinRequests(Complains().list(office_id=_id))
-        updates = Updates().list('office', _id)
-        return render_template('officeshow.html', requests=requests,
-            complains=complains, office=office, updates=updates, who=user)
+        updates = joinUserData(Updates().list('office', _id))
+        return render_template('officeshow.html', 
+                requests=requests,
+                complains=complains, 
+                office=office, 
+                updates=updates, 
+                date=Dates().getDate(),
+                has_right = hasRight('case', _id, ['OPR', 'MNR', 'USR']),
+                who=getRegistedUser())
 
 @app.route('/offices/<string:_id>/edit')
 def officeEdit(_id):
@@ -244,18 +279,7 @@ def requestDetail(_id):
     It has options to append updates and documents.
     """
     # Checking privileges
-    if 'user' in session:
-        user = session['user']
-        right = {
-            'source': 'request',
-            'source_id': str(_id),
-            'user_id': user['_id']
-        }
-        has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR',
-                'USR']
-    else:
-        user = {}
-        has_right = False
+    has_right = hasRight('request', _id, ['OPR', 'MNR', 'USR'])
     r = Requests() # Object used to access request methods
     if request.method == 'POST':
         if has_right:
@@ -284,9 +308,17 @@ def requestDetail(_id):
             updates_mod.append(element)
         docrels = DocRels().list('request', _id)
         docs = Documents().list()
-        return render_template('requestshow.html', _id=_id, req=req, 
-            office=office, case=case, updates=updates_mod,
-            docrels=docrels, docs=docs, has_right=has_right, who=user)
+        return render_template('requestshow.html', 
+                _id=_id, 
+                req=req, 
+                office=office, 
+                case=case, 
+                updates=updates_mod,
+                docrels=docrels, 
+                docs=docs, 
+                has_right=has_right, 
+                date=Dates().getDate(),
+                who=getRegistedUser())
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):
@@ -379,7 +411,7 @@ def updateNew():
         user = session['user']
         u = Updates()
         update = {key: request.form[key] for key in u.keys}
-        update['user_id'] = str(user['_id'])
+        update['user_id'] = request.form['user_id'] 
         _id = u.new(update)
     return redirect(request.referrer)
 
@@ -439,6 +471,7 @@ def complainDetail(_id):
     else:
         user = {}
         has_right = False
+    has_right = hasRight('complain', _id, ['OPR', 'MNR', 'USR'])
     r = Complains()
     if request.method == 'POST':
         if has_right:
@@ -453,16 +486,24 @@ def complainDetail(_id):
         case = Cases().get(complain['case_id'])
         office = Offices().get(complain['office_id'])
         reviewer = Offices().get(complain['reviewer_id'])
-        updates = Updates().list('complain', _id)
+        updates = joinUserData(Updates().list('complain', _id))
         updates_mod = []
         for u in updates:
            u['detail'] = markdown(u['detail'])
            updates_mod.append(u)
         docrels = DocRels().list('complain', _id)
         docs = Documents().list()
-        return render_template('complainshow.html', _id=_id, 
-            complain = complain, office = office, case=case, updates=updates_mod,
-            reviewer=reviewer, docrels=docrels, docs=docs, who=user,
+        return render_template('complainshow.html', 
+                _id=_id, 
+                complain=complain,
+                office=office,
+                case=case, 
+                updates=updates_mod,
+                reviewer=reviewer, 
+                docrels=docrels, 
+                docs=docs, 
+                date=Dates().getDate(),
+                who=getRegistedUser(),
             has_right=has_right)
 
 @app.route('/complains/<string:_id>/edit')
