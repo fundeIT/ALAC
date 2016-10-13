@@ -59,24 +59,14 @@
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="Button"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
-    {{ macro.listRequests(requests) }}
+    {{ macro.listItems(requests) }}
 </div>
 
 <div id="complains" class="tabcontent">
-    
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="Button"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
-
-    <table>
-    {% for complain in complains %}
-        <tr class="ListItem">
-            <td>{{ complain['ref'] }}</td>
-            <td><a href="/complains/{{ complain['_id'] }}">{{
-                    complain['overview'] }}</a></td>
-        </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listItems(complains) }}
 </div>
 
 <div id="advises" class="tabcontent">

@@ -1,11 +1,11 @@
-{% macro listRequests(requests) %}
+{% macro listItems(items) %}
     <table>
-    {% for request in requests%}
+    {% for item in items%}
         <tr class="ListItem">
-            <td>{{ request['date'] }}</td>
-            <td>{{ request['office'] }}</td>
-            <td><a href="/requests/{{ request['_id'] }}">{{
-                    request['overview'] }}</a></td>
+            <td>{{ item['date'] }}</td>
+            <td>{{ item['office'] }}</td>
+            <td><a href="/items/{{ item['_id'] }}">{{
+                    item['overview'] }}</a></td>
         </tr>
     {% endfor %}
     </table>

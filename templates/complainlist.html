@@ -1,3 +1,4 @@
+{% import "macros.html" as macro %}
 {% extends "layout.html" %}
 {% block main %}
 
@@ -13,40 +14,16 @@
     <li><a href="#" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
 </ul>
 
-
 <div id="running" class="tabcontent">
-    <table>
-    {% for complain in running %}
-    <tr class="ListItem">
-        <td>{{ complain['date'] }}</td>
-        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
-                }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listItems(running) }}
 </div>
 
 <div id="drafts" class="tabcontent">
-    <table>
-    {% for complain in drafts %}
-    <tr class="ListItem">
-        <td>{{ complain['date'] }}</td>
-        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
-                }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listItems(drafts) }}
 </div>
 
 <div id="done" class="tabcontent">
-    <table>
-    {% for complain in done %}
-    <tr class="ListItem">
-        <td>{{ complain['date'] }}</td>
-        <td><a href="/complains/{{ complain['_id'] }}">{{ complain['overview']
-                }}</a></td>
-    {% endfor %}
-    </table>
+    {{ macro.listItems(done) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

@@ -27,6 +27,16 @@ def uploadFile(docfile):
     else:
         return None
 
+def replaceOfficeinRequests(requests):
+    """It appends a new field to each record with the name of the office
+    to which was asked for information"""
+    o = Offices()
+    mod = []
+    for req in requests:
+        req['office'] = o.get(req['office_id'])['name']
+        mod.append(req)
+    return mod
+
 # Controllers
 
 @app.route('/')
@@ -101,7 +111,7 @@ def caseDetail(_id):
             user = {}
         case = Cases().get(_id)
         requests = replaceOfficeinRequests(Requests().list(case_id=_id))
-        complains = Complains().list(case_id=_id)
+        complains = replaceOfficeinRequests(Complains().list(case_id=_id))
         case['overview'] = markdown(case['overview'])
         updates = Updates().list('case', _id)
         advices = Updates().list('advise', _id)
@@ -159,7 +169,7 @@ def officeDetail(_id):
         office = Offices().get(_id)
         office['notes'] = markdown(office['notes'])
         requests = replaceOfficeinRequests(Requests().list(office_id=_id))
-        complains = Complains().list(office_id=_id)
+        complains = replaceOfficeinRequests(Complains().list(office_id=_id))
         updates = Updates().list('office', _id)
         return render_template('officeshow.html', requests=requests,
             complains=complains, office=office, updates=updates, who=user)
@@ -171,16 +181,6 @@ def officeEdit(_id):
     else:
         user = {}
     return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=user)
-
-def replaceOfficeinRequests(requests):
-    """It appends a new field to each record with the name of the office
-    to which was asked for information"""
-    o = Offices()
-    mod = []
-    for req in requests:
-        req['office'] = o.get(req['office_id'])['name']
-        mod.append(req)
-    return mod
 
 @app.route('/requests')
 def requests():
@@ -390,9 +390,9 @@ def complains():
     else:
         user = {}
     complains = Complains()
-    drafts = complains.list(status='0')
-    running = complains.list(status='1')
-    done = complains.list(status='2')
+    drafts = replaceOfficeinRequests(complains.list(status='0'))
+    running = replaceOfficeinRequests(complains.list(status='1'))
+    done = replaceOfficeinRequests(complains.list(status='2'))
     return render_template('complainlist.html', drafts=drafts, running=running,
         done=done, who=user)
 
@@ -658,11 +658,11 @@ def mine():
         return redirect('/')
     user = session['user']
     r = Rights()
-    requests = r.listByUser(user['_id'], 'request')
-    complains = r.listByUser(user['_id'], 'complain')
+    requests = replaceOfficeinRequests(r.listByUser(user['_id'], 'request'))
+    complains = replaceOfficeinRequests(r.listByUser(user['_id'], 'complain'))
     notes = r.listByUser(user['_id'], 'note')
     return render_template('minelist.html', 
-            requests=replaceOfficeinRequests(requests),
+            requests=requests,
             complains=complains, notes=notes, who=session['user'])
 
 @app.route('/notes')
