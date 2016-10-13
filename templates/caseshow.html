@@ -1,3 +1,4 @@
+{% import "macros.html" as macro %}
 {% extends "layout.html" %}
 {% block main %}
 
@@ -58,16 +59,7 @@
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="Button"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
     {% endif %}
-
-    <table>
-    {% for request in requests %}
-        <tr class="ListItem">
-            <td>{{ request['ref'] }}</td>
-            <td><a href="/requests/{{ request['_id'] }}">{{ request['overview']
-                    }}</a></td>
-        </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listRequests(requests) }}
 </div>
 
 <div id="complains" class="tabcontent">

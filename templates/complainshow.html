@@ -22,7 +22,7 @@ Correo: {{ office['email'] }}<br/>
 </p>
 
 <p>
-Detalle:
+<strong>Detalle:</strong>
 </p>
 
 {{ complain['detail'] | safe }}
@@ -32,10 +32,12 @@ Estado: {{ complain['status'] }}<br/>
 Resultado: {{ complain['result'] }}
 </p>
 
-<p>
-Comentarios:<br/>
-{{ complain['comment'] }}
-</p>
+{% if complain['comment'] %}
+    <p>
+    <strong>Comentarios:<strong><br/>
+    {{ complain['comment'] }}
+    </p>
+{% endif %}
 
 <ul class="tab">
     <li><a href="#updates" class="tablinks" 

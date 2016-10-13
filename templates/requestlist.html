@@ -1,3 +1,4 @@
+{% import 'macros.html' as macro %}
 {% extends "layout.html" %}
 {% block main %}
 
@@ -14,39 +15,15 @@
 </ul>
 
 <div id="running" class="tabcontent">
-    <table>
-    {% for request in running %}
-    <tr class="ListItem">
-        <td>{{ request['date'] }}</td>
-        <td><a href="/requests/{{ request['_id'] }}">{{
-                request['overview'] }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listRequests(running) }}
 </div>
 
 <div id="drafts" class="tabcontent">
-    <table>
-    {% for request in drafts %}
-    <tr class="ListItem">
-        <td>{{ request['date'] }}</td>
-        <td><a href="/requests/{{ request['_id'] }}">{{
-                request['overview'] }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listRequests(drafts) }}
 </div>
 
 <div id="done" class="tabcontent">
-    <table>
-    {% for request in done %}
-    <tr class="ListItem">
-        <td>{{ request['date'] }}</td>
-        <td><a href="/requests/{{ request['_id'] }}">{{
-                request['overview'] }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listRequests(done) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>

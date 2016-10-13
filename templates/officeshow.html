@@ -1,3 +1,4 @@
+{% import "macros.html" as macro %}
 {% extends "layout.html" %}
 {% block main %}
 
@@ -34,15 +35,7 @@ Teléfono: {{ office['phone'] }}<br/>
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <div class="MenuItem"><a href="/requests/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
     {% endif %}
-
-    <table>
-    {% for request in requests %}
-    <tr class="ListItem">
-        <td>{{ request['ref'] }}. <a href="/requests/{{ request['_id'] }}">{{
-                request['overview'] }}</a></td>
-    </tr>
-    {% endfor %}
-    </table>
+    {{ macro.listRequests(requests) }}
 </div>
 
 <div id="complains" class="tabcontent">

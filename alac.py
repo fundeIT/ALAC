@@ -100,7 +100,7 @@ def caseDetail(_id):
         else:
             user = {}
         case = Cases().get(_id)
-        requests = Requests().list(case_id=_id)  
+        requests = replaceOfficeinRequests(Requests().list(case_id=_id))
         complains = Complains().list(case_id=_id)
         case['overview'] = markdown(case['overview'])
         updates = Updates().list('case', _id)
@@ -158,7 +158,7 @@ def officeDetail(_id):
     else:
         office = Offices().get(_id)
         office['notes'] = markdown(office['notes'])
-        requests = Requests().list(office_id=_id)  
+        requests = replaceOfficeinRequests(Requests().list(office_id=_id))
         complains = Complains().list(office_id=_id)
         updates = Updates().list('office', _id)
         return render_template('officeshow.html', requests=requests,
@@ -172,6 +172,16 @@ def officeEdit(_id):
         user = {}
     return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=user)
 
+def replaceOfficeinRequests(requests):
+    """It appends a new field to each record with the name of the office
+    to which was asked for information"""
+    o = Offices()
+    mod = []
+    for req in requests:
+        req['office'] = o.get(req['office_id'])['name']
+        mod.append(req)
+    return mod
+
 @app.route('/requests')
 def requests():
     if 'user' in session:
@@ -179,11 +189,14 @@ def requests():
     else:
         user = {}
     r = Requests()
-    drafts = r.list(status='0')
-    running = r.list(status='1')
-    done = r.list(status='2')
-    return render_template('requestlist.html', drafts=drafts, running=running, 
-        done=done, who=user)
+    drafts = replaceOfficeinRequests(r.list(status='0'))
+    running = replaceOfficeinRequests(r.list(status='1'))
+    done = replaceOfficeinRequests(r.list(status='2'))
+    return render_template('requestlist.html', 
+            drafts=drafts,
+            running=running,
+            done=done,
+            who=user)
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
@@ -648,7 +661,8 @@ def mine():
     requests = r.listByUser(user['_id'], 'request')
     complains = r.listByUser(user['_id'], 'complain')
     notes = r.listByUser(user['_id'], 'note')
-    return render_template('minelist.html', requests=requests,
+    return render_template('minelist.html', 
+            requests=replaceOfficeinRequests(requests),
             complains=complains, notes=notes, who=session['user'])
 
 @app.route('/notes')
