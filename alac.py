@@ -657,7 +657,14 @@ def docrelNew():
     else:
         dr = DocRels()
         docrel = {key: request.form[key] for key in dr.keys}
-        _id = dr.new(docrel)
+        l = len(docrel['doc_id'])
+        p = docrel['doc_id'].rfind('/')
+        if p > 0:
+            p += 1
+            docrel['doc_id'] = docrel['doc_id'][p:l]
+        doc = Documents().get(docrel['doc_id'])
+        if doc['path']:
+            _id = dr.new(docrel)
         return redirect(request.referrer)
 
 @app.route('/docrels/newdoc/', methods=['POST'])

@@ -54,7 +54,7 @@
         {% endfor %}
     </table>
     {% if has_right %}
-    <p>Agregar documento:</p>
+    <p><strong>Agregar nuevo documento:</strong></p>
     <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
         <input class="Inline" type="date" size="8" name="date" 
                value="{{ date }}">
@@ -65,6 +65,13 @@
         entidad-titulo-tipo-año.<br/>
         Por ejemplo bcr-existencia-colones-apelacion-2016.pdf</p>
         <input type="hidden" name="prefix" value="{{ prefix }}">
+        <input type="hidden" name="source" value="{{ source }}">
+        <input type="hidden" name="source_id" value="{{ source_id }}">
+        <button>Enviar</button>
+    </form>
+    <p><strong>Agregar documento existente:</strong></p>
+    <form action="/docrels/new/" method="post">
+        <input size="60" name="doc_id" placeholder="URL del documento" required>
         <input type="hidden" name="source" value="{{ source }}">
         <input type="hidden" name="source_id" value="{{ source_id }}">
         <button>Enviar</button>
