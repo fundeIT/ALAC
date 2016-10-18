@@ -43,12 +43,37 @@
                 </option>
             {% endfor %}
         </select>
+    
+        {% if who['kind'] == 'OPR' %}
 
-        <input type="hidden" name="start" value="{{ req['start'] }}">
-        <input type="hidden" name="finish" value="{{ req['finish'] }}">
-        <input type="hidden" name="status" value="{{ req['status'] }}">
-        <input type="hidden" name="result" value="{{ req['result'] }}">
-        <input type="hidden" name="comment" value="{{ req['comment'] }}">
+            <label>Inicio</label>
+            <input name="start" value="{{ req['start'] }}">
+            <label>Finalización</label>
+            <input name="finish" value="{{ req['finish'] }}">
+            <label>Estado</label>
+            <select name='status'>
+                {% for s in status %}
+                    <option value="{{ loop.index0 }}" {% if req['status']|int() == loop.index0 %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}             
+            </select>
+            <label>Resultado</label>
+            <select name='result'>
+                {% for k in results %}
+                    <option value="{{ k }}" {% if req['result']|string() == k|string() %}selected{% endif %}>{{ results[k] }}</option>
+                {% endfor %}
+            </select>
+            <label>Comentarios</label>
+            <textarea class="TextArea" name="comment">{{ req['comment'] }}</textarea>
+
+        {% else %}
+
+            <input type="hidden" name="start" value="{{ req['start'] }}">
+            <input type="hidden" name="finish" value="{{ req['finish'] }}">
+            <input type="hidden" name="status" value="{{ req['status'] }}">
+            <input type="hidden" name="result" value="{{ req['result'] }}">
+            <input type="hidden" name="comment" value="{{ req['comment'] }}">
+
+        {% endif %}
 
         <button>Enviar</button>
 

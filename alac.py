@@ -322,14 +322,15 @@ def requestDetail(_id):
 
 @app.route('/requests/<string:_id>/edit')
 def requestEdit(_id):
-    if 'user' in session:
-        user = session['user']
-    else:
-        user = {}
+    if not 'user' in session:
+        return redirect('/requests/%s' % _id)
+    user = session['user']
+    if user['kind'] != 'OPR':
+        return redirect('/requests/%s' % _id)
     r = Requests()
     req = r.get(_id)
-    if int(req['status']) == 2:
-        return redirect('/requests/%s' % _id)
+    # if int(req['status']) == 2:
+    #    return redirect('/requests/%s' % _id)
     users_right = Rights().listBySource('request', _id)
     users_list = Users().list()
     return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
@@ -413,6 +414,16 @@ def updateNew():
         update = {key: request.form[key] for key in u.keys}
         update['user_id'] = request.form['user_id'] 
         _id = u.new(update)
+    return redirect(request.referrer)
+
+@app.route('/updates/<string:_id>/delete', methods=['POST'])
+def deleteUpdate(_id):
+    if not 'user' in session:
+        return redirect(request.referrer)
+    user = session['user']
+    if user['kind'] != 'OPR':
+        return redirect(request.referrer)
+    Updates().remove(_id)
     return redirect(request.referrer)
 
 @app.route('/complains')

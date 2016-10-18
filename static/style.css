@@ -166,6 +166,25 @@ button:hover, .Button:hover {
     display: inline-block;
 }
 
+.SmallButton a {
+    color: white;
+}
+
+.DeleteButton {
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 0 8px 0 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 80%;
+    display: inline-block;
+}
+
+.DeleteButton a {
+    color: white;
+}
+
 .ListItem {
     line-height: 160%;
     list-style-type: none;

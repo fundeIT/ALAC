@@ -11,7 +11,8 @@
     </table>
 {% endmacro %}
 
-{% macro listUpdates(updates, source, source_id, user_id, has_right, date) %}
+{% macro listUpdates(updates, source, source_id, user_id, has_right, date,
+operator=False) %}
     <table>
         {% for update in updates %}
             <tr class="ListItem">
@@ -20,6 +21,14 @@
     			{% if has_right %}
     			    <td>
     			        {{ update['user_name'] }}
+    			    </td>
+    			{% endif %}
+    			{% if operator %}
+    			    <td>
+                        <form action="/updates/{{ update['_id'] }}/delete"
+                        method="post">
+    			        <button class="DeleteButton">Eliminar</button>
+    			        </form>
     			    </td>
     			{% endif %}
     		</tr>

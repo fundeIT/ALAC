@@ -67,8 +67,9 @@ class Offices:
         dbconn().offices.update({'_id': ObjectId(_id)}, {'$set': office})
 
 class Requests:
-    keys = ['case_id', 'office_id', 'ref', 'date', 'overview', 'detail', 'start', 'finish', 'status', 'result', 'comment']
-    status = ['Borrador', 'En trámite', 'Cerrada']
+    keys = ['case_id', 'office_id', 'ref', 'date', 'overview', 'detail', 
+            'start', 'finish', 'status', 'result', 'comment']
+    status = ['Borrador', 'En trámite', 'Cerrada', 'No tramitada']
     results = {
         'ND': 'No definido', 
         'RC': 'Respuesta completa', 
@@ -165,6 +166,8 @@ class Updates:
         return dbconn().updates.insert_one(update).inserted_id 
     def list(self, source, source_id):
         return dbconn().updates.find({'source': source, 'source_id': source_id}).sort('date')
+    def remove(self, _id):
+        return dbconn().updates.remove({'_id': ObjectId(_id)})
 
 class Users:
     keys = ['name', 'email', 'kind', 'password']
