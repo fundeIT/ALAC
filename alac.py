@@ -257,7 +257,7 @@ def requestNew():
                 'user_id': str(user['_id'])
         }
         Updates().new(update)
-        return redirect('/requests')
+        return redirect('/requests/%s' % str(_id))
     else:
         r = Requests()
         req = emptyDict(r.keys)
