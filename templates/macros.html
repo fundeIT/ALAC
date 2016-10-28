@@ -17,7 +17,9 @@ operator=False) %}
         {% for update in updates %}
             <tr class="ListItem">
     			<td>{{ update['date'] }}</td>
-    			<td>{{ update['detail'] | safe }}</td>
+    			<td style="width: 70%; max-width: 70%">
+    			    {{ update['detail'] | safe }}
+    			</td>
     			{% if has_right %}
     			    <td>
     			        {{ update['user_name'] }}
