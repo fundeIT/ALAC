@@ -325,7 +325,7 @@ def requestEdit(_id):
     if not 'user' in session:
         return redirect('/requests/%s' % _id)
     user = session['user']
-    if user['kind'] != 'OPR':
+    if not user['kind'] in ['OPR', 'USR']:
         return redirect('/requests/%s' % _id)
     r = Requests()
     req = r.get(_id)
@@ -380,7 +380,7 @@ def closeRequest(_id):
             'source_id': str(_id),
             'user_id': user['_id']
     }
-    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'MNR']
+    has_right = Rights().lookup(right) or user['kind'] in ['OPR', 'USR', 'MNR']
     if not has_right:
         return redirect('/requests/%s' % _id)
     if request.method == 'GET':

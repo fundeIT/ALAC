@@ -10,7 +10,7 @@
 <div class="Button"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
 {% endif %}
 
-{% if who['kind'] in ['OPR', 'MNG'] %} 
+{% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
     {% if req['status'] == 'Borrador' %}
     <div class="Button">
         <a href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
