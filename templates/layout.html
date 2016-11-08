@@ -11,11 +11,13 @@
             <ul class='MenuBar'>
                 {% if who['kind'] %}
                     <li class="MenuItem"><a href="/mine">Míos</a></li>
+                    <li class="MenuItem"><a href="/cases">Casos</a></li>
                 {% endif %}
-                <li class="MenuItem"><a href="/cases">Casos</a></li>
                 <li class="MenuItem"><a href="/requests">Peticiones</a></li>
                 <li class="MenuItem"><a href="/complains">Denuncias</a></li>
-                <li class="MenuItem"><a href="/docs">Documentos</a></li>
+                {% if who['kind'] %}
+                    <li class="MenuItem"><a href="/docs">Documentos</a></li>
+                {% endif %}
                 <li class="MenuItem"><a href="/offices">Oficinas</a></li>
                 <li class="MenuItem"><a href="/notes">Blog</a></li>
                 {% if who['kind'] == 'OPR' %}
