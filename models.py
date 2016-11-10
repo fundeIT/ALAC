@@ -43,7 +43,7 @@ class Cases:
     def new(self, case):
         return dbconn().cases.insert_one(case).inserted_id
     def list(self):
-        return dbconn().cases.find({}, {'title': 1}).sort('title')
+        return dbconn().cases.find({}, {'title': 1}).sort('_id', -1)
     def get(self, _id):
         return dbconn().cases.find_one({'_id': ObjectId(_id)})
     def update(self, _id, case):

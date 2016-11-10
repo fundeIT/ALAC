@@ -698,7 +698,7 @@ def docrelNewWithDoc():
             docrel['source_id'] = request.form['source_id']
             docrel['doc_id'] = doc_id
             DocRels().new(docrel)
-        return redirect("%s#documents" % request.referrer)
+        return redirect("%s#docs" % request.referrer)
 
 @app.route('/rights/new/', methods=['POST'])
 def newRight():
