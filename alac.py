@@ -792,4 +792,4 @@ def editNote(_id):
     return render_template('noteform.html', _id=_id, note=note, users_right=users_right, users_list=users_list, who=session['user'])
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=80)
