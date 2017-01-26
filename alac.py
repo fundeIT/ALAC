@@ -339,7 +339,6 @@ def requestEdit(_id):
 def forwardRequest(_id):
     r = Requests()
     req = r.get(_id)
-    del req['_id']
     if int(req['status']) != 0:
         return redirect('/requests/%s' % _id)
     if not 'user' in session:
@@ -371,7 +370,6 @@ def forwardRequest(_id):
 def closeRequest(_id):
     r = Requests()
     req = r.get(_id)
-    del req['_id']
     if int(req['status']) != 1:
         return redirect('/requests/%s' % _id)
     if not 'user' in session:
