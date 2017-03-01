@@ -9,6 +9,7 @@
     <body>
         <div class="Header">
             <ul class='MenuBar'>
+                <li class="MenuItem"><a href="/notes">Inicio</a></li>
                 {% if who['kind'] %}
                     <li class="MenuItem"><a href="/mine">Míos</a></li>
                     <li class="MenuItem"><a href="/cases">Casos</a></li>
@@ -19,7 +20,6 @@
                     <li class="MenuItem"><a href="/docs">Documentos</a></li>
                 {% endif %}
                 <li class="MenuItem"><a href="/offices">Oficinas</a></li>
-                <li class="MenuItem"><a href="/notes">Blog</a></li>
                 {% if who['kind'] == 'OPR' %}
                     <li class="MenuCaution"><a href="/users">Usuarios</a></li>
                 {% endif %}

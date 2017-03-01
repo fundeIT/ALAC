@@ -75,7 +75,8 @@ def index():
         user = session['user']
     else:
         user = {}
-    return render_template('index.html', who=user) 
+    # return render_template('index.html', who=user) 
+    return redirect('/notes')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
