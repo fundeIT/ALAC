@@ -801,4 +801,8 @@ def editNote(_id):
             who=session['user'])
 
 if __name__ == '__main__':
+    """
+    This is the main function.
+    It starts the server.
+    """
     app.run(host='0.0.0.0', port=80)
