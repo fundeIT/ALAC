@@ -783,14 +783,19 @@ def detailNote(_id):
 
 @app.route('/notes/<string:_id>/edit')
 def editNote(_id):
+    """
+    Allows to edit a note previously stored in the database.
+    It checks if the user has right to edit the note.
+    """
     if not 'user' in session:
         return redirect('/notes')
     n = Notes()
     note = n.get(_id)
     users_right = Rights().listBySource('note', _id)
-    print(users_right)
     users_list = Users().list()
-    return render_template('noteform.html', _id=_id, note=note, users_right=users_right, users_list=users_list, who=session['user'])
+    return render_template('noteform.html', _id=_id, note=note, 
+            users_right=users_right, users_list=users_list, 
+            who=session['user'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
