@@ -285,8 +285,13 @@ ul.tab li a:focus, .active {
     flex: 1 1 auto;
     width: 240px;
     transition: width 0.7s ease-out;
-    margin: 15px;
+    margin: 5px;
+    padding: 15px;
+}
+
+.flex > div:nth-child(odd) {
 }
 
 .flex > div:hover {
+   background-color: #ddffff;
 }
