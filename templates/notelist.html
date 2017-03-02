@@ -13,6 +13,7 @@
             <h2><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></h2>
             {{ note['date'] }}<br/>
             {{ note['content'] | safe }}
+            <a href="/notes/{{ note['_id'] }}">Leer más...</a>
         </div>
     {% endfor %}
 </div>

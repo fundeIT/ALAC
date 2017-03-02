@@ -734,7 +734,8 @@ def notes():
     notes = Notes().list()
     notelist = [note for note in notes]
     for i in range(len(notelist)):
-        notelist[i]['content'] = markdown(notelist[i]['content'])
+        a = notelist[i]['content']
+        notelist[i]['content'] = markdown(a[0:a.find("\r\n\r\n")])
     return render_template('notelist.html', notes=notelist, who=user)
 
 @app.route('/notes/new/', methods=['GET', 'POST'])
