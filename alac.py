@@ -732,7 +732,10 @@ def notes():
     else:
         user = {}
     notes = Notes().list()
-    return render_template('notelist.html', notes=notes, who=user)
+    notelist = [note for note in notes]
+    for i in range(len(notelist)):
+        notelist[i]['content'] = markdown(notelist[i]['content'])
+    return render_template('notelist.html', notes=notelist, who=user)
 
 @app.route('/notes/new/', methods=['GET', 'POST'])
 def newNote():

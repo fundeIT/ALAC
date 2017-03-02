@@ -7,13 +7,14 @@
 
 {% endif %}
 
-<table>
+<div class="flex">
     {% for note in notes %}
-        <tr class="ListItem">
-            <td>{{ note['date'] }}</td>
-            <td><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></td>
-        </tr>
+        <div>
+            <h2><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></h2>
+            {{ note['date'] }}<br/>
+            {{ note['content'] | safe }}
+        </div>
     {% endfor %}
-</table>
+</div>
 
 {% endblock %}

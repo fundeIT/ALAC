@@ -275,3 +275,19 @@ ul.tab li a:focus, .active {
     color: white;
     text-decoration: none;
 }
+
+.flex {
+    display: flex;
+    flex-flow: wrap;
+}
+
+.flex > div {
+    flex: 1 1 auto;
+    width: 240px;
+    font-size: 90%;
+    transition: width 0.7s ease-out;
+    margin: 15px;
+}
+
+.flex > div:hover {
+}
