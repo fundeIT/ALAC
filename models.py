@@ -24,7 +24,7 @@ class Dates:
     def getMonth(self):
         return self.now.strftime("%m")
 
-class DBconn:
+class DB:
     """It is the base data connection class. All data models classes will be
     derivated from this base class. Building this class is an in progress
     work as part as refactoring tasks"""
@@ -35,6 +35,12 @@ class DBconn:
     def new(self, doc):
         _id = self.collection.insert_one(doc).inserted_id
         return _id
+    def list(self, skip=0, limit=50):
+        return self.collection.find().sort([('_id', 1)]).skip(skip).limit(limit)
+    def get(self, _id):
+        return self.collection.find_one({'_id': ObjectId(_id)})
+    def update(self, _id, doc):
+        self.collection.update({'_id': ObjectId(_id)}, {'$set': doc})
 
 # Clases para la consulta y actualización de la base de datos
 
