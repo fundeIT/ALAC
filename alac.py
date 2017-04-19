@@ -1,3 +1,6 @@
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
 from flask import Flask, request, render_template, redirect, session, send_file
 from werkzeug.utils import secure_filename
 from markdown import markdown
@@ -806,4 +809,7 @@ if __name__ == '__main__':
     This is the main function.
     It starts the server.
     """
-    app.run(host='0.0.0.0', port=80)
+    # app.run(host='0.0.0.0', port=80)
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(5000)
+    IOLoop.instance().start()
