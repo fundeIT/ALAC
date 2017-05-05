@@ -74,36 +74,6 @@
     {{ macro.listItems('complains', complains) }}
 </div>
 
-<!-- Advisory section -->
-<div id="advises" class="tabcontent">
-    
-    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        
-        <form action='/updates/new/' method="post">
-            <input type="hidden" name="source" value="advise">
-            <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-            <input type="hidden" name="user_id" 
-                value="{{ who['_id'] }}">
-            <input class="Inline" type="date" size="8" name="date"
-                value="{{ date }}">
-            <textarea class="Inline" name="detail" cols="60" rows="10" 
-                placeholder="Detalle"></textarea>
-            <button>Actualizar</button>
-        </form>
-
-    {% endif %}
-
-    <table>
-        {% for advice in advices %}
-        <tr class="ListItem">
-            <td>{{ advice['date'] }}</td>
-            <td>{{ advice['detail'] | safe }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-</div>
-
 <!-- Document section -->
 <div id="docs" class="tabcontent">
     {{ macro.listDocs(docrels, 'case', case['_id'], case['title'], 
