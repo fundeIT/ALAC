@@ -22,43 +22,75 @@
 </p>
 
 <ul class="tab">
-    <li><a href="#updates" class="tablinks" onclick="openTab(event,
-            'updates')">Comentarios</a></li>
-    <li><a href="#requests" class="tablinks" onclick="openTab(event, 'requests')">Peticiones</a></li>
-    <li><a href="#complains" class="tablinks" onclick="openTab(event, 'complains')">Denuncias</a></li>
-    <li><a href="#advises" class="tablinks" onclick="openTab(event, 'advises')">Asesoría</a></li>
-    <li><a href="#docs" class="tablinks" onclick="openTab(event, 'docs')">Documentos</a></li>
+    <li>
+        <a href="#updates" class="tablinks" 
+            onclick="openTab(event, 'updates')">Comentarios</a>
+    </li>
+    <li>
+        <a href="#requests" class="tablinks" 
+            onclick="openTab(event, 'requests')">Peticiones</a>
+    </li>
+    <li>
+        <a href="#complains" class="tablinks" 
+            onclick="openTab(event, 'complains')">Denuncias</a>
+    </li>
+    <li>
+        <a href="#advises" class="tablinks" 
+            onclick="openTab(event, 'advises')">Asesoría</a>
+    </li>
+    <li>
+        <a href="#docs" class="tablinks" 
+            onclick="openTab(event, 'docs')">Documentos</a>
+    </li>
 </ul>
 
+<!-- Updats or commentaries section -->
 <div id="updates" class="tabcontent">
-    {{ macro.listUpdates(updates, 'case', case['_id'], who['_id'], has_right, date) }}
+
+    {{ macro.listUpdates(updates, 'case', case['_id'], who['_id'], 
+        has_right, date) }}
 </div>
 
+<!-- Requests section -->
 <div id="requests" class="tabcontent">
     
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="Button"><a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+        <div class="Button">
+            <a href="/requests/new/?case_id={{ case['_id'] }}">Nueva...</a>
+        </div>
     {% endif %}
+
     {{ macro.listItems('requests', requests) }}
+
 </div>
 
+<!-- Complaint section -->
 <div id="complains" class="tabcontent">
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-        <div class="Button"><a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a></div>
+        <div class="Button">
+            <a href="/complains/new/?case_id={{ case['_id'] }}">Nueva...</a>
+        </div>
     {% endif %}
     {{ macro.listItems('complains', complains) }}
 </div>
 
+<!-- Advisory section -->
 <div id="advises" class="tabcontent">
     
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        
         <form action='/updates/new/' method="post">
             <input type="hidden" name="source" value="advise">
             <input type="hidden" name="source_id" value="{{ case['_id'] }}">
-            <input class="Inline" type="date" size="8" name="date" placeholder="Fecha">
-            <textarea class="Inline" name="detail" cols="60" rows="10" placeholder="Detalle"></textarea>
+            <input type="hidden" name="user_id" 
+                value="{{ who['_id'] }}">
+            <input class="Inline" type="date" size="8" name="date"
+                value="{{ date }}">
+            <textarea class="Inline" name="detail" cols="60" rows="10" 
+                placeholder="Detalle"></textarea>
             <button>Actualizar</button>
         </form>
+
     {% endif %}
 
     <table>
@@ -69,10 +101,13 @@
         </tr>
         {% endfor %}
     </table>
+
 </div>
 
+<!-- Document section -->
 <div id="docs" class="tabcontent">
-{{ macro.listDocs(docrels, 'case', case['_id'], case['title'], has_right, date) }}
+    {{ macro.listDocs(docrels, 'case', case['_id'], case['title'], 
+        has_right, date) }}
 </div>
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
