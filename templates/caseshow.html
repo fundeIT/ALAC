@@ -42,9 +42,8 @@
 
 <!-- Updats or commentaries section -->
 <div id="updates" class="tabcontent">
-
     {{ macro.listUpdates(updates, 'case', case['_id'], who['_id'], 
-        has_right, date) }}
+        has_right, date, who['kind']=='OPR') }}
 </div>
 
 <!-- Requests section -->
