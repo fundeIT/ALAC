@@ -1,6 +1,6 @@
+- Ordenar listas de peticiones y denuncias con base en eventos más recientes
 - Agregar formulario para agregar documento completo en casos, peticiones y
   denuncias.
 - Al agregar nuevos casos, que regrese al formulario caseshow
 - Letras blancas in hover on menu options
 - Lista when a document is added
-- Ordenar listas de peticiones y denuncias con base en eventos más recientes

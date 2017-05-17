@@ -44,15 +44,36 @@ class DB:
 
 # Clases para la consulta y actualización de la base de datos
 
+def touch(entity, _id):
+    if entity == 'case':
+        collection = 'cases'
+    elif entity == 'office':
+        collection = 'offices'
+    elif entity == 'request':
+        collection = 'requests'
+    elif entity == 'complain':
+        collection = 'complains'
+    else:
+        return
+    client = pymongo.MongoClient()
+    db = client.alac
+    collection = db[collection]
+    res = collection.update({'_id': ObjectId(_id)}, 
+            {'$currentDate': {'touched': True}})
+    s = collection.find_one({'_id': _id})
+    return
+
 class Cases:
     keys = ['title', 'overview', 'requester']
     def new(self, case):
         return dbconn().cases.insert_one(case).inserted_id
     def list(self):
-        return dbconn().cases.find({}, {'title': 1}).sort('_id', -1)
+        return dbconn().cases.find({}, 
+                {'title': 1, 'touched': 1}).sort('touched', -1)
     def get(self, _id):
         return dbconn().cases.find_one({'_id': ObjectId(_id)})
     def update(self, _id, case):
+        touch('case', _id)
         dbconn().cases.update({'_id': ObjectId(_id)}, {'$set': case})
 
 class Offices:
@@ -96,17 +117,18 @@ class Requests:
             'office_id': 1, 
             'ref': 1, 
             'date': 1,
-            'overview': 1
+            'overview': 1,
+            'touched': 1
         }
         if case_id != None:
             return dbconn().requests.find({'case_id': case_id}, 
-                fields).sort('date', -1)
+                fields).sort('touched', -1)
         elif office_id != None:
-            return dbconn().requests.find({'office_id': office_id}, fields).sort('date', -1)
+            return dbconn().requests.find({'office_id': office_id}, fields).sort('touched', -1)
         elif status != None:
-            return dbconn().requests.find({'status': status}, fields).sort('date', -1)
+            return dbconn().requests.find({'status': status}, fields).sort('touched', -1)
         else:
-            return dbconn().requests.find({}, fields).sort('ref')
+            return dbconn().requests.find({}, fields).sort('touched', -1)
     def get(self, _id):
         request = dbconn().requests.find_one({'_id': ObjectId(_id)})
         if not 'start' in request:
@@ -116,6 +138,7 @@ class Requests:
             request['finish'] = ''
         return request
     def update(self, _id, req):
+        touch('request', _id)
         dbconn().requests.update({'_id': ObjectId(_id)}, {'$set': req})
 
 class Complains:
@@ -146,15 +169,15 @@ class Complains:
     def new(self, req):
         return dbconn().complains.insert_one(req).inserted_id
     def list(self, case_id=None, office_id=None, status=None):
-        fields = {'case_id': 1, 'office_id': 1, 'ref': 1, 'date': 1, 'overview': 1}
+        fields = {'case_id': 1, 'office_id': 1, 'ref': 1, 'date': 1, 'overview': 1, 'touched': 1}
         if case_id != None:
-            return dbconn().complains.find({'case_id': case_id}, fields).sort('ref')
+            return dbconn().complains.find({'case_id': case_id}, fields).sort('touched', -1)
         elif office_id != None:
-            return dbconn().complains.find({'office_id': office_id}, fields).sort('ref')
+            return dbconn().complains.find({'office_id': office_id}, fields).sort('touched', -1)
         elif status != None:
-            return dbconn().complains.find({'status': status}, fields).sort('ref')
+            return dbconn().complains.find({'status': status}, fields).sort('touched', -1)
         else:
-            return dbconn().complains.find({}, fields).sort('ref')
+            return dbconn().complains.find({}, fields).sort('touched', -1)
     def get(self, _id):
         complain = dbconn().complains.find_one({'_id': ObjectId(_id)})
         for key in ['reviewer_id', 'start', 'finish']:
@@ -162,6 +185,7 @@ class Complains:
                 complain[key] = ''
         return complain
     def update(self, _id, req):
+        touch('complain', _id)
         dbconn().complains.update({'_id': ObjectId(_id)}, {'$set': req})
 
 class Updates:
@@ -169,9 +193,12 @@ class Updates:
     def new(self, update):
         if len(update['detail']) == 0:
                 return 0
-        return dbconn().updates.insert_one(update).inserted_id 
+        _id = dbconn().updates.insert_one(update).inserted_id 
+        touch(update['source'], update['source_id'])
+        return _id
     def list(self, source, source_id):
-        return dbconn().updates.find({'source': source, 'source_id': source_id}).sort('date')
+        return dbconn().updates.find({'source': source, 
+            'source_id': source_id}).sort('date')
     def remove(self, _id):
         return dbconn().updates.remove({'_id': ObjectId(_id)})
 
