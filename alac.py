@@ -3,7 +3,7 @@
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-from flask import Flask, request, render_template, redirect, session, send_file
+from flask import Flask, request, render_template, redirect, session, send_file, jsonify, Response
 from werkzeug.utils import secure_filename
 from markdown import markdown
 import os
@@ -805,6 +805,23 @@ def editNote(_id):
     return render_template('noteform.html', _id=_id, note=note, 
             users_right=users_right, users_list=users_list, 
             who=session['user'])
+
+
+@app.route('/data/requests')
+def dataRequest():
+    raw = DB('requests').raw()
+    data = []
+    for item in raw:
+        item['_id'] = str(item['_id'])
+        if item['case_id']:
+            item['case'] = Cases().get(item['case_id'])['title']
+        item['office'] = Offices().get(item['office_id'])['name']
+        if item['result']:
+            item['result'] = Requests().results[item['result']]
+        if 'touched' in item.keys():
+            item['touched'] = str(item['touched'])
+        data.append(item)
+    return jsonify(data)
 
 if __name__ == '__main__':
     """

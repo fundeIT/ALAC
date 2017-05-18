@@ -37,6 +37,8 @@ class DB:
         return _id
     def list(self, skip=0, limit=50):
         return self.collection.find().sort([('_id', 1)]).skip(skip).limit(limit)
+    def raw(self):
+        return self.collection.find().sort([('_id', 1)])
     def get(self, _id):
         return self.collection.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
@@ -263,6 +265,7 @@ class Documents:
 class DocRels:
     keys = ['source', 'source_id', 'doc_id']
     def new(self, docrel):
+        touch(docrel['source'], docrel['source_id'])
         return dbconn().docrels.insert_one(docrel).inserted_id 
     def list(self, source, source_id):
         # Getting document IDs related with the source
