@@ -21,6 +21,9 @@
                 {% endif %}
                 <li class="MenuItem"><a href="/offices">Oficinas</a></li>
                 {% if who['kind'] == 'OPR' %}
+                    <li class=""><a href="/clients">Clientes</a></li>
+                {% endif %}
+                {% if who['kind'] == 'OPR' %}
                     <li class="MenuCaution"><a href="/users">Usuarios</a></li>
                 {% endif %}
             </ul>
