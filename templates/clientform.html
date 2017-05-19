@@ -1,0 +1,80 @@
+{% extends "form.html" %}
+{% block form %}
+
+    <form action="/clients/{{ _id }}" method="post">
+        <label>Nombre</label>
+        <input class="TextInput" name="name" value="{{ client['name'] }}">
+        <label>Alias</label>
+        <input class="TextInput" name="alias" value="{{ client['name'] }}">
+        <label>Rango de edad</label>
+        <select name="age">
+            {% for age in ages %}
+                <option value="{{ loop.index0 }}" 
+                        {% if client['age']  == loop.index0 %}
+                            selected
+                        {% endif%}>
+                    {{ age }}
+                </option>
+            {% endfor %}
+        </select>
+        <label>Sexo</label>
+        <select name='sex'>
+            <option value="M"
+                {% if client['sex'] == 'M' %}selected{% endif %}>
+                Masculino
+            </option>
+            <option value="F"
+                {% if client['sex'] == 'F' %}selected{% endif %}>
+                Femenino
+            </option>
+            <option value="O"
+                {% if client['sex'] == 'O' %}selected{% endif %}>
+                Otro
+            </option>
+        </select>
+        <label>Sector</label>
+        <select name="kind">
+            {% for kind in kinds %}
+                <option value="{{ loop.index0 }}" 
+                        {% if client['kind']  == loop.index0 %}
+                            selected
+                        {% endif%}>
+                    {{ kind }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>¿Pertenece a un grupo vulnerable?</label>
+        <select name="vulnerable">
+            {% for v in vulnerables %}
+                <option value="{{ loop.index0 }}" 
+                        {% if client['vulnerable']  == loop.index0 %}
+                            selected
+                        {% endif%}>
+                    {{ v }}
+                </option>
+            {% endfor %}
+        </select>
+ 
+        <label>Organización</label>
+        <input class="TextInput" name="org" value="{{ client['org'] }}">
+
+        <label>Rol o cargo</label>
+        <input class="TextInput" name="rol" value="{{ client['rol'] }}">
+
+        <label>Municipio</label>
+        <input class="TextInput" name="city" value="{{ client['city'] }}">
+
+        <label>Teléfonos</label>
+        <input class="TextInput" name="tel" value="{{ client['tel'] }}">
+
+        <label>Correos</label>
+        <input class="TextInput" name="email" value="{{ client['email'] }}">
+
+        <label>Comentarios</label>
+        <textarea class="TextArea" name="notes"> {{ client['note'] }}</textarea>
+        <button>Enviar</button>
+
+    </form>
+        
+{% endblock %}
