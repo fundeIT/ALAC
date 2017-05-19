@@ -110,9 +110,8 @@ def logout():
 @app.route('/cases')
 def cases():
     if not 'user' in session:
-        user = {}
-    else:
-        user = session['user']
+        return redirect('/')
+    user = session['user']
     return render_template('caselist.html', cases = Cases().list(), who=user)
 
 @app.route('/cases/new/', methods=['GET', 'POST'])
@@ -808,10 +807,9 @@ def editNote(_id):
 
 @app.route('/clients')
 def clients():
-    if 'user' in session:
-        user = session['user']
-    else:
-        user = {}
+    if not 'user' in session:
+        return redirect('/')
+    user = session['user']
     return render_template('clientlist.html', 
             clients = Clients().list(), who=user) 
 
@@ -840,6 +838,9 @@ def clientNew():
 
 @app.route('/clients/<string:_id>', methods=['GET', 'POST'])
 def clientDetail(_id):
+    if not 'user' in session:
+        return redirect('/')
+    user = session['user']
     if request.method == 'POST':
         if 'user' in session:
             c = Clients()
