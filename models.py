@@ -143,6 +143,29 @@ class Requests:
         touch('request', _id)
         dbconn().requests.update({'_id': ObjectId(_id)}, {'$set': req})
 
+class Clients:
+    keys = ['name', 'alias', 'age', 'sex', 'kind', 'org', 
+            'vulnerable', 'rol', 'city', 'tel', 'email', 'notes']
+    kinds = ['Otro', 'Empleado público', 'Empresario', 'Organización social',
+            'Periodista', 'Ciudadano/a']
+    vulnerables = ['Ninguno', 'Mujeres', 'Jóvenes', 'Tercera edad', 
+            'Personas con discapacidad', 'Pueblos originarios', 'Migrante',
+            'LGBTI']
+    ages = ['Menos de 30 años', 'De 30 años o más y menor de 45',
+            'De 45 años o más y menor de 60', 'De 60 años o más']
+    def new(self, doc):
+        return dbconn().clients.insert_one(doc).inserted_id
+    def list(self, case_id=None, office_id=None, status=None):
+        fields = {
+            'name': 1, 
+            'city': 1 
+        }
+        return dbconn().clients.find().sort('name', 1)
+    def get(self, _id):
+        return dbconn().clients.find_one({'_id': ObjectId(_id)})
+    def update(self, _id, doc):
+        dbconn().clients.update({'_id': ObjectId(_id)}, {'$set': doc})
+
 class Complains:
     keys = [
         'case_id', 
@@ -250,6 +273,8 @@ class Users:
             else:
                 return None
         return None
+
+
 
 class Documents:
     keys = ['title', 'overview', 'tags', 'date', 'path']

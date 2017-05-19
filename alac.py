@@ -806,6 +806,67 @@ def editNote(_id):
             users_right=users_right, users_list=users_list, 
             who=session['user'])
 
+@app.route('/clients')
+def clients():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    return render_template('clientlist.html', 
+            clients = Clients().list(), who=user) 
+
+@app.route('/clients/new/', methods=['GET', 'POST'])
+def clientNew():
+    if not 'user' in session:
+        return redirect('/')
+    user = session['user']
+    if request.method == 'POST':
+        c = Clients()
+        client = {key: request.form[key] for key in c.keys}
+        _id = c.new(client)
+        right = {
+                'source': 'client',
+                'source_id': str(_id),
+                'user_id': user['_id']
+                }
+        Rights().new(right)
+        return redirect('/clients')
+    else:
+        c = Clients()
+        client = emptyDict(c.keys)
+        _id = 'new/'
+        return render_template('clientform.html', _id=_id, client=client, 
+            kinds=c.kinds, vulnerables=c.vulnerables, ages=c.ages, who=user)
+
+@app.route('/clients/<string:_id>', methods=['GET', 'POST'])
+def clientDetail(_id):
+    if request.method == 'POST':
+        if 'user' in session:
+            c = Clients()
+            client = {key: request.form[key] for key in c.keys} 
+            c.update(_id, client)
+        return redirect('/clients/%s' % _id)
+    else:
+        c = Clients()
+        client = c.get(_id)
+        return render_template('clientshow.html', 
+                client=client,
+                kinds=c.kinds, 
+                vulnerables=c.vulnerables, 
+                ages=c.ages,
+                has_right = hasRight('client', _id, ['OPR', 'MNR', 'USR']),
+                who=session['user'])
+
+@app.route('/clients/<string:_id>/edit')
+def clientEdit(_id):
+    if not 'user' in session:
+        return redirect('/clients/%s' % _id)
+    if request.method == 'GET':
+        c = Clients()
+        client = c.get(_id)
+        return render_template('clientform.html', _id = _id, client = client, 
+            kinds=c.kinds, vulnerables=c.vulnerables, ages=c.ages, 
+            who=session['user'])
 
 @app.route('/data/requests')
 def dataRequest():
