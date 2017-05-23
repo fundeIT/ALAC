@@ -274,14 +274,15 @@ class Users:
                 return None
         return None
 
-
-
 class Documents:
-    keys = ['title', 'overview', 'tags', 'date', 'path']
+    keys = ['title', 'overview', 'tags', 'date', 'path', 'public']
     def new(self, doc):
         return dbconn().docs.insert_one(doc).inserted_id
-    def list(self):
-        return dbconn().docs.find().sort('date', -1)
+    def list(self, public=False):
+        if public:
+            return dbconn().docs.find({'public': 'on'}).sort('date', -1)
+        else:
+            return dbconn().docs.find().sort('date', -1)
     def get(self, _id):
         return dbconn().docs.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):

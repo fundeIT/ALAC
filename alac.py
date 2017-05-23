@@ -599,13 +599,22 @@ def userDetail(_id):
             message='', password1='', kinds=u.kinds, who=session['user'])
 
 @app.route('/docs')
+def publicDocs():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    docs = Documents().list(public=True)
+    return render_template('doclist.html', docs=docs, who=user)
+
+@app.route('/docs/admin')
 def documents():
     if 'user' in session:
         user = session['user']
     else:
         user = {}
     docs = Documents().list()
-    return render_template('doclist.html', docs=docs, who=user) 
+    return render_template('docadmin.html', docs=docs, who=user) 
 
 @app.route('/docs/new/', methods=['GET', 'POST'])
 def newDoc():
@@ -620,6 +629,7 @@ def newDoc():
         doc['overview'] = request.form['overview']
         doc['tags'] = request.form['tags']
         doc['date'] = request.form['date']
+        doc['public'] = request.form['public']
         docfile = request.files['file']
         docfile.filename = secure_filename(docfile.filename)
         path = app.config['UPLOAD_FOLDER'] + '/' + d.getYear()
@@ -649,7 +659,10 @@ def docDetail(_id):
         return redirect('/docs')
     d = Documents()
     if request.method == 'POST':
-        doc = {key: request.form[key] for key in d.keys}
+        rf = {key: request.form[key] for key in request.form.keys()}
+        if not 'public' in rf.keys():
+            rf['public'] = ''
+        doc = {key: rf[key] for key in d.keys}
         del doc['path']
         d.update(_id, doc)
         return redirect(request.form['referrer'])
