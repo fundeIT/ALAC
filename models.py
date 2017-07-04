@@ -55,6 +55,8 @@ def touch(entity, _id):
         collection = 'requests'
     elif entity == 'complain':
         collection = 'complains'
+    elif entity == 'client':
+        collection = 'clients'
     else:
         return
     client = pymongo.MongoClient()
@@ -147,7 +149,7 @@ class Clients:
     keys = ['name', 'alias', 'age', 'sex', 'kind', 'org', 
             'vulnerable', 'rol', 'city', 'tel', 'email', 'notes']
     kinds = ['Otro', 'Empleado público', 'Empresario', 'Organización social',
-            'Periodista', 'Ciudadano/a']
+            'Periodista', 'Ciudadano/a', 'Academia']
     vulnerables = ['Ninguno', 'Mujeres', 'Jóvenes', 'Tercera edad', 
             'Personas con discapacidad', 'Pueblos originarios', 'Migrante',
             'LGBTI']
