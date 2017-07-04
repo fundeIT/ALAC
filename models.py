@@ -160,10 +160,11 @@ class Clients:
             'name': 1, 
             'city': 1 
         }
-        return dbconn().clients.find().sort('name', 1)
+        return dbconn().clients.find().sort('touched', -1)
     def get(self, _id):
         return dbconn().clients.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
+        touch('client', _id)
         dbconn().clients.update({'_id': ObjectId(_id)}, {'$set': doc})
 
 class Complains:
