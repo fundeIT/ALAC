@@ -1,0 +1,67 @@
+{% extends "ticket/layout.html" %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" 
+    href="{{ url_for('static', filename='css/start.css') }}">
+
+
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/userform.js') }}"
+        charset="utf-8">
+</script>
+
+
+
+{% endblock %}
+
+{% block main %}
+
+<div id="previous"></div>
+
+<div class="CenteredContainer">
+
+<div class="SimpleBox">
+    <input id="year" type="hidden" value="{{ data['year'] }}">
+    <input id="ticket" type="hidden" value="{{ data['ticket'] }}">
+    <input id="ticket_id" type="hidden" value="{{ data['ticket_id'] }}">
+
+    <h2>Mensaje</h2>
+    <label id="request">
+        Describa su requerimiento de información pública o la irregularidad que
+        desea reportar. Mientras más específicos sean los datos que proporcione,
+        en mejor manera podrémos servirle. Entre los datos, si es pertinente,
+        mencione: nombres, lugares, períodos o fechas, circunstancias, etc.
+    </label></br>
+    <textarea id="msg" placeholder="Describa su petición o denuncia"></textarea>
+    <div id="msgalert" class="alert"></div>
+
+
+    <h2>Agregar documentos</h2>
+    <label>
+        Si tiene documentos, imagenes u otros archivos que desee compartir,
+        puede agregarlos en esta sección.
+    </label></br>
+    <ul id="filelist">
+    </ul>
+    <input id="file" type="file" multiple>
+
+    <div id="contact">
+        <h2>Datos de contacto</h2>
+        <label>
+            Para que pueda dar seguimiento a su petición o denuncia deje su correo
+            electrónico. Se le enviará un número de ticket con el cual podrá revisar
+            las novedades sobre su caso o agregar nueva información. También puede
+            seleccionar la opción "Anónimo".
+        </label><br/>
+        <input id="email" type="email" value="{{ data['email'] }}" placeholder="Correo electrónico">
+        <input id="anonymous" type="checkbox">Anónimo<br/>
+    </div>
+
+    <br/>
+    <button id="send">Enviar</button>
+</div>
+
+</div>
+
+{% endblock %}

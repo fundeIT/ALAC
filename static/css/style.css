@@ -1,0 +1,105 @@
+body {
+    font-family: "Muli", sans-serif;
+    font-size: 14px;
+    /*
+    background: #01b1af;
+    */
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+textarea {
+    width: 100%;
+    height: 220px;
+    font-family: "Muli", sans-serif;
+}
+
+fieldset {
+    max-width: 520px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 90%;
+}
+
+h1 {
+    text-align: center;
+}
+
+.alert {
+    color: red;
+    font-size: 80%;
+}
+
+.TicketHeader {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.TicketComment {
+    width: 560px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+.ColoredBox {
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 20px;
+    width: 260px;
+    background: #d7ffc4;
+    background: white;
+}
+
+.SimpleBox {
+    break-after: always;
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 20px;
+    width: 600px;
+    background: white;
+}
+
+.CenteredContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    border: 1px solid gray;
+    background: #00a09d;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input[type=file] {
+
+}
+
+textarea, input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-family: "Muli", sans-serif;
+}
+
+textarea {
+    width: 90%;
+    height: 320px;
+}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block main %}
+<form action="{{ url_for('login') }}" method=post>
+    <label>Correo:</label>
+    <input type="email" name="email" autofocus>
+    <label>Contraseña:</label>
+    <input type="password" name="password">
+    {#
+    <label>Recordar:</label>
+    <input type="checkbox" name="remember">
+    #}
+    <button type="submit">Enviar</button>
+</form>
+
+{% if message %}
+    <span class="MenuCaution">{{ message }}</span>
+{% endif %}
+
+{% endblock %}
