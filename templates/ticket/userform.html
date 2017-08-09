@@ -33,14 +33,14 @@
         en mejor manera podrémos servirle. Entre los datos, si es pertinente,
         mencione: nombres, lugares, períodos o fechas, circunstancias, etc.
     </label></br>
-    <textarea id="msg" placeholder="Describa su petición o denuncia"></textarea>
+    <textarea id="msg" placeholder="Describa su petición o denuncia" required:></textarea>
     <div id="msgalert" class="alert"></div>
 
 
     <h2>Agregar documentos</h2>
     <label>
         Si tiene documentos, imagenes u otros archivos que desee compartir,
-        puede agregarlos en esta sección.
+        puede agregarlos en esta sección (tamaño máximo de cada archivo: 16MB).
     </label></br>
     <ul id="filelist">
     </ul>
@@ -54,7 +54,8 @@
             las novedades sobre su caso o agregar nueva información. También puede
             seleccionar la opción "Anónimo".
         </label><br/>
-        <input id="email" type="email" value="{{ data['email'] }}" placeholder="Correo electrónico">
+        <input id="email" type="email" value="{{ data['email'] }}"
+            placeholder="Correo electrónico" required>
         <input id="anonymous" type="checkbox">Anónimo<br/>
     </div>
 

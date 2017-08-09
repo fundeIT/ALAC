@@ -20,8 +20,10 @@ import trust
 app = Flask(__name__)
 app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx'])
+ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
+
 
 def uploadFile(docfile):
     docfile.filename = secure_filename(docfile.filename)

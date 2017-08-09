@@ -91,9 +91,10 @@ function makeRequest(data) {
 
 function uploadFiles(identifier) {
     console.log(identifier);
+    var counter = 0;
     for (var i = 0; i < filesToSend.length; i++) {
         files = filesToSend[i];
-        for (var j = 0; j < files.length; j++) {
+        for (var j = 0; j < files.length || counter < 5; j++) {
             var form = new FormData();
             form.append('ticket', identifier.ticket);
             form.append('ticket_id', identifier.ticket_id);
@@ -118,6 +119,7 @@ function uploadFiles(identifier) {
             }
             http.open('POST', '/attachment/upload');
             http.send(form);
+            counter++;
         }
     }
 }
