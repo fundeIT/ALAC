@@ -108,9 +108,10 @@ function uploadFiles(identifier) {
                 try {
                     if (http.readyState === XMLHttpRequest.DONE) {
                         if (http.status === 200)
-                            console.log(http.responseText);
+                            openTicket(http.responseText);
                         else
-                            console.log('There was a problem with data')
+                            console.log('There was a problem with data');
+                        delete files[j];
                     }
                 }
                 catch (e) {
@@ -120,18 +121,17 @@ function uploadFiles(identifier) {
             http.open('POST', '/attachment/upload');
             http.send(form);
             counter++;
+            delete filesToSend[i];
         }
     }
 }
 
 function openTicket(data) {
     console.log(data);
-
     document.getElementById('year').value = data.year;
     document.getElementById('ticket').value = data.ticket;
     document.getElementById('ticket_id').value = data.ticket_id;
     document.getElementById('email').value = data.email;
-
     document.getElementById('file').value = null
     document.getElementById('filelist').innerHTML = ''
     msg = document.getElementById('msg')
