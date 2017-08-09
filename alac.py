@@ -966,7 +966,6 @@ def ticket():
         data['year'] = request.form['year']
         data['email'] = request.form['email']
         ticket = getTicket(data)
-        print(ticket)
         if ticket:
             data['ticket_id'] = str(ticket['_id'])
         else:
@@ -1047,7 +1046,6 @@ def thread():
         for thread in threads:
             res = getDocuments(data['ticket_id'], str(thread['_id']))
             docs[str(thread['_id'])] = [x for x in res]
-        print(docs)
         threads.rewind()
         return render_template("ticket/threads.html", ticket=data,
             threads=threads, docs=docs)

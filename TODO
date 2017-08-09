@@ -4,3 +4,5 @@
 - Al agregar nuevos casos, que regrese al formulario caseshow
 - Letras blancas in hover on menu options
 - Lista when a document is added
+- Ticket: Bloquear formulario mientras se está procesando script
+- Ticket: Opción para eliminar tickets, threads o documentos
