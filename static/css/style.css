@@ -50,8 +50,8 @@ h1 {
     border: 1px #999 solid;
     padding: 20px;
     margin: 20px;
-    max-width: 260px;
     background: #d7ffc4;
+    flex-basis: 28%;
     background: white;
 }
 
