@@ -1,0 +1,15 @@
+digraph Ticket {
+    0 [shape=none, label=""];
+    0 -> 1 [label="Enviar"];
+    1 -> 2 [label="validateFields()"];
+    2 -> 3 [label="prepareForm()"];
+    3 -> 4 [label="makeRequest()"];
+    4 -> 5 [label="/ticket/new"];
+    5 -> 6 [label="uploadFiles()"];
+    6 -> 7 [label="/attachment/upload"];
+    7 -> 5;
+    7 -> 8 [label="getThreads()"];
+    5 -> 8 [label="getThreads()"];
+    8 -> 9 [label="/threads"];
+    9 -> 10 [label="updateThreads()"];
+}

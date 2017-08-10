@@ -24,7 +24,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
-
 def uploadFile(docfile):
     docfile.filename = secure_filename(docfile.filename)
     d = Dates()

@@ -3,7 +3,7 @@ var filesToSend = [];
 function main() {
     document.getElementById('file').onchange = pushFiles;
     document.getElementById('anonymous').onclick = toggleAnonymous;
-    document.getElementById('send').onclick = processForm;
+    document.getElementById('send').onclick = prepareForm;
 
     var data = {};
     data.ticket = document.getElementById('ticket').value;
@@ -12,7 +12,7 @@ function main() {
         data.ticket_id = document.getElementById('ticket_id').value;
         data.email = document.getElementById('email').value;
         console.log(data);
-        openTicket(data);
+        getThreads(data);
     }
 }
 
@@ -39,7 +39,7 @@ function toggleAnonymous() {
         email.focus();
 }
 
-function validateForm() {
+function validateFields() {
     var valid = true;
     var msg = document.getElementById('msg')
     var msgAlert = document.getElementById('msgalert');
@@ -53,8 +53,8 @@ function validateForm() {
     return valid;
 }
 
-function processForm() {
-    var valid = validateForm();
+function prepareForm() {
+    var valid = validateFields();
     if (!valid)
         return false;
     data = {};
@@ -74,7 +74,7 @@ function makeRequest(data) {
                 if (http.status === 200) {
                    data = JSON.parse(http.response);
                    uploadFiles(data);
-                   openTicket(data);
+                   getThreads(data);
                 }
                 else
                     console.log('makeRequest: There was a problem with data');
@@ -108,7 +108,7 @@ function uploadFiles(identifier) {
                 try {
                     if (http.readyState === XMLHttpRequest.DONE) {
                         if (http.status === 200)
-                            openTicket(http.responseText);
+                            getThreads(http.responseText);
                         else
                             console.log('There was a problem with data');
                         delete files[j];
@@ -126,7 +126,7 @@ function uploadFiles(identifier) {
     }
 }
 
-function openTicket(data) {
+function getThreads(data) {
     console.log(data);
     document.getElementById('year').value = data.year;
     document.getElementById('ticket').value = data.ticket;
@@ -151,7 +151,7 @@ function openTicket(data) {
         try {
             if (http.readyState === XMLHttpRequest.DONE) {
                 if (http.status === 200)
-                    updatePrevious(http.responseText)
+                    updateThreads(http.responseText)
                 else
                     console.log('There was a problem with data')
             }
@@ -164,8 +164,7 @@ function openTicket(data) {
     http.send(form);
 }
 
-function updatePrevious(data) {
-    console.log('I am here');
+function updateThreads(data) {
     prev = document.getElementById('previous')
     prev.innerHTML = data
 }

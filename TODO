@@ -6,3 +6,6 @@
 - Lista when a document is added
 - Ticket: Bloquear formulario mientras se está procesando script
 - Ticket: Opción para eliminar tickets, threads o documentos
+- Ticket: Cuando se agrega más de un archivo, de uno en uno, solo el último es
+  guardado.
+
