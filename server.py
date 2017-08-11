@@ -1030,13 +1030,10 @@ def newTicket():
 
 @app.route("/threads", methods=['POST'])
 def thread():
-    print("Preparing ticket")
-    print(request.form)
     data = {}
     data['ticket'] = int(request.form['ticket'])
     data['email'] = request.form['email']
     data['year'] = request.form['year']
-    print(data)
     ticket = getTicket(data)
     if ticket:
         data['ticket_id'] = str(ticket['_id'])
@@ -1047,7 +1044,6 @@ def thread():
             el = dict(thread)
             el['msg'] = markdown(el['msg'])
             t.append(el)
-            print(el)
             res = getDocuments(data['ticket_id'], str(thread['_id']))
             docs[str(thread['_id'])] = [x for x in res]
         return render_template("ticket/threads.html", ticket=data,
@@ -1071,10 +1067,8 @@ def adminEmptyTicket():
 
 @app.route('/attachment/<string:_id>')
 def attachment(_id):
-    print(_id)
     d = DB('ticketdocs')
     doc = d.get(_id)
-    print(doc)
     path = app.config['UPLOAD_FOLDER'] + doc['path']
     filename = path.split('/')[-1]
     return send_file(path, as_attachment=True, attachment_filename=filename)
@@ -1094,7 +1088,6 @@ def attachmentUpload():
         rec['ticket'] = request.form['ticket']
         rec['email'] = request.form['email']
         rec['doc_id'] = _id
-        print("1094: ", rec)
         return jsonify(rec)
     else:
         return "Failed"
