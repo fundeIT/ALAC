@@ -7,6 +7,12 @@
         charset="utf-8">
 </script>
 
+<link rel="stylesheet" 
+      href="{{ url_for('static', filename='third/simplemde.min.css') }}">
+
+<script src="{{ url_for('static', filename='third/simplemde.min.js') }}">
+</script>
+
 {% endblock %}
 
 {% block main %}
@@ -27,7 +33,7 @@
         en mejor manera podrémos servirle. Entre los datos, si es pertinente,
         mencione: nombres, lugares, períodos o fechas, circunstancias, etc.
     </label></br>
-    <textarea id="msg" placeholder="Describa su petición o denuncia" required:></textarea>
+    <textarea id="msg" placeholder="Describa su consulta" required:></textarea>
     <div id="msgalert" class="alert"></div>
 
 
@@ -43,10 +49,10 @@
     <div id="contact">
         <h2>Datos de contacto</h2>
         <label>
-            Para que pueda dar seguimiento a su petición o denuncia deje su correo
-            electrónico. Se le enviará un número de ticket con el cual podrá revisar
-            las novedades sobre su caso o agregar nueva información. También puede
-            seleccionar la opción "Anónimo".
+            Para que pueda dar seguimiento a su petición o denuncia deje su
+            correo electrónico. Se le enviará un número de ticket con el cual
+            podrá revisar las novedades sobre su caso o agregar nueva
+            información. También puede seleccionar la opción "Anónimo".
         </label><br/>
         <input id="email" type="email" value="{{ data['email'] }}"
             placeholder="Correo electrónico" required>
@@ -58,5 +64,15 @@
 
 </div>
 
+<script>
+var simplemde = new SimpleMDE({ 
+    element: document.getElementById("msg"), 
+    spellchecker: false,
+});
+</script>
+
+
 
 {% endblock %}
+
+
