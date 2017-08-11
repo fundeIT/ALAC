@@ -1041,13 +1041,17 @@ def thread():
     if ticket:
         data['ticket_id'] = str(ticket['_id'])
         threads = getThreads(data['ticket_id'])
+        t = []
         docs = {}
         for thread in threads:
+            el = dict(thread)
+            el['msg'] = markdown(el['msg'])
+            t.append(el)
+            print(el)
             res = getDocuments(data['ticket_id'], str(thread['_id']))
             docs[str(thread['_id'])] = [x for x in res]
-        threads.rewind()
         return render_template("ticket/threads.html", ticket=data,
-            threads=threads, docs=docs)
+            threads=t, docs=docs)
     else:
         return "Your ticket was not found"
 
