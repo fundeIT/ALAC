@@ -1,4 +1,5 @@
 var filesToSend = [];
+var processing = false;
 
 function main() {
     document.getElementById('file').onchange = pushFiles;
@@ -11,7 +12,6 @@ function main() {
         data.year = document.getElementById('year').value;
         data.ticket_id = document.getElementById('ticket_id').value;
         data.email = document.getElementById('email').value;
-        console.log(data);
         getThreads(data);
     }
 }
@@ -67,7 +67,10 @@ function prepareForm() {
 }
 
 function makeRequest(data) {
+    if (processing) return;
     var http = new XMLHttpRequest();
+    document.getElementById("Processing").innerHTML = "Procesando. Espere..."
+    processing = true;
     http.onreadystatechange = function () {
         try {
             if (http.readyState === XMLHttpRequest.DONE) {
@@ -78,6 +81,8 @@ function makeRequest(data) {
                 }
                 else
                     console.log('makeRequest: There was a problem with data');
+                document.getElementById("Processing").innerHTML = ""
+                processing = false;
             }
         }
         catch (e) {
@@ -90,7 +95,6 @@ function makeRequest(data) {
 }
 
 function uploadFiles(identifier) {
-    console.log(identifier);
     var counter = 0;
     for (var i = 0; i < filesToSend.length; i++) {
         files = filesToSend[i];
@@ -127,7 +131,6 @@ function uploadFiles(identifier) {
 }
 
 function getThreads(data) {
-    console.log(data);
     document.getElementById('year').value = data.year;
     document.getElementById('ticket').value = data.ticket;
     document.getElementById('ticket_id').value = data.ticket_id;
