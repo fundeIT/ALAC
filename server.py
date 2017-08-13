@@ -11,6 +11,8 @@ from email.mime.multipart import MIMEMultipart
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from tornado.web import FallbackHandler, RequestHandler, Application
+
 from flask import Flask, request, render_template, redirect, session, \
     send_file, make_response, jsonify, Response
 from werkzeug.utils import secure_filename
@@ -1146,6 +1148,16 @@ def attachmentUpload():
     else:
         return "Failed"
 
+class MainHandler(RequestHandler):
+    def get(self):
+        self.write("Hello")
+
+tr = WSGIContainer(app)
+application = Application([
+    (r"/support", MainHandler),
+    (r".*", FallbackHandler, dict(fallback=tr)),
+])
+
 if __name__ == "__main__":
     try:
         opts, args = getopt.getopt(sys.argv[1:], "dp:", ["debug", "port"])
@@ -1164,6 +1176,5 @@ if __name__ == "__main__":
     if debug:
         app.run(port=port, debug=True)
     else:
-        http_server = HTTPServer(WSGIContainer(app))
-        http_server.listen(port)
+        application.listen(port)
         IOLoop.instance().start()
