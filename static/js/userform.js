@@ -75,6 +75,9 @@ function makeRequest(data) {
         try {
             if (http.readyState === XMLHttpRequest.DONE) {
                 if (http.status === 200) {
+                    msg = document.getElementById('msg')
+                    msg.value = "";
+                    msg.focus();
                    data = JSON.parse(http.response);
                    uploadFiles(data);
                    getThreads(data);
