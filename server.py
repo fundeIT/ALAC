@@ -112,10 +112,18 @@ def hasRight(source, source_id, categories):
 def index():
     if 'user' in session:
         user = session['user']
+        return redirect('/notes')
     else:
         user = {}
-    # return render_template('index.html', who=user) 
-    return redirect('/start')
+        if 'user_id' in request.cookies:
+            user['_id'] = request.cookies.get('user_id')
+            user['name'] = request.cookies.get('user_name')
+            user['kind'] = request.cookies.get('user_kind')
+            user['email'] = request.cookies.get('user_email')
+            session['user'] = user
+            return redirect('/notes')
+        else:
+            return redirect('/start')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -126,20 +134,38 @@ def login():
         if user:
             user['_id'] = str(user['_id'])
             session['user'] = user
-            return redirect('/')
+            resp = make_response(redirect('/'))
+            if 'remember' in request.form:
+                exp = datetime.datetime.now() + datetime.timedelta(days=30)
+                resp.set_cookie('user_id', user['_id'], expires=exp)
+                resp.set_cookie('user_name', user['name'], expires=exp)
+                resp.set_cookie('user_kind', user['kind'], expires=exp)
+                resp.set_cookie('user_email', user['email'], expires=exp)
+            else:
+                resp.set_cookie('user_id', '', expires=0)
+                resp.set_cookie('user_name', '', expires=0)
+                resp.set_cookie('user_kind', '', expires=0)
+                resp.set_cookie('user_email', '', expires=0)
+            return resp
         else:
             message = 'Usuario no registrado o contraseña incorrecta'
             return render_template('login.html', message=message, who={})
-    if 'user' in session:
-        user = session['user']
     else:
-        user = {}
-    return render_template('login.html', message=None, who=user)
+        if 'user' in session:
+            user = session['user']
+        else:
+            user = {}
+        return render_template('login.html', message=None, who=user)
 
 @app.route('/logout')
 def logout():
     del session['user']
-    return redirect('/')
+    resp = make_response(redirect('/'))
+    resp.set_cookie('user_id', '', expires=0)
+    resp.set_cookie('user_name', '', expires=0)
+    resp.set_cookie('user_kind', '', expires=0)
+    resp.set_cookie('user_email', '', expires=0)
+    return rese
 
 @app.route('/cases')
 def cases():
