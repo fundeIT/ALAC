@@ -4,6 +4,7 @@ body {
     /*
     background: #01b1af;
     */
+    height: 100%;
 }
 
 input {
@@ -110,4 +111,12 @@ textarea, input {
 textarea {
     width: 90%;
     height: 320px;
+}
+
+.bg {
+        background-image: url("/static/images/citizes.jpg");
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
 }
