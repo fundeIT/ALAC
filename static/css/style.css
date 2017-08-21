@@ -1,0 +1,122 @@
+body {
+    font-family: "Muli", sans-serif;
+    font-size: 16px;
+    /*
+    background: #01b1af;
+    */
+    height: 100%;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+fieldset {
+    max-width: 520px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 90%;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #999;
+}
+
+td {
+    vertical-align: top;
+    padding: 5px;
+}
+
+.alert {
+    color: red;
+    font-size: 80%;
+}
+
+.TicketHeader {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.TicketComment {
+    max-width: 560px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+.ColoredBox {
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 20px;
+    background: #d7ffc4;
+    flex-basis: 28%;
+    background: white;
+}
+
+.SimpleBox {
+    break-after: always;
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 10px;
+    width: 600px;
+    background: white;
+    flex-basis: 60%; 
+}
+
+.CenteredContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    border: 1px solid gray;
+    background: #00a09d;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input[type=file] {
+
+}
+
+textarea, input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-family: "Muli", sans-serif;
+}
+
+textarea {
+    width: 90%;
+    height: 320px;
+}
+
+.bg {
+        background-image: url("/static/images/citizes.jpg");
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+}

@@ -1,20 +1,33 @@
 #!/usr/bin/python3
 
+import os
+import sys
+import getopt
+import json
+import smtplib
+
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-from flask import Flask, request, render_template, redirect, session, send_file, jsonify, Response
+from tornado.web import FallbackHandler, RequestHandler, Application, \
+                        StaticFileHandler
+
+from flask import Flask, request, render_template, redirect, session, \
+    send_file, make_response, jsonify, Response
 from werkzeug.utils import secure_filename
+
 from markdown import markdown
-import os
+
 from models import *
 import trust
+import emailmgr
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx'])
+ALLOWED_EXTENSIONS = set(['pdf', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
 def uploadFile(docfile):
     docfile.filename = secure_filename(docfile.filename)
@@ -29,6 +42,27 @@ def uploadFile(docfile):
     if not os.path.exists(path):
         docfile.save(path)
         return path 
+    else:
+        return None
+        
+def uploadAttachment(rec):
+    rec['file'].filename = secure_filename(rec['file'].filename)
+    path = app.config['UPLOAD_FOLDER'] + '/' + rec['year']
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path += '/tickets'
+    if not os.path.exists(path):
+        os.makedirs(path) 
+    path += '/' + rec['ticket_id']
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path += '/' + rec['thread_id']
+    if not os.path.exists(path):
+        os.makedirs(path)
+    path += '/' + rec['file'].filename
+    if not os.path.exists(path):
+        rec['file'].save(path)
+        return path[len(app.config['UPLOAD_FOLDER']):]
     else:
         return None
 
@@ -78,10 +112,18 @@ def hasRight(source, source_id, categories):
 def index():
     if 'user' in session:
         user = session['user']
+        return redirect('/notes')
     else:
         user = {}
-    # return render_template('index.html', who=user) 
-    return redirect('/notes')
+        if 'user_id' in request.cookies:
+            user['_id'] = request.cookies.get('user_id')
+            user['name'] = request.cookies.get('user_name')
+            user['kind'] = request.cookies.get('user_kind')
+            user['email'] = request.cookies.get('user_email')
+            session['user'] = user
+            return redirect('/notes')
+        else:
+            return redirect('/start')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -92,20 +134,38 @@ def login():
         if user:
             user['_id'] = str(user['_id'])
             session['user'] = user
-            return redirect('/')
+            resp = make_response(redirect('/'))
+            if 'remember' in request.form:
+                exp = datetime.datetime.now() + datetime.timedelta(days=30)
+                resp.set_cookie('user_id', user['_id'], expires=exp)
+                resp.set_cookie('user_name', user['name'], expires=exp)
+                resp.set_cookie('user_kind', user['kind'], expires=exp)
+                resp.set_cookie('user_email', user['email'], expires=exp)
+            else:
+                resp.set_cookie('user_id', '', expires=0)
+                resp.set_cookie('user_name', '', expires=0)
+                resp.set_cookie('user_kind', '', expires=0)
+                resp.set_cookie('user_email', '', expires=0)
+            return resp
         else:
             message = 'Usuario no registrado o contraseña incorrecta'
             return render_template('login.html', message=message, who={})
-    if 'user' in session:
-        user = session['user']
     else:
-        user = {}
-    return render_template('login.html', message=None, who=user)
+        if 'user' in session:
+            user = session['user']
+        else:
+            user = {}
+        return render_template('login.html', message=None, who=user)
 
 @app.route('/logout')
 def logout():
     del session['user']
-    return redirect('/')
+    resp = make_response(redirect('/'))
+    resp.set_cookie('user_id', '', expires=0)
+    resp.set_cookie('user_name', '', expires=0)
+    resp.set_cookie('user_kind', '', expires=0)
+    resp.set_cookie('user_email', '', expires=0)
+    return rese
 
 @app.route('/cases')
 def cases():
@@ -898,12 +958,201 @@ def dataRequest():
         data.append(item)
     return jsonify(data)
 
-if __name__ == '__main__':
-    """
-    This is the main function.
-    It starts the server.
-    """
-    # app.run(host='0.0.0.0', port=80)
-    http_server = HTTPServer(WSGIContainer(app))
-    http_server.listen(80)
-    IOLoop.instance().start()
+@app.route("/start")
+def start():
+    year = Dates().getYear()
+    ticket = ''
+    email = ''
+    remember = False
+    if 'ticket' in request.cookies:
+        year = request.cookies.get('year')
+        ticket = request.cookies.get('ticket')
+        email = request.cookies.get('email')
+        remember = True
+    return render_template("ticket/start.html", year=year, ticket=ticket,
+        email=email, remember=remember)
+        
+@app.route("/ticket", methods=['GET', 'POST'])
+def ticket():
+    data = {}
+    threads = None
+    docs = None
+    data['ticket'] = 0
+    data['year'] = Dates().getYear()
+    data['email'] = ""
+    referrer = None
+    if request.referrer:
+        referrer = request.referrer.split('/')[-1]
+    if request.method == 'GET':
+        if 'ticket' in request.cookies and referrer != 'start':
+            data['ticket'] = int(request.cookies.get('ticket'))
+            data['year'] = request.cookies.get('year')
+            data['email'] = request.cookies.get('email')
+            ticket = getTicket(data)
+            data['ticket_id'] = str(ticket['_id'])
+    else:
+        data['ticket'] = int(request.form['ticket'])
+        data['year'] = request.form['year']
+        data['email'] = request.form['email']
+        ticket = getTicket(data)
+        if ticket:
+            data['ticket_id'] = str(ticket['_id'])
+        else:
+            data['ticket'] = 0
+            data['year'] = Dates().getYear()
+            data['email'] = ""
+    resp = make_response(render_template("ticket/userform.html", data=data))
+
+    if 'remember' in request.form:
+        exp = datetime.datetime.now() + datetime.timedelta(days=90)
+        resp.set_cookie('ticket', str(data['ticket']), expires=exp)
+        resp.set_cookie('year', data['year'], expires=exp)
+        resp.set_cookie('email', data['email'], expires=exp)
+    else:
+        if referrer == 'start':
+            resp.set_cookie('ticket', '', expires=0)
+            resp.set_cookie('year', '', expires=0)
+            resp.set_cookie('email', '', expires=0)
+
+    return resp
+
+@app.route("/ticket/new", methods=['POST'])
+def newTicket():
+    d = Dates()
+    today = d.getDate()
+    year = d.getYear()
+    data = request.json
+    
+    if data['ticket'] == '0':
+        counter = newCounter('ticket', d.getYear())
+        ticket = {
+            'year': year, 
+            'ticket': counter, 
+            'email': data['email'],
+            'msg':  data['msg'], 
+            'date': today
+        }
+        ticket_id = DB('tickets').new(ticket)
+    else:
+        ticket_id = data['ticket_id']
+        counter = data['ticket']
+        year = data['year']
+    
+    name = ''
+    if 'user' in session:
+        name = session['user']['name']
+        emailmgr.notify(year, counter, data['email']) 
+
+    thread = {
+        'ticket_id': ticket_id, 
+        'msg': data['msg'], 
+        'date': today,
+        'name': name
+    }
+
+    thread_id = DB('threads').new(thread)
+    
+    ret = {
+        'year': year, 
+        'ticket': counter, 
+        'ticket_id': ticket_id, 
+        'thread_id': thread_id, 
+        'email': data['email']
+    }
+    return jsonify(ret)
+
+@app.route("/threads", methods=['POST'])
+def thread():
+    data = {}
+    data['ticket'] = int(request.form['ticket'])
+    data['email'] = request.form['email']
+    data['year'] = request.form['year']
+    ticket = getTicket(data)
+    if ticket:
+        data['ticket_id'] = str(ticket['_id'])
+        threads = getThreads(data['ticket_id'])
+        t = []
+        docs = {}
+        for thread in threads:
+            el = dict(thread)
+            el['msg'] = markdown(el['msg'])
+            t.append(el)
+            res = getDocuments(data['ticket_id'], str(thread['_id']))
+            docs[str(thread['_id'])] = [x for x in res]
+        return render_template("ticket/threads.html", ticket=data,
+            threads=t, docs=docs)
+    else:
+        return "Your ticket was not found"
+
+@app.route('/ticket/admin/<int:skip>/<int:limit>')
+def adminTicket(skip, limit):
+    if not 'user' in session:
+        return redirect('/login')
+    db = DB('tickets')
+    count = db.count()
+    tickets = db.list(skip, limit)
+    return render_template('ticket/tickets.html',
+        tickets=tickets)
+
+@app.route('/ticket/admin')
+def adminEmptyTicket():
+    return redirect('/ticket/admin/0/20')
+
+@app.route('/attachment/<string:_id>')
+def attachment(_id):
+    d = DB('ticketdocs')
+    doc = d.get(_id)
+    path = app.config['UPLOAD_FOLDER'] + doc['path']
+    filename = path.split('/')[-1]
+    return send_file(path, as_attachment=True, attachment_filename=filename)
+
+@app.route("/attachment/upload", methods=['POST'])
+def attachmentUpload():
+    rec = {}
+    rec['ticket_id'] = request.form['ticket_id'];
+    rec['year'] = request.form['year']
+    rec['thread_id'] = request.form['thread_id']
+    rec['file'] = request.files['file']
+    path = uploadAttachment(rec)
+    if (path):
+        del rec['file']
+        rec['path'] = path
+        _id = str(DB('ticketdocs').new(rec))
+        rec['ticket'] = request.form['ticket']
+        rec['email'] = request.form['email']
+        rec['doc_id'] = _id
+        return jsonify(rec)
+    else:
+        return "Failed"
+
+class MainHandler(RequestHandler):
+    def get(self):
+        self.write("Hello")
+
+tr = WSGIContainer(app)
+application = Application([
+    (r"/support", MainHandler),
+    (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
+    (r".*", FallbackHandler, dict(fallback=tr)),
+])
+
+if __name__ == "__main__":
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "dp:", ["debug", "port"])
+    except getoopt.GetoptError as err:
+        print(str(err))
+        sys.exit(2)
+    debug = False
+    port = 5000
+    for o, a in opts:
+        if o in ["-d", "--debug"]:
+            debug = True
+        elif o in ("-p", "--port"):
+            port = int(a)
+        else:
+            assert False, "unhandled option"
+    if debug:
+        app.run(port=port, debug=True)
+    else:
+        application.listen(port)
+        IOLoop.instance().start()

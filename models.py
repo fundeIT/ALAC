@@ -25,24 +25,26 @@ class Dates:
         return self.now.strftime("%m")
 
 class DB:
-    """It is the base data connection class. All data models classes will be
-    derivated from this base class. Building this class is an in progress
-    work as part as refactoring tasks"""
+    """It is the basic data connection class. All data models classes will be
+    derivated from this base class."""
     def __init__(self, collection):
         client = pymongo.MongoClient()
         db = client.alac
         self.collection = db[collection]
     def new(self, doc):
-        _id = self.collection.insert_one(doc).inserted_id
+        _id = str(self.collection.insert_one(doc).inserted_id)
         return _id
-    def list(self, skip=0, limit=50):
+    def count(self):
+        return self.collection.count()
+    def list(self, skip=0, limit=25):
         return self.collection.find().sort([('_id', 1)]).skip(skip).limit(limit)
     def raw(self):
         return self.collection.find().sort([('_id', 1)])
     def get(self, _id):
+        print(_id)
         return self.collection.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
-        self.collection.update({'_id': ObjectId(_id)}, {'$set': doc})
+        self.collection.update({'_id': _id}, {'$set': doc})
 
 # Clases para la consulta y actualización de la base de datos
 
@@ -340,3 +342,28 @@ class Notes:
         return dbconn().notes.find_one({'_id': ObjectId(_id)})
     def update(self, _id, note):
         dbconn().notes.update({'_id': ObjectId(_id)}, {'$set': note})
+        
+def newCounter(kind, year):
+    counter = 1
+    client = pymongo.MongoClient()
+    db = client.alac
+    rec = db.counters.find_one({'year': year, 'kind': kind})
+    if (not rec):
+        db.counters.insert_one({'year': year, 'kind': kind, 'value': counter})
+    else:
+        _id = rec['_id']
+        counter = rec['value'] + 1
+        db.counters.update({'_id': _id}, {'$set': {'year': year, 'kind': kind, 'value': counter}})
+    return counter
+
+def getTicket(data):
+    db = DB('tickets')
+    return db.collection.find_one(data)
+
+def getThreads(ticket_id):
+    db = DB('threads')
+    return db.collection.find({'ticket_id': ticket_id})
+
+def getDocuments(ticket_id, thread_id):
+    db = DB('ticketdocs')
+    return db.collection.find({'ticket_id': ticket_id, 'thread_id': thread_id})

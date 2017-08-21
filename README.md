@@ -24,6 +24,10 @@ Create a file named 'trust.py' with the following content:
     db_port = SERVER_PORT
     db_user = "DATABASE USERNAME ACCESS"
     db_password = "DATABASE PASSWORD ACCESS"
+    email_user = "USERNAME-EMAIL-SERVER"
+    email_password = "PASSWORD-EMAIL-SERVER"
+    email_server = "NAME-EMAIL-SERVER"
+    email_port = "PORT_EMAIL_SERVER"
 
 Run the utility program 'resetadmin.py' to create the admin user:
 

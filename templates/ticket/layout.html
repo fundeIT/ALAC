@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Asesoría</title>
+        <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet"> 
+        <link rel="stylesheet" type="text/css" 
+              href="{{ url_for('static', filename='css/style.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div class="bg"></div>
+        <div class="Header">
+        </div>
+        <div class="Login">
+        </div>
+        <div class="Main">
+             {% block main %}{% endblock %}
+        </div>
+        <div class="Footer">
+        </div>
+    </body>
+</html>

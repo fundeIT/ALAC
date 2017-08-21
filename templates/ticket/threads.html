@@ -1,0 +1,37 @@
+<div class="CenteredContainer">
+
+<div class="SimpleBox">
+    <p>Año: {{ ticket['year'] }}</p>
+    <p>Ticket: {{ ticket['ticket'] }}</p>
+</div>
+
+</div>
+<div class="CenteredContainer">
+{% if threads %}
+
+    {% for thread in threads %}
+    <div class="SimpleBox">
+    <p>{{ thread['date'] }} - 
+    {% if thread['name'] != '' %}
+        {{ thread['name'] }}
+    {% else %}
+        Usuario(a)
+    {% endif %}
+    </p>
+        
+        {{ thread['msg'] | safe }}
+
+
+        <ul>
+        {% for doc in docs[thread['_id'] | string] %}
+            <li>
+                <a href="/attachment/{{ doc['_id']}}">{{ doc['path'][(doc['path'].rfind('/') + 1):] }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+{% endif %}
+
+</div>

@@ -1,0 +1,67 @@
+{% extends "ticket/layout.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block main %}
+
+<div class="CenteredContainer">
+
+    <div class="SimpleBox">
+        <h1>ALAC<br/>
+        Centro de Asesoría Legal Anticorrupción</h1>
+        <p>¿Tienes dudas o difultades para acceder a información pública?</p>
+        <p>¿Quieres denunciar un acto irregular o mal uso de recursos en
+        una institución pública?</p>
+        <p>Estamos para servirte. Haz tu consulta.</p>
+        <p>El servicio es gratuito y confidencial.</p>
+    </div>
+    
+</div>
+
+<div class="CenteredContainer">
+
+    <div class="ColoredBox">
+        <h2>Una nueva consulta:</h2>
+        <form action="/ticket" method="get">
+                <button>Consultar</button>
+        </form>
+    </div>
+
+    <div class="ColoredBox">
+        <h2>Dar seguimiento:</h2>
+        <form action="/ticket" method="post">
+            <input name="year"
+                   placeholder="Año" value="{{ year }}" required>
+            <br/>
+            <input name="ticket" value="{{ ticket }}" 
+                   placeholder="Número de ticket" required>
+            </br>
+            <input name="email" type="email" value="{{ email }}"
+                   placeholder="Correo electrónico" required>
+            <br/>
+            
+            <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar<br/>
+            
+            <button>Enviar</button>
+        </form>
+    </div>
+
+</div>
+
+<div class="CenteredContainer">
+
+    <div class="SimpleBox">
+        <p>También puedes escribir a <a
+            href="mailto:alac@funde.org">alac@funde.org</a>, llamar al teléfono
+            +503 2209-5324 o visitar las oficinas de la ALAC ubicadas en la
+            calle Arturo Ambrogi No. 411, Col. Escalón, San Savador.</p>
+        <p>La ALAC es una iniciativa de la Fundación Nacional para el Desarrollo
+        (FUNDE), capítulo nacional de Transparencia Internacional.</p>
+    </div>
+    
+</div>
+
+
+{% endblock %}
