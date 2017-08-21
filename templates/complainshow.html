@@ -49,7 +49,7 @@ Resultado: {{ complain['result'] }}
 
 <div id="updates" class="tabcontent">
     {{ macro.listUpdates(updates, 'complain', complain['_id'], who['_id'], 
-                         has_right, date) }}
+                         has_right, date, who['kind']=='OPR') }}
 </div>
 
 <div id="docs" class="tabcontent">
