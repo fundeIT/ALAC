@@ -70,6 +70,7 @@ function makeRequest(data) {
     if (processing) return;
     var http = new XMLHttpRequest();
     document.getElementById("Processing").innerHTML = "Procesando. Espere..."
+    document.getElementById("send").disable = true;
     processing = true;
     http.onreadystatechange = function () {
         try {
@@ -86,6 +87,7 @@ function makeRequest(data) {
                     console.log('makeRequest: There was a problem with data');
                 document.getElementById("Processing").innerHTML = ""
                 processing = false;
+                document.getElementById("send").disable = false;
             }
         }
         catch (e) {
