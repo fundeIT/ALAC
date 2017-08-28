@@ -165,7 +165,7 @@ def logout():
     resp.set_cookie('user_name', '', expires=0)
     resp.set_cookie('user_kind', '', expires=0)
     resp.set_cookie('user_email', '', expires=0)
-    return rese
+    return resp
 
 @app.route('/cases')
 def cases():
