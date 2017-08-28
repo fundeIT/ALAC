@@ -1091,8 +1091,8 @@ def adminTicket(skip, limit):
     db = DB('tickets')
     count = db.count()
     tickets = db.list(skip, limit)
-    return render_template('ticket/tickets.html',
-        tickets=tickets)
+    return render_template('tickets.html',
+        tickets=tickets, who=session['user'])
 
 @app.route('/ticket/admin')
 def adminEmptyTicket():
