@@ -4,7 +4,6 @@ import os
 import sys
 import getopt
 import json
-import smtplib
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer

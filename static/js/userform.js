@@ -143,6 +143,7 @@ function getThreads(data) {
     document.getElementById('file').value = null
     document.getElementById('filelist').innerHTML = ''
     msg = document.getElementById('msg')
+    msg.innerHTML = "";
     msg.value = "";
     msg.focus();
 
@@ -158,8 +159,10 @@ function getThreads(data) {
     http.onreadystatechange = function () {
         try {
             if (http.readyState === XMLHttpRequest.DONE) {
-                if (http.status === 200)
-                    updateThreads(http.responseText)
+                if (http.status === 200) {
+                    console.log(http.responseText);
+                    updateThreads(http.responseText);
+                }
                 else
                     console.log('There was a problem with data')
             }

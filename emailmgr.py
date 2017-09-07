@@ -1,5 +1,7 @@
+import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import trust
 
 def send(to, msg):
     s = smtplib.SMTP_SSL(trust.email_server, trust.email_port)
@@ -48,4 +50,4 @@ Teléfono:  +503 2209 5324
     msg['Subject'] = "ALAC: actualizacion de ticket"
     msg['From'] = trust.email_user
     msg['To'] = email
-    sendMail(email, msg)
+    send(email, msg)
