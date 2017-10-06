@@ -131,6 +131,13 @@ def index():
         else:
             return redirect('/start')
 
+@app.route('/faq')
+def faq():
+    user = {}
+    if 'user' in session:
+        user = session['user']
+    return render_template('index.html', who=user)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
