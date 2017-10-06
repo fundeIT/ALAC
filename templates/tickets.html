@@ -12,14 +12,22 @@
     
     {% for ticket in tickets %}
     
-    <tr>
+    <tr class="ListItem">
+
+        <td>{{ ticket['ticket'] }}</td>
         <td>{{ ticket['date'] }}</td>
-        <td>{{ ticket['msg'] }}</td>
+        <td>
+            {% if ticket['email'] != '' %} 
+                <strong>{{ ticket['email'] }}: </strong>
+            {% endif %}
+            {{ ticket['msg'] }}
+        </td>
         <td>
             <form action="/ticket" method="post" target="_blank">
                 <input type="hidden" name="year" value="{{ ticket['year'] }}">
                 <input type="hidden" name="email" value="{{ ticket['email'] }}">
-                <input type="hidden" name="ticket" value="{{ ticket['ticket'] }}">
+                <input type="hidden" name="ticket" 
+                       value="{{ ticket['ticket'] }}">
                 <button>Consultar</button>
             </form>
         </td>
@@ -28,6 +36,5 @@
     {% endfor %}
 
 </table>
-
 
 {% endblock %}

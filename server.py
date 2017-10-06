@@ -1,21 +1,28 @@
 #!/usr/bin/python3
 
+# Importing standard libraries
+
 import os
 import sys
 import getopt
 import json
+
+# Import specific libraries for web deploying
 
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
-
 from flask import Flask, request, render_template, redirect, session, \
-    send_file, make_response, jsonify, Response
+                  send_file, make_response, jsonify, Response
 from werkzeug.utils import secure_filename
 
+# Other supporting libraries
+
 from markdown import markdown
+
+# Own libraries
 
 from models import *
 import trust
@@ -1083,8 +1090,8 @@ def thread():
     else:
         return "Your ticket was not found"
 
-@app.route('/ticket/admin/<int:skip>/<int:limit>')
-def adminTicket(skip, limit):
+@app.route('/ticket/admin/<int:skip>')
+def adminTicket(skip, limit=20):
     if not 'user' in session:
         return redirect('/login')
     db = DB('tickets')
@@ -1095,7 +1102,7 @@ def adminTicket(skip, limit):
 
 @app.route('/ticket/admin')
 def adminEmptyTicket():
-    return redirect('/ticket/admin/0/20')
+    return redirect('/ticket/admin/0')
 
 @app.route('/attachment/<string:_id>')
 def attachment(_id):
