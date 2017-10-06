@@ -127,7 +127,7 @@ def index():
             user['kind'] = request.cookies.get('user_kind')
             user['email'] = request.cookies.get('user_email')
             session['user'] = user
-            return redirect('/notes')
+            return redirect('/')
         else:
             return redirect('/start')
 
