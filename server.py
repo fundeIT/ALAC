@@ -1047,9 +1047,11 @@ def newTicket():
     name = ''
     if 'user' in session:
         name = session['user']['name']
+
+    if data['email'] != '':
         emailmgr.notify(year, counter, data['email']) 
     else:
-        emailmgr.notify(year, counter, 'alac@funde.org')
+        emailmgr.notify(year, counter, trust.email_user)
 
     thread = {
         'ticket_id': ticket_id, 

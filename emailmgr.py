@@ -50,5 +50,5 @@ Teléfono:  +503 2209 5324
     msg['Subject'] = "ALAC: actualizacion de ticket"
     msg['From'] = trust.email_user
     msg['To'] = email
-    msg['Bcc'] = 'alac@funde.org'
+    msg['Bcc'] = trust.email_user 
     send(email, msg)
