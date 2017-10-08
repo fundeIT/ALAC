@@ -120,3 +120,26 @@ textarea {
         background-repeat: no-repeat;
         background-size: cover;
 }
+
+
+button, .Button {
+    margin-top: 5px;
+    background-color: #0ea09e;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover, .Button:hover {
+   background-color: #057e7d;
+}
+
+.Button a {
+    color: white;
+    text-decoration: none;
+}
+
+

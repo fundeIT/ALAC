@@ -21,14 +21,24 @@
         
         {{ thread['msg'] | safe }}
 
+        {% if  docs[thread['_id'] | string] %}
+
+        <p><strong>Anexos:</strong></p>
 
         <ul>
         {% for doc in docs[thread['_id'] | string] %}
-            <li>
-                <a href="/attachment/{{ doc['_id']}}">{{ doc['path'][(doc['path'].rfind('/') + 1):] }}</a>
+            <li class="ListItem">
+                <a href="/attachment/{{ doc['_id']}}">{{
+                        doc['path'][(doc['path'].rfind('/') + 1):] }}</a>
             </li>
         {% endfor %}
         </ul>
+
+        {% endif %}
+
+        <div>
+            <a class="Button" href="/threads/{{ thread['_id'] }}/edit">Editar...</a>
+        </div>
     </div>
     {% endfor %}
 

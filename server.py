@@ -1101,6 +1101,25 @@ def thread():
     else:
         return "Your ticket was not found"
 
+@app.route("/threads/<string:_id>/edit", methods=['GET', 'POST'])
+def threadEdit(_id):
+    if not 'user' in session:
+        return redirect('/')
+    user = session['user']
+    db = DB('threads')
+    thread = dict(db.get(_id))
+    if request.method == 'GET':
+        return render_template('threadform.html', thread=thread, 
+                                                         who=user)
+    else:
+        msg = request.form['msg']
+        print(msg)
+        if len(msg) > 0:
+            db.update(_id, {'msg': msg})
+        db = DB('tickets')
+        ticket = db.get(thread['ticket_id'])
+        return render_template("ticket/userform.html", data=ticket)
+
 @app.route('/ticket/admin/<int:skip>')
 def adminTicket(skip, limit=20):
     if not 'user' in session:
