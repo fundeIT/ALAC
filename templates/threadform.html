@@ -1,0 +1,11 @@
+{% extends "form.html" %}
+{% block form %}
+
+    <form action="/threads/{{ thread['_id'] }}/edit" method="post">
+        <label>Detalle</label>
+        <textarea class="TextArea" name="msg" 
+            required>{{ thread['msg'] }}</textarea>
+        <button>Enviar</button>
+    </form>
+
+{% endblock %}
