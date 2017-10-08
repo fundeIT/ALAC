@@ -9,10 +9,11 @@
 <div class="CenteredContainer">
 {% if threads %}
 
+
     {% for thread in threads %}
     <div class="SimpleBox">
     <p>{{ thread['date'] }} - 
-    {% if thread['name'] != '' %}
+    2{% if thread['name'] != '' %}
         {{ thread['name'] }}
     {% else %}
         Usuario(a)
@@ -36,9 +37,11 @@
 
         {% endif %}
 
+        {% if who %}
         <div>
             <a class="Button" href="/threads/{{ thread['_id'] }}/edit">Editar...</a>
         </div>
+        {% endif %}
     </div>
     {% endfor %}
 

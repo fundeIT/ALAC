@@ -1080,6 +1080,9 @@ def newTicket():
 
 @app.route("/threads", methods=['POST'])
 def thread():
+    user = None
+    if 'user' in session:
+        user = session['user']
     data = {}
     data['ticket'] = int(request.form['ticket'])
     data['email'] = request.form['email']
@@ -1097,7 +1100,7 @@ def thread():
             res = getDocuments(data['ticket_id'], str(thread['_id']))
             docs[str(thread['_id'])] = [x for x in res]
         return render_template("ticket/threads.html", ticket=data,
-            threads=t, docs=docs)
+            threads=t, docs=docs, who=user)
     else:
         return "Your ticket was not found"
 
