@@ -1,6 +1,6 @@
 body {
-    font-family: "Muli", sans-serif;
-    font-size: 16px;
+    font-family: "Ubuntu", "Muli", sans-serif;
+    font-size: 18px;
     /*
     background: #01b1af;
     */
@@ -86,17 +86,6 @@ td {
     flex-wrap: wrap;
 }
 
-button {
-    border: 1px solid gray;
-    background: #00a09d;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 input[type=file] {
 
 }
@@ -119,27 +108,6 @@ textarea {
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-}
-
-
-button, .Button {
-    margin-top: 5px;
-    background-color: #0ea09e;
-    border: none;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-}
-
-button:hover, .Button:hover {
-   background-color: #057e7d;
-}
-
-.Button a {
-    color: white;
-    text-decoration: none;
 }
 
 
