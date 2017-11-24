@@ -1,8 +1,11 @@
 body {
     font-family: 'Ubuntu', 'Tahoma', sans;
-    font-size: 12px;
+    font-size: 18px;
     margin: 0px;
     padding-top: 0px;
+    background: white;
+    font-weight: 200;
+    color: #333;
 }
 
 h1, h2, h3 {
@@ -30,7 +33,7 @@ td p {
     position:fixed;
     left:0px;
     bottom:0px;
-    height:30px;
+    height:45px;
     width:100%;
     color: white;
     background-color: #01b1af;
@@ -48,7 +51,7 @@ td p {
     margin-top: 0px;
     padding: 10px 10px 0px 10px;
     position: fixed;
-    height: 24px;
+    height: 40px;
     width: 100%;
     top: 0px;
 }
@@ -60,13 +63,13 @@ td p {
 
 .Main {
     margin: 10px;
-    padding-top: 25px;
-    padding-bottom: 30px;
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 
 label, input, textarea, select {
     display: block;
-    font-size: 12px;
+    font-size: 18px;
     font-family: 'Ubuntu', 'Tahoma', sans;
     margin-top: 10px;
 }
@@ -88,10 +91,14 @@ button, .Button {
     background-color: #0ea09e;
     border: none;
     color: white;
-    padding: 5px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 110%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    border-radius: 10px 10px 10px 10px;
 }
 
 button:hover, .Button:hover {
@@ -113,6 +120,7 @@ button:hover, .Button:hover {
     margin: 0;
     padding: 0;
     background-color: #01b1af;
+    height: 40px;
 }
 
 .MenuItem {
@@ -121,9 +129,11 @@ button:hover, .Button:hover {
     color: white;
     padding: 5px 5px;
     text-align: center;
+    font-size: 110%;
     text-decoration: none;
     display: inline-block;
-    border-radius: 5px 5px 0 0;
+    border-radius: 10px 10px 0 0;
+    height: 30px;
 }
 
 .MenuItem a {
