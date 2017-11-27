@@ -4,23 +4,24 @@
 
 <h2>{{ req['overview'] }}</h2>
 
+
 {% if has_right %}
 
-{% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
-<div class="Button"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
-{% endif %}
+	{% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
+		<div class="Button"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
+	{% endif %}
 
-{% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
-    {% if req['status'] == 'Borrador' %}
-    <div class="Button">
-        <a href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
-    </div>
-    {% elif req['status'] == 'En trámite' %}
-    <div class="Button">
-        <a href="/requests/{{ req['_id'] }}/close">Cerrar</a>
-    </div>
-    {% endif %}
-{% endif %}
+	{% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
+	    {% if req['status'] == 'Borrador' %}
+		    <div class="Button">
+			<a href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
+		    </div>
+	    {% elif req['status'] == 'En trámite' %}
+		    <div class="Button">
+			<a href="/requests/{{ req['_id'] }}/close">Cerrar</a>
+		    </div>
+	    {% endif %}
+	{% endif %}
 
 {% endif %}
 
@@ -61,19 +62,20 @@ Finalización del trámite: {{ req['finish'] }}
 
 <ul class="tab">
     <li><a href="#updates" class="tablinks" 
-        onclick="openTab(event, 'updates')">Comentarios</a></li>
+	onclick="openTab(event, 'updates')">Comentarios</a></li>
     <li><a href="#docs" class="tablinks" 
-        onclick="openTab(event, 'docs')">Documentos</a></li>
+	onclick="openTab(event, 'docs')">Documentos</a></li>
 </ul>
 
 <div id="updates" class="tabcontent">
     {{ macro.listUpdates(updates, 'request', req['_id'], who['_id'], 
-                         has_right, date, who['kind']=='OPR') }}
+			 has_right, date, who['kind']=='OPR') }}
 </div>
 
 <div id="docs" class="tabcontent">
     {{ macro.listDocs(docrels, 'request', req['_id'], req['overview'], has_right, date) }}
 </div>
+
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
 

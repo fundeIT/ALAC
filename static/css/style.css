@@ -1,6 +1,6 @@
 body {
     font-family: "Ubuntu", "Muli", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     /*
     background: #01b1af;
     */
@@ -61,12 +61,12 @@ td {
 }
 
 .ColoredBox {
+    break-after: always;
     border: 1px #999 solid;
     padding: 20px;
     margin: 20px;
-    background: #d7ffc4;
+    background: #ddffff;
     flex-basis: 28%;
-    background: white;
 }
 
 .SimpleBox {
@@ -78,6 +78,26 @@ td {
     background: white;
     flex-basis: 60%; 
 }
+
+.TColoredBox {
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 20px;
+    background: #ddffff;
+    min-width: 240px;
+    max-width: 360px;
+}
+
+.TSimpleBox {
+    border: 1px #999 solid;
+    padding: 20px;
+    margin: 10px;
+    width: 600px;
+    background: white;
+    min-width: 240px;
+    max-width: 360px;
+}
+
 
 .CenteredContainer {
     display: flex;

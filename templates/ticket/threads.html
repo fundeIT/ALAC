@@ -1,8 +1,7 @@
 <div class="CenteredContainer">
 
 <div class="SimpleBox">
-    <p>Año: {{ ticket['year'] }}</p>
-    <p>Ticket: {{ ticket['ticket'] }}</p>
+    <h1>Ticket: {{ ticket['ticket'] }}/{{ ticket['year'] }}</h1>
 </div>
 
 </div>
@@ -11,9 +10,15 @@
 
 
     {% for thread in threads %}
-    <div class="SimpleBox">
+    <div 
+    {% if thread['name'] != '' %}
+	    class="TSimpleBox"
+     {% else %}
+	    class="TColoredBox"
+	{% endif %}
+    >
     <p>{{ thread['date'] }} - 
-    2{% if thread['name'] != '' %}
+    {% if thread['name'] != '' %}
         {{ thread['name'] }}
     {% else %}
         Usuario(a)

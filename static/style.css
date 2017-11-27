@@ -1,6 +1,6 @@
 body {
     font-family: 'Ubuntu', 'Tahoma', sans;
-    font-size: 18px;
+    font-size: 14px;
     margin: 0px;
     padding-top: 0px;
     background: white;
@@ -68,7 +68,7 @@ td p {
 
 label, input, textarea, select {
     display: block;
-    font-size: 18px;
+    font-size: 14px;
     font-family: 'Ubuntu', 'Tahoma', sans;
     margin-top: 10px;
 }
@@ -305,3 +305,4 @@ ul.tab li a:focus, .active {
 .flex > div:hover {
    background-color: #ddffff;
 }
+
