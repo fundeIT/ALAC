@@ -2,17 +2,20 @@
 {% extends "layout.html" %}
 {% block main %}
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
+<h3>Peticiones</h3>
 
-<div class="Button"><a href="/requests/new/">Nueva...</a></div>
+<nav>
+    <ul class="tab">
+        <li><a href="#running" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>
+        <li><a href="#drafts" class="tablinks" onclick="openTab(event, 'drafts')">Borradores</a></li>
+        <li><a href="#done" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
+        {% if who['kind'] in ['OPR', 'USR', 'MNR', 'GSS'] %}
+            <li><a href="/requests/new/">Nueva...</a></li>
+        {% endif %}
+    </ul>
+</nav>
 
-{% endif %}
-
-<ul class="tab">
-    <li><a href="#running" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>
-    <li><a href="#drafts" class="tablinks" onclick="openTab(event, 'drafts')">Borradores</a></li>
-    <li><a href="#done" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
-</ul>
+<hr/>
 
 <div id="running" class="tabcontent">
     {{ macro.listItems('requests', running) }}

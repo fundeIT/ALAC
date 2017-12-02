@@ -2,17 +2,23 @@
 {% extends "layout.html" %}
 {% block main %}
 
+<h3>Denuncias</h3>
+
 {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
 
 <div class="Button"><a href="/complains/new/">Nueva...</a></div>
 
 {% endif %}
 
-<ul class="tab">
-    <li><a href="#" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>
-    <li><a href="#" class="tablinks" onclick="openTab(event, 'drafts')">Borradores</a></li>
-    <li><a href="#" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
-</ul>
+<nav>
+    <ul class="tab">
+        <li><a href="#" class="tablinks" onclick="openTab(event, 'running')">En trámite</a></li>
+        <li><a href="#" class="tablinks" onclick="openTab(event, 'drafts')">Borradores</a></li>
+        <li><a href="#" class="tablinks" onclick="openTab(event, 'done')">Cerradas</a></li>
+    </ul>
+</nav>
+
+<hr/>
 
 <div id="running" class="tabcontent">
     {{ macro.listItems('complains', running) }}

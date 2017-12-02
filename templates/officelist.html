@@ -1,22 +1,23 @@
 {% extends "layout.html" %}
 {% block main %}
 
+<h3>Oficinas</h3>
+
 {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
 
 <div class="Button"><a href="/offices/new/">Nuevo...</a></div>
 
 {% endif %}
 
-<table>
+<p>Directorio de oficinas de acceso a la información pública y de recepción de denuncias de corrupción.</p> 
+
     {% for office in offices %}
-        <tr class="ListItem">
-            <td>{{ office['acronym'] }}</td>
-            <td>
+            <p>
                 <a href="/offices/{{ office['_id'] }}">
                     {{ office['name'] }}
                 </a>
-            </td>
-        </tr>
+                    <small>({{ office['acronym'] }})</small>
+        </p>
     {% endfor %}
 </table>
 

@@ -22,6 +22,10 @@ textarea {
     text-align: center;
 }
 
+nav ul {
+    border-bottom: 1px solid #EFEFEF;
+}
+
 nav li {
     display: inline;
     padding-left: 10px;
@@ -34,4 +38,8 @@ nav li {
 
 .border-bottom {
     border-bottom: 1px solid #EFEFEF;
+}
+
+input {
+    display: block;
 }

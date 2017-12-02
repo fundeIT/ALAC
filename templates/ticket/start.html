@@ -1,4 +1,4 @@
-{% extends "ticket/layout.html" %}
+{% extends "layout.html" %}
 
 {% block head %}
 
@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="six columns">
-        <img src="/static/third/icons/svg/pen-letter.svg" width="64px">
+        <a href="/ticket"><img src="/static/third/icons/svg/pen-letter.svg" width="64px"></a>
         <h3>Una nueva consulta:</h3>
             
         <a class="button" href="/ticket">Consultar</a>
@@ -28,7 +28,7 @@
             <input name="year" placeholder="Año" value="{{ year }}" required>
             <input name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
             <input name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
-            <button class="">Enviar</button>
+            <button class="button">Enviar</button>
             <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar
         </form>
     </div>

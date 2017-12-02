@@ -1,40 +1,32 @@
 {% macro listItems(type, items) %}
-    <table>
+    <div class="row">
     {% for item in items%}
-        <tr class="ListItem">
-            <td>{{ item['date'] }}</td>
-            <td>{{ item['office'] }}</td>
+        <p>
+        <small>{{ item['date'] }}: {{ item['office'] }}</small><br/>
             <td><a href="/{{ type }}/{{ item['_id'] }}">{{
-                    item['overview'] }}</a></td>
-        </tr>
+                    item['overview'] }}</a>
+        </p>
     {% endfor %}
-    </table>
+    </div>
 {% endmacro %}
 
 {% macro listUpdates(updates, source, source_id, user_id, has_right, date,
-operator=False) %}
-    <table>
-        {% for update in updates %}
-            <tr class="ListItem">
-    			<td>{{ update['date'] }}</td>
-    			<td style="width: 70%; max-width: 70%">
-    			    {{ update['detail'] | safe }}
-    			</td>
-    			{% if has_right %}
-    			    <td>
-    			        {{ update['user_name'] }}
-    			    </td>
-    			{% endif %}
-    			{% if operator %}
-    			    <td>
-                        <form action="/updates/{{ update['_id'] }}/delete"
-                        method="post">
-    			        <button class="DeleteButton">Eliminar</button>
-    			        </form>
-    			    </td>
-    			{% endif %}
-    		</tr>
-        {% endfor %}
+    operator=False) %}
+        <ul>
+            {% for update in updates %}
+                <li>
+                    {{ update['date'] }}: {{ update['detail'] | safe }}
+                    {% if has_right %}
+                    <small>({{ update['user_name'] }})</small>
+                    {% endif %}
+                    {% if operator %}
+                            <form action="/updates/{{ update['_id'] }}/delete"
+                            method="post">
+                            <button class="DeleteButton">Eliminar</button>
+                            </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
     </table>
     {% if has_right %}
         <form action='/updates/new/' method="post">
@@ -54,16 +46,11 @@ operator=False) %}
 {% endmacro %}
 
 {% macro listDocs(docrels, source, source_id, prefix, has_right, date) %}
-    <table>
+    <ul>
         {% for dr in docrels %}
-	  <tr class="ListItem">
-              <td>{{ dr['date'] }}</td>
-	      <td>
-		<a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
-              </td>
-	     </tr>
+        <li>{{ dr['date'] }}: <a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a></li>
         {% endfor %}
-    </table>
+    </ul>
     {% if has_right %}
     <p><strong>Agregar nuevo documento:</strong></p>
     <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">
