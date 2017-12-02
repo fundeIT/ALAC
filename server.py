@@ -826,7 +826,7 @@ def notes():
     for i in range(len(notelist)):
         a = notelist[i]['content']
         notelist[i]['content'] = markdown(a[0:a.find("\r\n\r\n")])
-    return render_template('notelist.html', notes=notelist, who=user)
+    return render_template('ticket/notelist.html', notes=notelist, who=user)
 
 @app.route('/notes/new/', methods=['GET', 'POST'])
 def newNote():
@@ -873,7 +873,7 @@ def detailNote(_id):
     else:
         note = n.get(_id)
         note['content'] = markdown(note['content'])
-        return render_template('noteshow.html', _id=_id, note=note, who=user)
+        return render_template('ticket/noteshow.html', _id=_id, note=note, who=user)
 
 @app.route('/notes/<string:_id>/edit')
 def editNote(_id):
