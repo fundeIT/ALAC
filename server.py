@@ -136,7 +136,7 @@ def faq():
     user = {}
     if 'user' in session:
         user = session['user']
-    return render_template('index.html', who=user)
+    return render_template('ticket/alac.html', who=user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

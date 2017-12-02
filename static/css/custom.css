@@ -1,0 +1,37 @@
+textarea {
+    height: 240px;
+}
+
+.background1 {
+    background: #69D2E7;
+}
+
+.background2 {
+    background: #A7DBD8;
+}
+
+.background3 {
+    background: #E0E4CC;
+}
+
+.background-light-gray {
+    background: #EFEFEF;
+}
+
+.center {
+    text-align: center;
+}
+
+nav li {
+    display: inline;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.row {
+    padding: 10px;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #EFEFEF;
+}

@@ -3,24 +3,51 @@
     <head>
         <meta charset="utf-8">
         <title>ALAC</title>
-        <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet"> 
-        <link rel="stylesheet" type="text/css" 
-              href="{{ url_for('static', filename='style.css') }}">
-        <link rel="stylesheet" type="text/css" 
-              href="{{ url_for('static', filename='css/style.css') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/third/skeleton/css/normalize.css">
+        <link rel="stylesheet" href="/static/third/skeleton/css/skeleton.css">
+        <link rel="stylesheet" href="/static/css/custom.css">
         {% block head %}{% endblock %}
     </head>
     <body>
-        <div class="bg"></div>
-        <div class="Header">
-        </div>
-        <div class="Login">
-        </div>
-        <div class="Main">
-             {% block main %}{% endblock %}
-        </div>
-        <div class="Footer">
+        <div class="container">
+
+            <div class="row center">
+                <h1>ALAC</h1>
+                <p>Centro de Asesoría Legal Anticorrupción</p>
+            </div>
+            <nav class="center">
+                <ul>
+                    <li><a href="/start">Inicio</a></li>
+                    <li><a href="/notes">Expedientes</a></li>
+                    <li><a href="/faq">Acerca de</a></li>
+                </ul>
+            </nav>
+
+            {% block main %}{% endblock %}
+
+            <hr/>
+            <div class="row center">
+                <small>
+                <p>
+                    Correo: <a href="mailto:alac@funde.org">alac@funde.org</a> - Tel. +503 2209-5324<br/>
+                    Calle Arturo Ambrogi No. 411, Col. Escalón<br/>
+                    San Salvador, El Salvador, C.A.
+                </p>
+                <p>
+                        ALAC es un servicio de la 
+                        <a href="http://www.funde.org">Fundación Nacional para el Desarrollo</a>
+                        (FUNDE),<br/>
+                        capítulo nacional de 
+                        <a href="http://transparency.org">Transparencia Internacional</a>.
+                </p>
+                </small>
+            </div>
+
+
+            </div>
+
         </div>
     </body>
 </html>

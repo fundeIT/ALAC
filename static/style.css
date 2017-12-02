@@ -1,16 +1,3 @@
-body {
-    font-family: 'Ubuntu', 'Tahoma', sans;
-    font-size: 14px;
-    margin: 0px;
-    padding-top: 0px;
-    background: white;
-    color: #333;
-}
-
-h1, h2, h3 {
-    font-weight: normal;
-}
-
 table {
     width: 100%;
 }
@@ -18,10 +5,6 @@ table {
 td {
 	vertical-align: top;
 	padding: 2px;
-}
-
-td a {
-	color: #553;
 }
 
 td p {
@@ -34,18 +17,10 @@ td p {
     bottom:0px;
     height:45px;
     width:100%;
-    color: white;
-    background-color: #01b1af;
 }
 
-.Footer a {
-    color: white;
-    text-decoration: none;
-}
 
 .Header {
-    background-color: #01b1af;
-    color: white;
     margin: 0;
     margin-top: 0px;
     padding: 10px 10px 0px 10px;
@@ -88,9 +63,7 @@ label {
 button, .Button {
     font-family: 'Ubuntu', 'Tahoma', sans;
     margin-top: 5px;
-    background-color: #0ea09e;
     border: none;
-    color: white;
     padding: 15px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -102,12 +75,6 @@ button, .Button {
 }
 
 button:hover, .Button:hover {
-   background-color: #057e7d;
-}
-
-.Button a {
-    color: white;
-    text-decoration: none;
 }
 
 .Inline {
@@ -119,14 +86,11 @@ button:hover, .Button:hover {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: #01b1af;
     height: 40px;
 }
 
 .MenuItem {
-    background-color: #0ea09e;
     border: none;
-    color: white;
     padding: 5px 5px;
     text-align: center;
     font-size: 110%;
@@ -138,17 +102,13 @@ button:hover, .Button:hover {
 
 .MenuItem a {
     text-decoration: none;
-    color: white;
 }
 
 .MenuItem:hover {
-   background-color: #057e7d;
 }
 
 .MenuCaution {
-    background-color: #FF3300;
     border: none;
-    color: white;
     padding: 5px 5px;
     text-align: center;
     text-decoration: none;
@@ -158,17 +118,13 @@ button:hover, .Button:hover {
 
 .MenuCaution a {
     text-decoration: none;
-    color: white;
 }
 
 .MenuCaution:hover {
-   background-color: #057e7d;
 }
 
 .SmallButton {
-    background-color: #0ea09e;
     border: none;
-    color: white;
     padding: 0 8px 0 8px;
     text-align: center;
     text-decoration: none;
@@ -177,13 +133,10 @@ button:hover, .Button:hover {
 }
 
 .SmallButton a {
-    color: white;
 }
 
 .DeleteButton {
-    background-color: red;
     border: none;
-    color: white;
     padding: 0 8px 0 8px;
     text-align: center;
     text-decoration: none;
@@ -192,7 +145,6 @@ button:hover, .Button:hover {
 }
 
 .DeleteButton a {
-    color: white;
 }
 
 .ListItem {
@@ -207,7 +159,6 @@ button:hover, .Button:hover {
 
 a, .ListItem a {
     text-decoration: none;
-    color: #005000;
 }
 
 .ListItem:last-child {
@@ -215,11 +166,9 @@ a, .ListItem a {
 }
 
 a:hover, .ListItem a:hover {
-   color: #555;
 }
 
 .ListItem:nth-child(odd) {
-   background-color: #ddffff;
 }
 
 ul.tab {
@@ -232,13 +181,11 @@ ul.tab {
 ul.tab li {
     float: left;
     margin-right: 3px;
-    background-color: #0ea09e;
     border-radius: 5px 5px 0 0;
 }
 
 ul.tab li a {
     display: inline-block;
-    color: white;
     text-align: center;
     padding: 5px 5px;
     text-decoration: none;
@@ -246,12 +193,10 @@ ul.tab li a {
 }
 
 ul.tab li a:hover {
-   background-color: #057e7d;
     border-radius: 5px 5px 0 0;
 }
 
 ul.tab li a:focus, .active {
-    background-color: #057e7d;
     border-radius: 5px 5px 0 0;
 }
 
@@ -270,19 +215,15 @@ ul.tab li a:focus, .active {
     padding: 5px;
     border-width: 1px;
     border-style: solid;
-    border-color: red;
-    background: #FEF;
 }
 
 .Login {
     position: fixed;
     right: 5px;
-    color: white;
     font-size: 90%;
 }
 
 .Login a {
-    color: white;
     text-decoration: none;
 }
 
@@ -303,6 +244,5 @@ ul.tab li a:focus, .active {
 }
 
 .flex > div:hover {
-   background-color: #ddffff;
 }
 

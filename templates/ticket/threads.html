@@ -1,28 +1,35 @@
 <div class="CenteredContainer">
 
-<div class="SimpleBox">
-    <h1>Ticket: {{ ticket['ticket'] }}/{{ ticket['year'] }}</h1>
+<div class="row">
+    <h3>Ticket: {{ ticket['ticket'] }}/{{ ticket['year'] }}</h3>
 </div>
 
 </div>
-<div class="CenteredContainer">
 {% if threads %}
 
 
     {% for thread in threads %}
     <div 
     {% if thread['name'] != '' %}
-	    class="TSimpleBox"
+	    class="row"
      {% else %}
-	    class="TColoredBox"
+	    class="row background-light-gray"
 	{% endif %}
     >
-    <p>{{ thread['date'] }} - 
+    <p class="border-bottom">
+        <small>
+        {{ thread['date'] }} - 
     {% if thread['name'] != '' %}
         {{ thread['name'] }}
     {% else %}
         Usuario(a)
     {% endif %}
+
+        {% if who %}
+            [<a href="/threads/{{ thread['_id'] }}/edit">Editar...</a>]
+        {% endif %}
+
+        </small>
     </p>
         
         {{ thread['msg'] | safe }}
@@ -40,12 +47,6 @@
         {% endfor %}
         </ul>
 
-        {% endif %}
-
-        {% if who %}
-        <div>
-            <a class="Button" href="/threads/{{ thread['_id'] }}/edit">Editar...</a>
-        </div>
         {% endif %}
     </div>
     {% endfor %}
