@@ -1,0 +1,19 @@
+{% extends "ticket/layout.html" %}
+{% block main %}
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="Button"><a href="/notes/new/">Nueva</a></div>
+
+{% endif %}
+
+    {% for note in notes %}
+        <div class="row">
+            <h3><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></h3>
+            <p><small>{{ note['date'] }}</small></p>
+            {{ note['content'] | safe }}
+            <a href="/notes/{{ note['_id'] }}">Leer más...</a>
+        </div>
+    {% endfor %}
+
+{% endblock %}

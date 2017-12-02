@@ -1,0 +1,20 @@
+{% extends "ticket/layout.html" %}
+{% block main %}
+
+<div row>
+        <h3 class="border-bottom">{{ note['title'] }}</h3>
+        {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+            <p>
+            <small><a href='/notes/{{ note['_id'] }}/edit'>Editar</a></small>
+            </p>
+        {% endif %}
+        
+        <p>{{ note['date'] }}</p>
+        {{ note['content'] | safe }}
+        {% if note['tags'] %}
+            <p>Etiquetas:</p>
+            <p>{{ note['tags'] }}</p>
+        {% endif %}
+</div>
+
+{% endblock %}
