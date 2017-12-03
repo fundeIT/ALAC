@@ -4,24 +4,18 @@
 
 <div class="row">
 <h3>{{ req['overview'] }}</h3>
+
 {% if has_right %}
-
 	{% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
-		<div class="Button"><a href='/requests/{{ req['_id'] }}/edit'>Editar</a></div>
+		<a class="button" href='/requests/{{ req['_id'] }}/edit'>Editar</a>
 	{% endif %}
-
 	{% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
 	    {% if req['status'] == 'Borrador' %}
-		    <div class="Button">
-			<a href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
-		    </div>
+			<a class="button" href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
 	    {% elif req['status'] == 'En trámite' %}
-		    <div class="Button">
-			<a href="/requests/{{ req['_id'] }}/close">Cerrar</a>
-		    </div>
+			<a class="button" href="/requests/{{ req['_id'] }}/close">Cerrar</a>
 	    {% endif %}
 	{% endif %}
-
 {% endif %}
 </div>
 
