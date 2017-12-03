@@ -2,6 +2,11 @@ textarea {
     height: 240px;
 }
 
+a {
+    text-decoration: none;
+    color: #0066CC;
+}
+
 .background1 {
     background: #69D2E7;
 }
