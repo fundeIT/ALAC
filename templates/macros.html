@@ -1,56 +1,55 @@
 {% macro listItems(type, items) %}
+{% for item in items%}
     <div class="row">
-    {% for item in items%}
-        <p>
         <small>{{ item['date'] }}: {{ item['office'] }}</small><br/>
-            <td><a href="/{{ type }}/{{ item['_id'] }}">{{
-                    item['overview'] }}</a>
-        </p>
-    {% endfor %}
+        <a href="/{{ type }}/{{ item['_id'] }}">{{ item['overview'] }}</a>
     </div>
+{% endfor %}
 {% endmacro %}
 
-{% macro listUpdates(updates, source, source_id, user_id, has_right, date,
-    operator=False) %}
-        <ul>
-            {% for update in updates %}
-                <li>
-                    {{ update['date'] }}: {{ update['detail'] | safe }}
-                    {% if has_right %}
-                    <small>({{ update['user_name'] }})</small>
-                    {% endif %}
-                    {% if operator %}
-                            <form action="/updates/{{ update['_id'] }}/delete"
-                            method="post">
-                            <button class="DeleteButton">Eliminar</button>
-                            </form>
-                    {% endif %}
-                </li>
-            {% endfor %}
-    </table>
-    {% if has_right %}
-        <form action='/updates/new/' method="post">
-            <input type="hidden" name="source" value="{{ source }}">
-            <input type="hidden" name="source_id" value="{{ source_id }}">
-            <input class="Inline" 
-                   type="date" 
-                   size="8" 
-                   name="date" 
-                   value="{{ date }}">
-            <textarea class="Inline" name="detail" cols="60" rows="5" 
-    		    placeholder="Detalle"></textarea>
-    		<input type="hidden" name="user_id" value="{{ user_id }}">
-            <button>Actualizar</button>
-        </form>
-    {% endif %}
+{% macro listUpdates(updates, source, source_id, user_id, has_right, date, operator=False) %}
+{% for update in updates %}
+    <div class="row">
+        <div class="three columns">
+                {{ update['date'] }}
+                {% if has_right %}
+                <small>({{ update['user_name'] }})</small>
+                {% endif %}:
+                {% if operator %}
+                        <form action="/updates/{{ update['_id'] }}/delete"
+                        method="post">
+                        <button class="DeleteButton">Eliminar</button>
+                        </form>
+                {% endif %}
+        </div>
+        <div class="nine columns">
+                {{ update['detail'] | safe }}
+        </div>
+    </div>
+{% endfor %}
+{% if has_right %}
+    <form action='/updates/new/' method="post">
+        <input type="hidden" name="source" value="{{ source }}">
+        <input type="hidden" name="source_id" value="{{ source_id }}">
+        <input class="Inline" 
+               type="date" 
+               size="8" 
+               name="date" 
+               value="{{ date }}">
+        <textarea class="Inline" name="detail" cols="60" rows="5" 
+            placeholder="Detalle"></textarea>
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <button>Actualizar</button>
+    </form>
+{% endif %}
 {% endmacro %}
 
 {% macro listDocs(docrels, source, source_id, prefix, has_right, date) %}
-    <ul>
         {% for dr in docrels %}
-        <li>{{ dr['date'] }}: <a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a></li>
+        <div class="row">
+        {{ dr['date'] }}: <a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
+        </div>
         {% endfor %}
-    </ul>
     {% if has_right %}
     <p><strong>Agregar nuevo documento:</strong></p>
     <form action="/docrels/newdoc/" method="post" enctype="multipart/form-data">

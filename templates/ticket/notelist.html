@@ -1,19 +1,26 @@
 {% extends "layout.html" %}
 {% block main %}
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
 
-<div class="Button"><a href="/notes/new/">Nueva</a></div>
+<div class="row background-light-gray">
+    <div class="three columns center">
+        <img src="/static/third/icons/svg/pen-letter.svg" width="64px">
+    </div>
+    <div class="nine columns">
+        Notas con análisis y relatos de experiencias en casos de acceso a la
+        información pública y denuncias de corrupción. 
+        {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+            [<a href="/notes/new/">Nueva...</a>]
+        {% endif %}
+    </div>
+</div>
 
-{% endif %}
-
-    {% for note in notes %}
-        <div class="row">
-            <p><big><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></big>.
-            <small>{{ note['date'] }}</small></p>
-            {{ note['content'] | safe }}
-            <a href="/notes/{{ note['_id'] }}">Leer más...</a>
-        </div>
-    {% endfor %}
+{% for note in notes %}
+    <div class="row">
+        <big><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></big>.
+        <small>{{ note['date'] }}</small>
+        {{ note['content'] | safe }}
+    </div>
+{% endfor %}
 
 {% endblock %}

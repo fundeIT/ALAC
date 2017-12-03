@@ -2,9 +2,8 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h2>{{ req['overview'] }}</h2>
-
-
+<div class="row">
+<h3>{{ req['overview'] }}</h3>
 {% if has_right %}
 
 	{% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
@@ -24,33 +23,36 @@
 	{% endif %}
 
 {% endif %}
+</div>
 
-<p>
-Petición: {{ req['ref'] }}<br/>
-Fecha: {{ req['date'] }}<br/>
-Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
-</p>
+<div class="row">
+    <div class="six columns">
+        Petición: {{ req['ref'] }}<br/>
+        Fecha: {{ req['date'] }}<br/>
+        Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
+    </div>
+    <div class="six columns">
+        Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
+        Oficial de información: {{ office['officer'] }}<br/>
+        Correo: {{ office['email'] }}<br/>
+    </div>
+</div>
+<div class="row">
+    <div class="six columns">
+        Estado: {{ req['status'] }}<br/>
+        Resultado: {{ req['result'] }}
+    </div>
+    <div class="six columns">
+        {% if req['start'] %}
+        <p>
+        Inicio del trámite: {{ req['start'] }}<br/>
+        Finalización del trámite: {{ req['finish'] }}
+        </p>
+        {% endif %}
+    </div>
+</div>
 
-<p>
-Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
-Oficial de información: {{ office['officer'] }}<br/>
-Correo: {{ office['email'] }}<br/>
-</p>
-
-<p>
-Estado: {{ req['status'] }}<br/>
-Resultado: {{ req['result'] }}
-</p>
-
-{% if req['start'] %}
-<p>
-Inicio del trámite: {{ req['start'] }}<br/>
-Finalización del trámite: {{ req['finish'] }}
-</p>
-{% endif %}
-
-<p><strong>Detalle:</strong></p>
-
+<div class="row">
 {{ req['detail'] | safe }}
 
 {% if req['comment'] %}
@@ -59,13 +61,16 @@ Finalización del trámite: {{ req['finish'] }}
 {{ req['comment'] | safe }}
 </p>
 {% endif %}
+</div>
 
-<ul class="tab">
-    <li><a href="#updates" class="tablinks" 
-	onclick="openTab(event, 'updates')">Comentarios</a></li>
-    <li><a href="#docs" class="tablinks" 
-	onclick="openTab(event, 'docs')">Documentos</a></li>
-</ul>
+<nav>
+    <ul>
+        <li><a href="#updates" class="tablinks" 
+        onclick="openTab(event, 'updates')">Comentarios</a></li>
+        <li><a href="#docs" class="tablinks" 
+        onclick="openTab(event, 'docs')">Documentos</a></li>
+    </ul>
+</nav>
 
 <div id="updates" class="tabcontent">
     {{ macro.listUpdates(updates, 'request', req['_id'], who['_id'], 

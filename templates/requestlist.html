@@ -2,7 +2,18 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h3>Peticiones</h3>
+<div class="row background-light-gray">
+    <div class="three columns center">
+        <img src="/static/third/icons/svg/notebook.svg" width="64px">
+    </div>
+    <div class="nine columns">
+        Expedientes de las peticiones de información tramitadas desde ALAC.
+        Cada expediente contiene una descripción de la petición y de su
+        estado, un registro de los eventos o incidentes relacionados con el
+        trámite de la petición y enlaces a los documentos que conforman el
+        caso.
+    </div>
+</div>
 
 <nav>
     <ul class="tab">
@@ -14,8 +25,6 @@
         {% endif %}
     </ul>
 </nav>
-
-<hr/>
 
 <div id="running" class="tabcontent">
     {{ macro.listItems('requests', running) }}

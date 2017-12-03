@@ -1,25 +1,27 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h3>Oficinas</h3>
+<div class="row background-light-gray">
+    <div class="three columns center">
+        <img src="/static/third/icons/svg/address-card.svg" width="64px">
+    </div>
+    <div class="nine columns">
+        Directorio de oficinas de acceso de la información y de recepción de
+        denuncias. En la página de cada oficina hay referencias a peticiones o
+        denuncias que ALAC ha tramido ante ellas.
+        {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+            [<a href="/offices/new/">Nueva...</a>]
+        {% endif %}
+    </div>
+</div>
 
-{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-
-<div class="Button"><a href="/offices/new/">Nuevo...</a></div>
-
-{% endif %}
-
-<p>Directorio de oficinas de acceso a la información pública y de recepción de denuncias de corrupción.</p> 
-
-    {% for office in offices %}
-            <p>
-                <a href="/offices/{{ office['_id'] }}">
-                    {{ office['name'] }}
-                </a>
-                    <small>({{ office['acronym'] }})</small>
-        </p>
-    {% endfor %}
-</table>
-
+{% for office in offices %}
+    <div class="row">
+        <a href="/offices/{{ office['_id'] }}">
+            {{ office['name'] }}
+        </a>
+        <small>({{ office['acronym'] }})</small>
+    </div>
+{% endfor %}
 
 {% endblock %}

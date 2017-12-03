@@ -2,50 +2,50 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<h2>{{ complain['overview'] }}</h2>
+<div class="row">
+    <h3>{{ complain['overview'] }}</h3>
+    {% if has_right %}
+    <div class="Button"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
+    {% endif %}
+</div>
 
-{% if has_right %}
+<div class="row">
+    <div class="six columns">
+        Denuncia: {{ complain['ref'] }}<br/>
+        Fecha: {{ complain['date'] }}<br/>
+        Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
+    </div>
+    <div class="six columns">
+        Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
+        Oficial de información: {{ office['officer'] }}<br/>
+        Correo: {{ office['email'] }}<br/>
+    </div>
+</div>
+<div class="row">
+    <div class="six columns">
+        Estado: {{ complain['status'] }}<br/>
+        Resultado: {{ complain['result'] }}
+    </div>
+</div>
 
-<div class="Button"><a href='/complains/{{ complain['_id'] }}/edit'>Editar</a></div>
-
-{% endif %}
-
-<p>
-Denuncia: {{ complain['ref'] }}<br/>
-Fecha: {{ complain['date'] }}<br/>
-Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
-</p>
-
-<p>
-Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
-Oficial de información: {{ office['officer'] }}<br/>
-Correo: {{ office['email'] }}<br/>
-</p>
-
-<p>
-<strong>Detalle:</strong>
-</p>
-
+<div class="row">
 {{ complain['detail'] | safe }}
-
-<p>
-Estado: {{ complain['status'] }}<br/>
-Resultado: {{ complain['result'] }}
-</p>
-
 {% if complain['comment'] %}
     <p>
     <strong>Comentarios:</strong><br/>
     {{ complain['comment'] }}
     </p>
 {% endif %}
+</div>
 
-<ul class="tab">
+<nav>
+<ul>
     <li><a href="#updates" class="tablinks" 
         onclick="openTab(event, 'updates')">Comentarios</a></li>
     <li><a href="#documents" class="tablinks" 
         onclick="openTab(event, 'docs')">Documentos</a></li>
 </ul>
+</nav>
 
 <div id="updates" class="tabcontent">
     {{ macro.listUpdates(updates, 'complain', complain['_id'], who['_id'], 
