@@ -1191,7 +1191,7 @@ if __name__ == "__main__":
         else:
             assert False, "unhandled option"
     if debug:
-        app.run(port=port, debug=True)
+        app.run(port=port, host='0.0.0.0', debug=True)
     else:
         application.listen(port)
         IOLoop.instance().start()
