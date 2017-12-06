@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<div row>
+<article class="row">
         <h3 class="border-bottom">{{ note['title'] }}</h3>
         {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
             <p>
@@ -15,6 +15,6 @@
             <p>Etiquetas:</p>
             <p>{{ note['tags'] }}</p>
         {% endif %}
-</div>
+</article>
 
 {% endblock %}
