@@ -2,19 +2,14 @@
 {% block main %}
 
 <article class="row">
-        <h3 class="border-bottom">{{ note['title'] }}</h3>
-        {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
-            <p>
-            <small><a href='/notes/{{ note['_id'] }}/edit'>Editar</a></small>
-            </p>
-        {% endif %}
-        
-        <p>{{ note['date'] }}</p>
-        {{ note['content'] | safe }}
-        {% if note['tags'] %}
-            <p>Etiquetas:</p>
-            <p>{{ note['tags'] }}</p>
-        {% endif %}
+    <header>
+        <h4 class="border-bottom">{{ note['title'] }}</h4>
+    </header>
+    <time><small>{{ note['date'] }}</small></time>
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <small>[<a href='/notes/{{ note['_id'] }}/edit'>Editar</a>]</small>
+    {% endif %}
+    {{ note['content'] | safe }}
 </article>
 
 {% endblock %}

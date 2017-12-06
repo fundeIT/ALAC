@@ -17,9 +17,8 @@
 
 {% for note in notes %}
     <div class="row">
-        <big><a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a></big>.
+        <a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a>.
         <small>{{ note['date'] }}</small>
-        {{ note['content'] | safe }}
     </div>
 {% endfor %}
 

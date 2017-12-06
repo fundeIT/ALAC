@@ -47,3 +47,8 @@ nav li {
 input {
     display: block;
 }
+
+article img {
+    float: right;
+    padding-left: 10px;
+}
