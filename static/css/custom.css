@@ -21,6 +21,14 @@ a {
 
 .background-light-gray {
     background: #F0F8FF;
+    box-shadow: 5px 5px 5px #D0D6DD;
+    margin-bottom: 30px;
+}
+
+.background-white-gray {
+    background: white;
+    box-shadow: 5px 5px 5px #D0D6DD;
+    margin-bottom: 30px;
 }
 
 .center {
