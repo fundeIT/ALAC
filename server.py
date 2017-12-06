@@ -35,6 +35,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
+def request_analytics(req):
+    print(req.path)
+    print(req.headers)
+
 def uploadFile(docfile):
     docfile.filename = secure_filename(docfile.filename)
     d = Dates()
@@ -133,6 +137,7 @@ def index():
 
 @app.route('/faq')
 def faq():
+    request_analytics(request)
     user = {}
     if 'user' in session:
         user = session['user']
