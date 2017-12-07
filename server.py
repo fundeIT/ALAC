@@ -1169,6 +1169,14 @@ def attachmentUpload():
     else:
         return "Failed"
 
+@app.route('/dosiers')
+def dosiers():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
+    return render_template('dosierlist.html', who=user)
+
 class MainHandler(RequestHandler):
     def get(self):
         self.write("Hello")
