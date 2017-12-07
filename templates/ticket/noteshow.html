@@ -2,9 +2,7 @@
 {% block main %}
 
 <article class="row">
-    <header>
-        <h4 class="border-bottom">{{ note['title'] }}</h4>
-    </header>
+    <h4 class="border-bottom">{{ note['title'] }}</h4>
     <time><small>{{ note['date'] }}</small></time>
     {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
         <small>[<a href='/notes/{{ note['_id'] }}/edit'>Editar</a>]</small>
