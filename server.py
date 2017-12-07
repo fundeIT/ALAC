@@ -1185,6 +1185,8 @@ tr = WSGIContainer(app)
 application = Application([
     (r"/support", MainHandler),
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
+    (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
+
     (r".*", FallbackHandler, dict(fallback=tr)),
 ])
 
