@@ -59,4 +59,5 @@ input {
 article img {
     float: right;
     padding-left: 10px;
+    margin-bottom: 60px;
 }
