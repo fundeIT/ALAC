@@ -1208,5 +1208,10 @@ if __name__ == "__main__":
     if debug:
         app.run(port=port, host='0.0.0.0', debug=True)
     else:
+        http_server = HTTPServer(application, ssl_options={
+            "certfile": trust.cert_file,
+            "keyfile": trust.key_priv
+        })
+        http_server.listen(443)
         application.listen(port)
         IOLoop.instance().start()
