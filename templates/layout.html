@@ -8,9 +8,9 @@
         <meta name="keywords" content="acceso,información,denuncia,corrupción">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="/static/third/skeleton/css/normalize.css">
-        <link rel="stylesheet" href="/static/third/skeleton/css/skeleton.css">
-        <link rel="stylesheet" href="/static/css/custom.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/skeleton.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         {% block head %}{% endblock %}
     </head>
     <body>
