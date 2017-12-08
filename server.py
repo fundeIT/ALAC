@@ -1090,15 +1090,22 @@ def threadEdit(_id):
     db = DB('threads')
     thread = dict(db.get(_id))
     if request.method == 'GET':
-        return render_template('threadform.html', thread=thread, 
-                                                         who=user)
+        return render_template('threadform.html', thread=thread, who=user)
     else:
         msg = request.form['msg']
         if len(msg) > 0:
             db.update(_id, {'msg': msg})
         db = DB('tickets')
-        ticket = db.get(thread['ticket_id'])
-        return render_template("ticket/userform.html", data=ticket)
+        ret = db.get(thread['ticket_id'])
+        t = ticket.Ticket()
+        t.hash = str(ret['_id'])
+        t.ticket = ret['ticket']
+        t.email = ret['email']
+        t.year = ret['year']
+        print(t.email, t.ticket, t.year, t.hash)
+        t.get_threads()
+        print(t.threads)
+        return render_template("ticket/userform.html", ticket=t, who=user)
 
 @app.route('/ticket/admin/<int:skip>')
 def adminTicket(skip, limit=20):

@@ -54,6 +54,7 @@ class Ticket:
                 res = self.get_documents(el['_id'])
                 self.docs[el['_id']] = [x for x in res]
             self.threads = t 
+            print(t)
     def append_to_db(self, msg):
         self.hash = DB('tickets').new({
             'ticket': self.ticket,
