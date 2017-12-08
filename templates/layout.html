@@ -27,6 +27,9 @@
                     <li><a href="/start">Inicio</a></li>
                     <li><a href="/ticket">Consultar</a></li>
                     <li><a href="/notes">Blog</a></li>
+                    {% if who['kind'] %}
+                        <li><a href="/ticket/admin">Tickets</a></li>
+                    {% endif %}
                     <li><a href="/dosiers">Expedientes</a></li>
                     <li><a href="/faq">Acerca de</a></li>
                 </ul>
