@@ -29,7 +29,7 @@
             {{ ticket['msg'] }}
         </td>
         <td>
-            <form action="/ticket" method="post" target="_blank">
+            <form action="/ticket" method="post">
                 <input type="hidden" name="year" value="{{ ticket['year'] }}">
                 <input type="hidden" name="email" value="{{ ticket['email'] }}">
                 <input type="hidden" name="ticket" 

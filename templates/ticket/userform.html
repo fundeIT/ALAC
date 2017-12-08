@@ -1,57 +1,98 @@
 {% extends "layout.html" %}
 
-{% block head %}
-
-<script type="text/javascript"
-        src="{{ url_for('static', filename='js/userform.js') }}"
-        charset="utf-8">
-</script>
-
-{% endblock %}
-
 {% block main %}
-
-
-<div id="previous"></div>
-
-<div class="row">
-    <div class="eight columns">
-        <form>
-        <input id="year" type="hidden" value="{{ data['year'] }}">
-        <input id="ticket" type="hidden" value="{{ data['ticket'] }}">
-        <input id="ticket_id" type="hidden" value="{{ data['ticket_id'] }}">
-        <label>Consulta</label>
-        <textarea class="u-full-width" id="msg" rows="10" placeholder="Describa su consulta" required></textarea>
-        <div id="msgalert" class="alert"></div>
-        <label>Agregar documentos (opcional)</label>
-        <ul id="filelist"></ul>
-        <input id="file" type="file" multiple>
-        <div id="contact">
-            <label>Contacto (opcional)</label>
-            <input id="email" type="email" value="{{ data['email'] }}" placeholder="Correo electrónico" required>
-            <input id="anonymous" type="checkbox">Anónimo<br/>
-        </div>
-        <button class="button-primary"  id="send">Enviar</button><span id="Processing"></span>
-        </form>
+    {% if ticket.hash %}
+    <div class="row">
+        <h3>Ticket: {{ ticket.ticket }}/{{ ticket.year }}</h3>
     </div>
-    <div class="four columns">
-    <label id="request">
-        <div class="center">
-            <img src="/static/third/icons/svg/checklist.svg" width="64px">
+    {% endif %}
+    {% if ticket.threads %}
+        {% for thread in ticket.threads %}
+            {% set thrd = thread['_id'] %}
+            <div {% if thread['name'] != '' %} class="row background-white-gray" {% else %} class="row background-light-gray" {% endif %}>
+                <p class="border-bottom">
+                    <small>
+                        {{ thread['date'] }} 
+                        {% if thread['name'] != '' %}
+                            - {{ thread['name'] }}
+                        {% endif %}
+                        {% if who %}
+                            [<a href="/threads/{{ thread['_id'] }}/edit">Editar...</a>]
+                        {% endif %}
+                    </small>
+                </p>
+                {{ thread['msg'] | safe }}
+                {% if ticket.docs[thread['_id']] %}
+                    <ul>
+                        {% for doc in ticket.docs[thread['_id']] %}
+                            <li>
+                                <a href="/attachment/{{ doc['_id'] }}">
+                                {% if 'desc' in doc.keys() %}
+                                    {{ doc['desc'] }}
+                                {% else %}
+                                    {{ doc['path'][(doc['path'].rfind('/') + 1):] }}
+                                {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {% if loop.last %}
+                <div class="row background-light-gray">
+                    <p><strong>Agregar documento:</strong></p>
+                    <form action="/attachment/upload" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="year" value="{{ ticket.year }}">
+                        <input type="hidden" name="ticket" value="{{ ticket.ticket }}">
+                        <input type="hidden" name="email" value="{{ ticket.email }}">
+                        <input type="hidden" name="ticket_id" value="{{ ticket.hash }}">
+                        <input type="hidden" name="thread_id" value="{{ thread['_id'] }}">
+                        <input class="inline" name="desc" type="text" placeholder="Descripción del documento">
+                        <input class="inline" name="file" type="file" required>
+                        <button class="inline">Enviar</button>
+                    </form>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="eight columns">
+            <form action="/ticket/new" method="post">
+                <input name="year" type="hidden" value="{{ ticket.year }}">
+                <input name="ticket" type="hidden" value="{{ ticket.ticket }}">
+                <input name="ticket_id" type="hidden" value="{{ ticket.hash }}">
+                {% if ticket.hash %}
+                    <label>Agregar comentario</label>
+                {% else %}
+                    <label>Consulta</label>
+                {% endif %}
+                <textarea class="u-full-width" name="msg" rows="10" placeholder="Describa su consulta" required></textarea>
+                <div id="msgalert" class="alert"></div>
+                {% if not ticket.email %}
+                    <label>Contacto</label>
+                    <input name="email" type="email" placeholder="Correo (opcional)">
+                {% else %}
+                    <input name="email" type="hidden" value="{{ ticket.email }}">
+                {% endif %}
+                <button class="button-primary" id="send">Enviar</button>
+            </form>
         </div>
-        <p><small>
-        Su consulta es confidencial. Describa su requerimiento de información pública o la irregularidad que
-        desea reportar. Entre los datos, si es pertinente,
-        mencione: nombres, lugares, períodos o fechas, circunstancias, etc. Si
-        desea que le contactemos para ampliar la información, indique sus datos
-        de contacto.
-        Si tiene documentos, imagenes u otros archivos que desee compartir,
-        puede agregarlos en esta sección (hasta 5 archivos, tamaño máximo de cada archivo: 16MB).
-        </small><p>
-    </label>
+        <div class="four columns">
+            <label id="request">
+                <div class="center">
+                    <img src="/static/third/icons/svg/checklist.svg" width="64px">
+                </div>
+                <p>
+                    <small>
+                        Su consulta es confidencial. Describa su requerimiento
+                        de información pública o la irregularidad que desea
+                        reportar.  Entre los datos, si es pertinente, mencione:
+                        nombres, lugares, períodos o fechas, circunstancias,
+                        etc. Si desea dar seguimiento, indique sus datos de
+                        contacto.
+                    </small>
+                <p>
+            </label>
+        </div>
     </div>
-</div>
-
 {% endblock %}
-
-

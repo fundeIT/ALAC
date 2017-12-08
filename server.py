@@ -27,6 +27,7 @@ from markdown import markdown
 from models import *
 import trust
 import emailmgr
+import ticket
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
@@ -70,11 +71,8 @@ def uploadAttachment(rec):
     if not os.path.exists(path):
         os.makedirs(path)
     path += '/' + rec['file'].filename
-    if not os.path.exists(path):
-        rec['file'].save(path)
-        return path[len(app.config['UPLOAD_FOLDER']):]
-    else:
-        return None
+    rec['file'].save(path)
+    return path[len(app.config['UPLOAD_FOLDER']):]
 
 def replaceOfficeinRequests(requests):
     """It appends a new field to each record with the name of the office
@@ -1004,97 +1002,59 @@ def start():
         email=email, remember=remember)
         
 @app.route("/ticket", methods=['GET', 'POST'])
-def ticket():
-    data = {}
-    threads = None
-    docs = None
-    data['ticket'] = 0
-    data['year'] = Dates().getYear()
-    data['email'] = ""
-    referrer = None
-    if request.referrer:
-        referrer = request.referrer.split('/')[-1]
+def get_ticket():
+    user = None
+    if 'user' in session:
+        user = session['user']
+    t = ticket.Ticket()
+    t.update_referrer(request)
     if request.method == 'GET':
-        if 'ticket' in request.cookies and referrer != 'start':
-            data['ticket'] = int(request.cookies.get('ticket'))
-            data['year'] = request.cookies.get('year')
-            data['email'] = request.cookies.get('email')
-            ticket = getTicket(data)
-            data['ticket_id'] = str(ticket['_id'])
-    else:
-        data['ticket'] = int(request.form['ticket'])
-        data['year'] = request.form['year']
-        data['email'] = request.form['email']
-        ticket = getTicket(data)
-        if ticket:
-            data['ticket_id'] = str(ticket['_id'])
-        else:
-            data['ticket'] = 0
-            data['year'] = Dates().getYear()
-            data['email'] = ""
-    resp = make_response(render_template("ticket/userform.html", data=data))
-
+        t.restore_cookie(request)
+    else: # POST
+        t.get_form(request)
+    t.get_threads()
+    resp = make_response(render_template("ticket/userform.html", ticket=t, who=user))
     if 'remember' in request.form:
         exp = datetime.datetime.now() + datetime.timedelta(days=90)
-        resp.set_cookie('ticket', str(data['ticket']), expires=exp)
-        resp.set_cookie('year', data['year'], expires=exp)
-        resp.set_cookie('email', data['email'], expires=exp)
-    else:
-        if referrer == 'start':
-            resp.set_cookie('ticket', '', expires=0)
-            resp.set_cookie('year', '', expires=0)
-            resp.set_cookie('email', '', expires=0)
-
+        resp.set_cookie('ticket', t.id, expires=exp)
+        resp.set_cookie('year', t.year, expires=exp)
+        resp.set_cookie('email', t.email, expires=exp)
+    elif t.referrer == 'start':
+        resp.set_cookie('ticket', '', expires=0)
+        resp.set_cookie('year', '', expires=0)
+        resp.set_cookie('email', '', expires=0)
     return resp
 
 @app.route("/ticket/new", methods=['POST'])
-def newTicket():
+def new_ticket():
+    user = None
+    if 'user' in session:
+        user = session['user']
     d = Dates()
-    today = d.getDate()
-    year = d.getYear()
-    data = request.json
-    
-    if data['ticket'] == '0':
-        counter = newCounter('ticket', d.getYear())
-        ticket = {
-            'year': year, 
-            'ticket': counter, 
-            'email': data['email'],
-            'msg':  data['msg'], 
-            'date': today
-        }
-        ticket_id = DB('tickets').new(ticket)
-    else:
-        ticket_id = data['ticket_id']
-        counter = data['ticket']
-        year = data['year']
-    
+    t = ticket.Ticket()
+    t.ticket = int(request.form['ticket'])
+    t.year = request.form['year']
+    t.email = request.form['email']
+    t.hash = request.form['ticket_id']
+    msg = request.form['msg']
+    if t.ticket == 0:
+        t.ticket = newCounter('ticket', d.getYear())
+        t.append_to_db(msg)
     name = ''
     if 'user' in session:
         name = session['user']['name']
-
-    if data['email'] != '':
-        emailmgr.notify(year, counter, data['email']) 
-    else:
-        emailmgr.notify(year, counter, trust.email_user)
-
+    if t.email != '':
+        emailmgr.notify(t.year, t.ticket, t.email) 
+    emailmgr.notify(t.year, t.ticket, trust.email_user)
     thread = {
-        'ticket_id': ticket_id, 
-        'msg': data['msg'], 
-        'date': today,
+        'ticket_id': t.hash, 
+        'msg': msg, 
+        'date': d.getDate(),
         'name': name
     }
-
     thread_id = DB('threads').new(thread)
-    
-    ret = {
-        'year': year, 
-        'ticket': counter, 
-        'ticket_id': ticket_id, 
-        'thread_id': thread_id, 
-        'email': data['email']
-    }
-    return jsonify(ret)
+    t.get_threads()
+    return render_template("ticket/userform.html", ticket=t, who=user)
 
 @app.route("/threads", methods=['POST'])
 def thread():
@@ -1134,7 +1094,6 @@ def threadEdit(_id):
                                                          who=user)
     else:
         msg = request.form['msg']
-        print(msg)
         if len(msg) > 0:
             db.update(_id, {'msg': msg})
         db = DB('tickets')
@@ -1165,20 +1124,24 @@ def attachment(_id):
 
 @app.route("/attachment/upload", methods=['POST'])
 def attachmentUpload():
+    user = None
+    if 'user' in session:
+        user = session['user']
     rec = {}
-    rec['ticket_id'] = request.form['ticket_id'];
     rec['year'] = request.form['year']
+    rec['ticket_id'] = request.form['ticket_id'];
     rec['thread_id'] = request.form['thread_id']
+    rec['desc'] = request.form['desc']
     rec['file'] = request.files['file']
     path = uploadAttachment(rec)
     if (path):
         del rec['file']
         rec['path'] = path
         _id = str(DB('ticketdocs').new(rec))
-        rec['ticket'] = request.form['ticket']
-        rec['email'] = request.form['email']
-        rec['doc_id'] = _id
-        return jsonify(rec)
+        t = ticket.Ticket()
+        t.get_form(request)
+        t.get_threads()
+        return render_template("ticket/userform.html", ticket=t, who=user)
     else:
         return "Failed"
 

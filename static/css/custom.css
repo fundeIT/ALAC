@@ -61,3 +61,7 @@ article img {
     padding-left: 10px;
     margin-bottom: 60px;
 }
+
+.inline {
+    display: inline;
+}

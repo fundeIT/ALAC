@@ -357,14 +357,4 @@ def newCounter(kind, year):
         db.counters.update({'_id': _id}, {'$set': {'year': year, 'kind': kind, 'value': counter}})
     return counter
 
-def getTicket(data):
-    db = DB('tickets')
-    return db.collection.find_one(data)
 
-def getThreads(ticket_id):
-    db = DB('threads')
-    return db.collection.find({'ticket_id': ticket_id})
-
-def getDocuments(ticket_id, thread_id):
-    db = DB('ticketdocs')
-    return db.collection.find({'ticket_id': ticket_id, 'thread_id': thread_id})

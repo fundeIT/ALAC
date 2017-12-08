@@ -47,7 +47,7 @@ Teléfono:  +503 2209 5324
 """
     text = text % (str(year), str(ticket))
     msg = MIMEText(text)
-    msg['Subject'] = "ALAC: actualizacion de ticket"
+    msg['Subject'] = "ALAC: actualizacion de ticket No. %s" % str(ticket)
     msg['From'] = trust.email_user
     msg['To'] = email
     msg['Bcc'] = trust.email_user 

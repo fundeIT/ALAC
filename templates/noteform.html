@@ -21,7 +21,7 @@
 
             {% for user in users_right%}
                 {{ user['name'] }}
-		{% if not loop.last %}, {% endif %}
+                {% if not loop.last %}, {% endif %}
             {% endfor %}
 
         <form action='/rights/new/' method='post'>
