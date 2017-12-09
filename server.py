@@ -833,10 +833,9 @@ def mine():
 
 @app.route('/notes')
 def notes():
+    user = {}
     if 'user' in session:
         user = session['user']
-    else:
-        user = {}
     notes = Notes().list()
     notelist = [note for note in notes]
     for i in range(len(notelist)):
@@ -989,6 +988,9 @@ def dataRequest():
 
 @app.route("/start")
 def start():
+    user = {}
+    if 'user' in session:
+        user = session['user']
     year = Dates().getYear()
     ticket = ''
     email = ''
@@ -998,8 +1000,7 @@ def start():
         ticket = request.cookies.get('ticket')
         email = request.cookies.get('email')
         remember = True
-    return render_template("ticket/start.html", year=year, ticket=ticket,
-        email=email, remember=remember)
+    return render_template("ticket/start.html", year=year, ticket=ticket, email=email, remember=remember, who=user)
         
 @app.route("/ticket", methods=['GET', 'POST'])
 def get_ticket():
