@@ -1017,7 +1017,7 @@ def get_ticket():
     resp = make_response(render_template("ticket/userform.html", ticket=t, who=user))
     if 'remember' in request.form:
         exp = datetime.datetime.now() + datetime.timedelta(days=90)
-        resp.set_cookie('ticket', t.id, expires=exp)
+        resp.set_cookie('ticket', str(t.ticket), expires=exp)
         resp.set_cookie('year', t.year, expires=exp)
         resp.set_cookie('email', t.email, expires=exp)
     elif t.referrer == 'start':
