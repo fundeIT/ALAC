@@ -1168,6 +1168,7 @@ class MainHandler(RequestHandler):
 tr = WSGIContainer(app)
 application = Application([
     (r"/support", MainHandler),
+    (r"/favicon.ico", StaticFileHandler, {'path': 'static/favicon.ico'}),
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
 
