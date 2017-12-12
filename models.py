@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 
 def dbconn():
     client = pymongo.MongoClient(trust.db_server, trust.db_port)
-    db = client.alac
+    db = client[trust.db_name]
     return db
     
 def emptyDict(keys):

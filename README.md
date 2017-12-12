@@ -21,6 +21,7 @@ Create a file named 'trust.py' with the following content:
     secret_key = "CHOOSE_YOUR_SECRET_KEY"
     docs_path = "DIRECTORY_WHERE_FILES_WILL_STORED"
     db_server = "DATABASE_SERVER_HOST_NAME"
+    db_name = "DATABASE_NAME"
     db_port = SERVER_PORT
     db_user = "DATABASE USERNAME ACCESS"
     db_password = "DATABASE PASSWORD ACCESS"
@@ -28,6 +29,8 @@ Create a file named 'trust.py' with the following content:
     email_password = "PASSWORD-EMAIL-SERVER"
     email_server = "NAME-EMAIL-SERVER"
     email_port = "PORT_EMAIL_SERVER"
+    cert_file = "YOUR_CERTIFICATE_PATH"
+    key_priv = "YOUR_PRIVATE_KEY_PATH"
 
 Run the utility program 'resetadmin.py' to create the admin user:
 
@@ -43,6 +46,4 @@ The new user admin created has the following attributes:
 
 To run the application:
 
-    $ ./run.sh
-
-Or if you are using a Windows system, execute the file `run.bat`
+    $ ./server.py
