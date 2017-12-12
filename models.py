@@ -29,7 +29,7 @@ class DB:
     derivated from this base class."""
     def __init__(self, collection):
         client = pymongo.MongoClient()
-        db = client.alac
+        db = client[trust.db_name]
         self.collection = db[collection]
     def new(self, doc):
         _id = str(self.collection.insert_one(doc).inserted_id)
@@ -63,7 +63,7 @@ def touch(entity, _id):
     else:
         return
     client = pymongo.MongoClient()
-    db = client.alac
+    db = client[trust.db_name]
     collection = db[collection]
     res = collection.update({'_id': ObjectId(_id)}, 
             {'$currentDate': {'touched': True}})
@@ -347,7 +347,7 @@ class Notes:
 def newCounter(kind, year):
     counter = 1
     client = pymongo.MongoClient()
-    db = client.alac
+    db = client[trust.db_name]
     rec = db.counters.find_one({'year': year, 'kind': kind})
     if (not rec):
         db.counters.insert_one({'year': year, 'kind': kind, 'value': counter})
