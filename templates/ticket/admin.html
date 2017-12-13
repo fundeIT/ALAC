@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block main %}
+
+<div class="row">
+<h3>Tickets de usuarios</h3>
+</div>
+
+<div class="row background-light-gray">
+    Esta es la sección de administración de tickets.
+</div>
+
+<nav>
+    <ul>
+        {% if rng | length > 1 %}
+        {% for a in rng %}
+            <li><a href="/ticket/admin/{{ a }}">+{{ a }}</a></li>
+        {% endfor %}
+        {% endif %}
+        <li><a href="/ticket">Nuevo</a></li>
+    </ul>
+</nav>
+    
+{% for ticket in tickets %}
+    <div class="row background-white-gray">
+        {% set pos = ticket['msg'].find('\n') %}
+        <p><strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>:
+        {{ ticket['msg'][:pos] }}
+     
+        <form class="inline" action="/ticket" method="post">
+            <input type="hidden" name="year" value="{{ ticket['year'] }}">
+            <input type="hidden" name="email" value="{{ ticket['email'] }}">
+            <input type="hidden" name="ticket" 
+                   value="{{ ticket['ticket'] }}">
+            <button class="inline">Consultar</button>
+        </form>
+        {% if 'status' in ticket and ticket['status'] == 'closed' %}
+            <form class="inline" action="/ticket/open" method="post">
+                <input name="ticket_id" type="hidden" value="{{ ticket['_id'] }}">
+                <button class="inline">Reabrir</button>
+            </form>
+        {% else %}
+            <form class="inline" action="/ticket/close" method="post">
+                <input name="ticket_id" type="hidden" value="{{ ticket['_id'] }}">
+                <button class="inline">Cerrar</button>
+            </form>
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% endblock %}
