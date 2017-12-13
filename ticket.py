@@ -10,6 +10,7 @@ class Ticket:
         self.referrer = None
         self.threads = None
         self.docs = None
+        self.status = 'openned'
     def update_referrer(self, request):
         if request.referrer:
             self.referrer = request.referrer.split('/')[-1]
@@ -58,6 +59,11 @@ class Ticket:
             'ticket': self.ticket,
             'year': self.year,
             'email': self.email,
+            'status': self.status,
             'msg': msg
         })
+    def close(self, _id):
+        DB('tickets').update(_id, {'status': 'closed'})
+    def open(self, _id):
+        DB('tickets').update(_id, {'status': 'openned'})
 

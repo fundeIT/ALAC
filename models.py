@@ -36,8 +36,8 @@ class DB:
         return _id
     def count(self):
         return self.collection.count()
-    def list(self, skip=0, limit=25):
-        return self.collection.find().sort([('_id', 1)]).skip(skip).limit(limit)
+    def list(self, skip=0, limit=25, filt=None):
+        return self.collection.find(filt).sort([('_id', 1)]).skip(skip).limit(limit)
     def raw(self):
         return self.collection.find().sort([('_id', 1)])
     def get(self, _id):

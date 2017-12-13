@@ -1039,6 +1039,7 @@ def new_ticket():
     if t.ticket == 0:
         t.ticket = newCounter('ticket', d.getYear())
         t.append_to_db(msg)
+    t.open(t.hash)
     name = ''
     if 'user' in session:
         name = session['user']['name']
@@ -1054,6 +1055,22 @@ def new_ticket():
     thread_id = DB('threads').new(thread)
     t.get_threads()
     return render_template("ticket/userform.html", ticket=t, who=user)
+
+@app.route("/ticket/close", methods=['POST'])
+def close_ticket():
+    if not 'user' in session:
+        return redirect('/login')
+    _id = request.form['ticket_id']
+    ticket.Ticket().close(_id)
+    return redirect(request.environ['HTTP_REFERER'])
+
+@app.route("/ticket/open", methods=['POST'])
+def open_ticket():
+    if not 'user' in session:
+        return redirect('/login')
+    _id = request.form['ticket_id']
+    ticket.Ticket().open(_id)
+    return redirect(request.environ['HTTP_REFERER'])
 
 @app.route("/threads", methods=['POST'])
 def thread():
@@ -1112,9 +1129,10 @@ def adminTicket(skip, limit=20):
         return redirect('/login')
     db = DB('tickets')
     count = db.count()
-    tickets = db.list(skip, limit)
-    return render_template('tickets.html',
-        tickets=tickets, who=session['user'])
+    r = range(0, count, limit)
+    tickets = db.list(skip, limit, {'status': 'openned'})
+    return render_template('ticket/admin.html',
+        tickets=tickets, rng=r, who=session['user'])
 
 @app.route('/ticket/admin')
 def adminEmptyTicket():
