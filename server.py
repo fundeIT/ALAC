@@ -26,6 +26,7 @@ from markdown import markdown
 
 from models import *
 import trust
+from attachment import *
 import emailmgr
 import ticket
 
@@ -762,11 +763,8 @@ def docDetail(_id):
 
 @app.route('/docs/<string:_id>')
 def docDownload(_id):
-    d = Documents()
-    doc = d.get(_id)
-    path = app.config['UPLOAD_FOLDER'] + '/' + doc['path']
-    filename = path.split('/')[-1]
-    return send_file(path, as_attachment=True, attachment_filename=filename)
+    d = Attachment('docs').get(_id)
+    return send_file(d['path'], as_attachment=True, attachment_filename=d['name'])
 
 @app.route('/docrels/new/', methods=['POST'])
 def docrelNew():
@@ -1124,11 +1122,8 @@ def adminEmptyTicket():
 
 @app.route('/attachment/<string:_id>')
 def attachment(_id):
-    d = DB('ticketdocs')
-    doc = d.get(_id)
-    path = app.config['UPLOAD_FOLDER'] + doc['path']
-    filename = path.split('/')[-1]
-    return send_file(path, as_attachment=True, attachment_filename=filename)
+    d = Attachment('ticketdocs').get(_id)
+    return send_file(d['path'], as_attachment=True, attachment_filename=d['name'])
 
 @app.route("/attachment/upload", methods=['POST'])
 def attachmentUpload():

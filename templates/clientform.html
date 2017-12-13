@@ -3,9 +3,9 @@
 
     <form action="/clients/{{ _id }}" method="post">
         <label>Nombre</label>
-        <input class="TextInput" name="name" value="{{ client['name'] }}">
+        <input type="text" name="name" value="{{ client['name'] }}">
         <label>Alias</label>
-        <input class="TextInput" name="alias" value="{{ client['alias'] }}">
+        <input type="text" name="alias" value="{{ client['alias'] }}">
         <label>Rango de edad</label>
         <select name="age">
             {% for age in ages %}
@@ -57,19 +57,19 @@
         </select>
  
         <label>Organización</label>
-        <input class="TextInput" name="org" value="{{ client['org'] }}">
+        <input type="text" name="org" value="{{ client['org'] }}">
 
         <label>Rol o cargo</label>
-        <input class="TextInput" name="rol" value="{{ client['rol'] }}">
+        <input type="text" name="rol" value="{{ client['rol'] }}">
 
         <label>Municipio</label>
-        <input class="TextInput" name="city" value="{{ client['city'] }}">
+        <input type="text" name="city" value="{{ client['city'] }}">
 
         <label>Teléfonos</label>
-        <input class="TextInput" name="tel" value="{{ client['tel'] }}">
+        <input type="text" name="tel" value="{{ client['tel'] }}">
 
         <label>Correos</label>
-        <input class="TextInput" name="email" value="{{ client['email'] }}">
+        <input type="text" name="email" value="{{ client['email'] }}">
 
         <label>Comentarios</label>
         <textarea class="TextArea" name="notes"> {{ client['note'] }}</textarea>

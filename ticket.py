@@ -1,7 +1,6 @@
 from markdown import markdown
 from models import *
 
-
 class Ticket:
     def __init__(self):
         self.ticket = 0
@@ -17,7 +16,6 @@ class Ticket:
     def update_hash(self):
         db = DB('tickets')
         query = {'ticket': self.ticket, 'email': self.email, 'year': self.year}
-        print(query)
         ret = db.collection.find_one(query)
         if ret:
             self.hash = str(ret['_id'])
