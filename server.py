@@ -1211,5 +1211,5 @@ if __name__ == "__main__":
             "keyfile": trust.key_priv
         })
         http_server.listen(443)
-        # application.listen(port)
+        application.listen(port)
         IOLoop.instance().start()
