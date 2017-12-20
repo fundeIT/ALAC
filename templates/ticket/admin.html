@@ -18,10 +18,17 @@
     <ul>
         {% if rng | length > 1 %}
         {% for a in rng %}
-            <li><a href="/ticket/admin/{{ a }}">+{{ a }}</a></li>
+        <li><a href="/ticket/{{ status }}/{{ a }}">+{{ a }}</a></li>
         {% endfor %}
         {% endif %}
         <li><a href="/ticket">Nuevo</a></li>
+        <li>
+            {% if status == "openned" %}
+                <a href="/ticket/closed/0">Cerrados</a>
+            {% else %}
+                <a href="/ticket/openned/0">Abiertos</a>
+            {% endif %}
+        </li>
     </ul>
 </nav>
     

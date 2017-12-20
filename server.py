@@ -1123,20 +1123,20 @@ def threadEdit(_id):
         print(t.threads)
         return render_template("ticket/userform.html", ticket=t, who=user)
 
-@app.route('/ticket/admin/<int:skip>')
-def adminTicket(skip, limit=20):
+@app.route('/ticket/<string:status>/<int:skip>')
+def adminTicket(status, skip, limit=20):
     if not 'user' in session:
         return redirect('/login')
     db = DB('tickets')
     count = db.count()
     r = range(0, count, limit)
-    tickets = db.list(skip, limit, {'status': 'openned'})
+    tickets = db.list(skip, limit, {'status': status})
     return render_template('ticket/admin.html',
-        tickets=tickets, rng=r, who=session['user'])
+        tickets=tickets, status=status, rng=r, who=session['user'])
 
 @app.route('/ticket/admin')
 def adminEmptyTicket():
-    return redirect('/ticket/admin/0')
+    return redirect('/ticket/openned/0')
 
 @app.route('/attachment/<string:_id>')
 def attachment(_id):
