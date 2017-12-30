@@ -1,0 +1,23 @@
+{% macro navTicket(rng, status) %}
+<nav>
+    <ul>
+        {% if rng | length > 1 %}
+            {% for a in rng %}
+                <li>
+                    <a href="/ticket/{{ status }}?skip={{ a }}">
+                        +{{ a }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+        <li>
+            {% if status == "openned" %}
+                <a href="/ticket/closed">Cerrados</a>
+            {% else %}
+                <a href="/ticket/openned">Abiertos</a>
+            {% endif %}
+        </li>
+        <li><a href="/ticket">Nuevo</a></li>
+    </ul>
+</nav>
+{% endmacro %}
