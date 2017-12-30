@@ -14,9 +14,20 @@ class Ticket:
     def update_referrer(self, request):
         if request.referrer:
             self.referrer = request.referrer.split('/')[-1]
-    def update_hash(self):
+    def update_hash(self, is_email=True):
         db = DB('tickets')
-        query = {'ticket': self.ticket, 'email': self.email, 'year': self.year}
+        if is_email:
+            query = {
+                    'ticket': self.ticket, 
+                    'email': self.email, 
+                    'year': self.year
+            }
+        else:
+            query = {
+                    'ticket': self.ticket, 
+                    'year': self.year
+            }
+        print(query)
         ret = db.collection.find_one(query)
         if ret:
             self.hash = str(ret['_id'])

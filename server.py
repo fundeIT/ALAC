@@ -1025,9 +1025,23 @@ def get_ticket():
         resp.set_cookie('email', '', expires=0)
     return resp
 
-@app.route("/ticket/<int:year>/<int:ticket>")
-def get_ticketByID(year, ticket):
-    print("Hola")
+@app.route("/ticket/<string:year>/<int:tckt>")
+def get_ticketByID(year, tckt):
+    # Checking privileges. Only managers and operators are
+    # allowed to use this function.
+    if not 'user' in session:
+        return redirect('/login')
+    user = session['user']
+    if not user['kind'] in ['MNG', 'OPR']:
+        return redirect('/')
+    t = ticket.Ticket()
+    t.year = year
+    t.ticket = tckt
+    t.update_hash(is_email=False)
+    t.get_threads()
+    resp = make_response(render_template("ticket/userform.html", 
+        ticket=t, who=user))
+    return resp
 
 @app.route("/ticket/new", methods=['POST'])
 def new_ticket():
