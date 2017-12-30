@@ -1012,7 +1012,8 @@ def get_ticket():
     else: # POST
         t.get_form(request)
     t.get_threads()
-    resp = make_response(render_template("ticket/userform.html", ticket=t, who=user))
+    resp = make_response(render_template("ticket/userform.html", 
+        ticket=t, who=user))
     if 'remember' in request.form:
         exp = datetime.datetime.now() + datetime.timedelta(days=90)
         resp.set_cookie('ticket', str(t.ticket), expires=exp)
@@ -1023,6 +1024,10 @@ def get_ticket():
         resp.set_cookie('year', '', expires=0)
         resp.set_cookie('email', '', expires=0)
     return resp
+
+@app.route("/ticket/<int:year>/<int:ticket>")
+def get_ticketByID(year, ticket):
+    print("Hola")
 
 @app.route("/ticket/new", methods=['POST'])
 def new_ticket():
