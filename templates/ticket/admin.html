@@ -12,24 +12,20 @@
 </div>
 
 <div class="row background-light-gray">
-    Esta es la sección de administración de tickets.
+    Esta es la sección de administración de tickets. Contiene la lista de
+    tickets según su estado (abiertos o cerrados).
 </div>
 
 {{ macro.navTicket(rng, status) }}
    
 {% for ticket in tickets %}
-    <div class="row background-white-gray">
+    <div>
         {% set pos = ticket['msg'].find('\n') %}
-        <p><strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>:
+        <a href="/ticket/{{ticket['year']}}/{{ticket['ticket']}}">
+            <strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>
+        </a>
         {{ ticket['msg'][:pos] }}
-     
-        <form class="inline" action="/ticket" method="post">
-            <input type="hidden" name="year" value="{{ ticket['year'] }}">
-            <input type="hidden" name="email" value="{{ ticket['email'] }}">
-            <input type="hidden" name="ticket" 
-                   value="{{ ticket['ticket'] }}">
-            <button class="inline">Consultar</button>
-        </form>
+    
         {% if 'status' in ticket and ticket['status'] == 'closed' %}
             <form class="inline" action="/ticket/open" method="post">
                 <input name="ticket_id" type="hidden" 
