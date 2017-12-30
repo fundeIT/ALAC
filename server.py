@@ -1123,14 +1123,29 @@ def threadEdit(_id):
         print(t.threads)
         return render_template("ticket/userform.html", ticket=t, who=user)
 
-@app.route('/ticket/<string:status>/<int:skip>')
-def adminTicket(status, skip, limit=20):
+@app.route('/ticket/<string:status>')
+def adminTicket(status):
+    # Checking privileges. Only managers and operators are
+    # allowed to use this function.
     if not 'user' in session:
         return redirect('/login')
+    user = session['user']
+    if not user['kind'] in ['MNG', 'OPR']:
+        return redirect('/')
+    # Setting list parameters
+    #   Default values
+    limit = 20    # How many items
+    skip = 0      # Get since this item
+    #   Checking if user gives own values
+    if 'limit' in request.args:
+        limit = int(request.args.get('limit'))
+    if 'skip' in request.args:
+        skip = int(request.args.get('skip'))
+    # Querying database
     db = DB('tickets')
-    count = db.count()
-    r = range(0, count, limit)
-    tickets = db.list(skip, limit, {'status': status})
+    count = db.count({'status': status}) # How many items exist
+    r = range(0, count, limit)           # Ranges for pagination
+    tickets = db.list(skip, limit, {'status': status}, -1) # Getting data
     return render_template('ticket/admin.html',
         tickets=tickets, status=status, rng=r, who=session['user'])
 

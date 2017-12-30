@@ -1,3 +1,4 @@
+{% import "ticket/macros.html" as macro %}
 {% extends "layout.html" %}
 
 {% block head %}
@@ -14,24 +15,8 @@
     Esta es la sección de administración de tickets.
 </div>
 
-<nav>
-    <ul>
-        {% if rng | length > 1 %}
-        {% for a in rng %}
-        <li><a href="/ticket/{{ status }}/{{ a }}">+{{ a }}</a></li>
-        {% endfor %}
-        {% endif %}
-        <li><a href="/ticket">Nuevo</a></li>
-        <li>
-            {% if status == "openned" %}
-                <a href="/ticket/closed/0">Cerrados</a>
-            {% else %}
-                <a href="/ticket/openned/0">Abiertos</a>
-            {% endif %}
-        </li>
-    </ul>
-</nav>
-    
+{{ macro.navTicket(rng, status) }}
+   
 {% for ticket in tickets %}
     <div class="row background-white-gray">
         {% set pos = ticket['msg'].find('\n') %}
@@ -47,16 +32,20 @@
         </form>
         {% if 'status' in ticket and ticket['status'] == 'closed' %}
             <form class="inline" action="/ticket/open" method="post">
-                <input name="ticket_id" type="hidden" value="{{ ticket['_id'] }}">
+                <input name="ticket_id" type="hidden" 
+                    value="{{ ticket['_id'] }}">
                 <button class="inline">Reabrir</button>
             </form>
         {% else %}
             <form class="inline" action="/ticket/close" method="post">
-                <input name="ticket_id" type="hidden" value="{{ ticket['_id'] }}">
+                <input name="ticket_id" type="hidden" 
+                    value="{{ ticket['_id'] }}">
                 <button class="inline">Cerrar</button>
             </form>
         {% endif %}
     </div>
 {% endfor %}
 
+{{ macro.navTicket(rng, status) }}
+   
 {% endblock %}

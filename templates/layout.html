@@ -3,33 +3,41 @@
     <head>
         <meta charset="utf-8">
         <title>ALAC - Centro de Asesoría Legal Anticorrupción</title>
-        <meta name="description" content="Asesoría legal a peticionarios de infomación y denunciantes de corrupción">
+        <meta name="description" 
+            content="Asesoría legal a peticionarios
+                de infomación y denunciantes de corrupción">
         <meta name="author" content="FUNDE/TI - El Salvador">
         <meta name="keywords" content="acceso,información,denuncia,corrupción">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--
-        <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
-        -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/normalize.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/skeleton.css') }}">
-        <link href='https://fonts.googleapis.com/css?family=Raleway:700,400,300,700italic,400italic,300italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', 
+                filename='third/skeleton/css/normalize.css') }}">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', 
+                filename='third/skeleton/css/skeleton.css') }}">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', filename='css/custom.css') }}">
+
         {% block head %}{% endblock %}
+
     </head>
     <body>
         <div class="container">
            <div class="row center">
-                    <h3>ALAC</h3>
-                    <big>Centro de Asesoría Legal Anticorrupción</big><br/>
-                <small>"Tienes derecho a pedir información y a denunciar irregularidades en los servicios públicos"</small>
+                <h3>ALAC</h3>
+                <big>Centro de Asesoría Legal Anticorrupción</big><br/>
+                <small>
+                    "Tienes derecho a pedir información y a denunciar
+                    irregularidades en los servicios públicos"
+                </small>
             </div>
             <nav class="center">
                 <ul>
                     <li><a href="/start">Inicio</a></li>
                     <li><a href="/ticket">Consultar</a></li>
                     <li><a href="/notes">Blog</a></li>
-                    {% if who['kind'] %}
-                        <li><a href="/ticket/admin">Tickets</a></li>
+                    {% if who['kind'] in ['MNG', 'OPR'] %}
+                        <li><a href="/ticket/openned">Tickets</a></li>
                     {% endif %}
                     <li><a href="/dosiers">Expedientes</a></li>
                     <li><a href="/faq">Acerca de</a></li>
@@ -42,32 +50,34 @@
             <div class="row center">
                 <small>
                     <div class="four columns">
-                <p>
-                    Correo: <a href="mailto:alac@funde.org">alac@funde.org</a> -
-                    Tel. +503 2209-5324.
-                    <a href="https://goo.gl/maps/vYB8vzGS4Q52" target="_blank">Calle Arturo Ambrogi No. 411, Col. Escalón. San Salvador, El Salvador, C.A.</a>
-                </p>
+                        Correo: 
+                        <a href="mailto:alac@funde.org">
+                            alac@funde.org
+                        </a> - Tel. +503 2209-5324.
+                        <a href="https://goo.gl/maps/vYB8vzGS4Q52"
+                            target="_blank">
+                                Calle Arturo Ambrogi No. 411, Col. Escalón.
+                                San Salvador, El Salvador, C.A.
+                        </a>
                     </div>
                     <div class="four columns">
-                <p>
                         ALAC es un servicio de la 
-                        <a href="http://www.funde.org">Fundación Nacional para el Desarrollo</a>
+                        <a href="http://www.funde.org">
+                            Fundación Nacional para el Desarrollo
+                        </a>
                         (FUNDE), capítulo nacional de 
-                        <a href="http://transparency.org">Transparencia Internacional</a>.
+                        <a href="http://transparency.org">
+                            Transparencia Internacional
+                        </a>
                     </div>
                     <div class="four columns">
-                </p>
-                <p>
-                    Hecho con software libre: <a href="https://github.com/fundeIT/ALAC">Repositorio del código fuente</a>
-                </p>
+                        Hecho con software libre:
+                        <a href="https://github.com/fundeIT/ALAC">
+                            Repositorio del código fuente
+                        </a>
                     </div>
-
                 </small>
             </div>
-
-
-            </div>
-
         </div>
     </body>
 </html>
