@@ -70,3 +70,7 @@ article img {
 .inline {
     display: inline;
 }
+
+.logo {
+    max-width: 40%;
+}

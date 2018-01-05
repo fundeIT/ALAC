@@ -395,7 +395,6 @@ def requestDetail(_id):
         updates = Updates().list('request', _id)
         updates_mod = []
         for element in updates:
-            element['detail'] = markdown(element['detail'])
             if 'user_id' in element:
                 u = Users().get(element['user_id'])
                 if u:
@@ -511,7 +510,7 @@ def updateNew():
         _id = u.new(update)
     return redirect(request.referrer)
 
-@app.route('/updates/<string:_id>/delete', methods=['POST'])
+@app.route('/updates/<string:_id>/delete', methods=['GET'])
 def deleteUpdate(_id):
     if not 'user' in session:
         return redirect(request.referrer)
@@ -593,10 +592,6 @@ def complainDetail(_id):
         office = Offices().get(complain['office_id'])
         reviewer = Offices().get(complain['reviewer_id'])
         updates = joinUserData(Updates().list('complain', _id))
-        updates_mod = []
-        for u in updates:
-           u['detail'] = markdown(u['detail'])
-           updates_mod.append(u)
         docrels = DocRels().list('complain', _id)
         docs = Documents().list()
         return render_template('complainshow.html', 
@@ -604,7 +599,7 @@ def complainDetail(_id):
                 complain=complain,
                 office=office,
                 case=case, 
-                updates=updates_mod,
+                updates=updates,
                 reviewer=reviewer, 
                 docrels=docrels, 
                 docs=docs, 

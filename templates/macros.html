@@ -8,25 +8,22 @@
 {% endmacro %}
 
 {% macro listUpdates(updates, source, source_id, user_id, has_right, date, operator=False) %}
-{% for update in updates %}
-    <div class="row">
-        <div class="three columns">
-                {{ update['date'] }}
-                {% if has_right %}
-                <small>({{ update['user_name'] }})</small>
-                {% endif %}:
-                {% if operator %}
-                        <form action="/updates/{{ update['_id'] }}/delete"
-                        method="post">
-                        <button class="DeleteButton">Eliminar</button>
-                        </form>
-                {% endif %}
-        </div>
-        <div class="nine columns">
-                {{ update['detail'] | safe }}
-        </div>
-    </div>
-{% endfor %}
+<div class="row">
+    {% for update in updates %}
+    <p>
+            {{ update['date'] }}:
+            {{ update['detail'] }}
+            {% if has_right %}
+            <small>({{ update['user_name'] }})</small>
+            {% endif %}
+            {% if operator %}
+                <a href="/updates/{{ update['_id'] }}/delete">
+                    <img src="/static/images/del.svg" alt="Eliminar">
+                </a>
+            {% endif %}
+    </p>
+    {% endfor %}
+</div>
 {% if has_right %}
     <form action='/updates/new/' method="post">
         <input type="hidden" name="source" value="{{ source }}">
