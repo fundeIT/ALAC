@@ -23,6 +23,7 @@
                 </p>
                 {{ thread['msg'] | safe }}
                 {% if ticket.docs[thread['_id']] %}
+                    <p>Anexos:</p>
                     <ul>
                         {% for doc in ticket.docs[thread['_id']] %}
                             <li>
