@@ -29,6 +29,7 @@ import trust
 from attachment import *
 import emailmgr
 import ticket
+import govsearcher
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
@@ -1132,9 +1133,7 @@ def threadEdit(_id):
         t.ticket = ret['ticket']
         t.email = ret['email']
         t.year = ret['year']
-        print(t.email, t.ticket, t.year, t.hash)
         t.get_threads()
-        print(t.threads)
         return render_template("ticket/userform.html", ticket=t, who=user)
 
 @app.route('/ticket/<string:status>')
@@ -1208,10 +1207,12 @@ class MainHandler(RequestHandler):
         self.write("Hello")
 
 tr = WSGIContainer(app)
+
 application = Application([
     (r"/support", MainHandler),
     (r"/favicon.ico", StaticFileHandler, {'path': 'static/favicon.ico'}),
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
+    (r"/govsearcher", govsearcher.GovSearcher),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
 
     (r".*", FallbackHandler, dict(fallback=tr)),

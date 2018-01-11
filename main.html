@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/third/skeleton/css/normalize.css">
+        <link rel="stylesheet" href="/static/third/skeleton/css/skeleton.css">
+        <link rel="stylesheet" href="/static/css/custom.css">
+    </head>
+    <body>
+        <div class="container">
+            <div id="search" class="row center">
+                <h3>Buscador de documentos públicos</h3>
+                <form action="/govsearcher" method="get">
+                    <input name="query" class="ten columns" type="text" {% if query %}value="{{ query }}"{% end %}>
+                    <button class="two columns">Buscar</button>
+                </form>
+            </div>
+            <div id="results" class="row">
+                {% for item in results %}
+                    <p>
+                        {{ item['title'] }}:
+                        <a href="{{ item['url'] }}">{{ item['desc'] }}</a>
+                    </p>
+                {% end %}
+            </div>
+            <div class="row center">
+                <small>{{ count }} documentos indexados</small><br/>
+                <small>El Salvador, C.A.</small>
+            </div>
+        </div>
+    </body>
+</html>
