@@ -3,25 +3,19 @@
 
     <form action="/requests/{{ _id }}" method="post">
         <label>Asunto</label>
-        <input class="TextInput" name="overview" 
-            value="{{ req['overview'] }}" required autofocus>
+        <input class="u-full-width" name="overview" value="{{ req['overview'] }}" required autofocus>
         <label>Detalle</label>
-        <textarea class="TextArea" name="detail" 
-            required>{{ req['detail'] }}</textarea>
-
+        <textarea class="u-full-width" name="detail" required>{{ req['detail'] }}</textarea>
         {% if _id != 'new/' %}
-        <label>Referencia</label>
-        <input class="TextInput" name="ref" value="{{ req['ref'] }}"
-            placeholder="Opcional">
+            <label>Referencia</label>
+            <input name="ref" value="{{ req['ref'] }}" placeholder="Opcional">
         {% else %}
-        <input type="hidden" name="ref" value="">
+            <input type="hidden" name="ref" value="">
         {% endif %}
-
         <label>Fecha</label>
-        <input class="TextInput" type="date" name="date" 
-            value="{{ req['date'] }}" required>
+        <input type="date" name="date" value="{{ req['date'] }}" required>
         <label>Caso</label>
-        <select name="case_id">
+        <select class="u-full-width" name="case_id">
             <option value=""></option>
             {% for case in cases %}
                 <option value="{{ case['_id'] }}" 
@@ -33,7 +27,7 @@
             {% endfor %}
         </select>
         <label>Oficina</label>
-        <select name="office_id">
+        <select class="u-full-width" name="office_id">
             {% for office in offices %}
                 <option value="{{ office['_id'] }}" 
                     {% if office['_id']|string() == req['office_id']|string() %}
@@ -43,13 +37,11 @@
                 </option>
             {% endfor %}
         </select>
-    
         {% if who['kind'] == 'OPR' %}
-
             <label>Inicio</label>
-            <input name="start" value="{{ req['start'] }}">
+            <input name="start" type="date" value="{{ req['start'] }}">
             <label>Finalización</label>
-            <input name="finish" value="{{ req['finish'] }}">
+            <input name="finish" type="date" value="{{ req['finish'] }}">
             <label>Estado</label>
             <select name='status'>
                 {% for s in status %}
@@ -63,42 +55,35 @@
                 {% endfor %}
             </select>
             <label>Comentarios</label>
-            <textarea class="TextArea" name="comment">{{ req['comment'] }}</textarea>
-
+            <textarea class="u-full-width" name="comment">{{ req['comment'] }}</textarea>
         {% else %}
-
             <input type="hidden" name="start" value="{{ req['start'] }}">
             <input type="hidden" name="finish" value="{{ req['finish'] }}">
             <input type="hidden" name="status" value="{{ req['status'] }}">
             <input type="hidden" name="result" value="{{ req['result'] }}">
             <input type="hidden" name="comment" value="{{ req['comment'] }}">
-
         {% endif %}
-
         <button>Enviar</button>
-
     </form>
 
     {% if who['kind'] == 'OPR' and _id != 'new/' %}
 
-    <div class="CautionSet">
-
+    <div class="row background-light-gray">
         <p><strong>Usuarios con derechos de edición:</strong></p>
-
             {% for user in users_right%}
                 {{ user['name'] }}
 		{% if not loop.last %}, {% endif %}
             {% endfor %}
 
         <form action='/rights/new/' method='post'>
-            <select name='user_id'>
+            <select class="ten columns" name='user_id'>
                 {% for user in users_list %}
                     <option value="{{ user['_id'] }}">{{ user['name'] }}</option>
                 {% endfor %}
             </select>
             <input type="hidden" name="source" value="request">
             <input type="hidden" name='source_id' value="{{ req['_id'] }}">
-            <button class="MenuCaution">Agregar</button>
+            <button class="two columns">Agregar</button>
         </form>
 
     </div>

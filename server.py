@@ -323,7 +323,7 @@ def requests():
     drafts = replaceOfficeinRequests(r.list(status='0'))
     running = replaceOfficeinRequests(r.list(status='1'))
     done = replaceOfficeinRequests(r.list(status='2'))
-    return render_template('requestlist.html', 
+    return render_template('request/list.html', 
             drafts=drafts,
             running=running,
             done=done,
@@ -364,7 +364,7 @@ def requestNew():
         if case_id != None:
             req['case_id'] = case_id
         _id = 'new/'
-        return render_template('requestform.html', _id=_id, req = req, 
+        return render_template('request/form.html', _id=_id, req = req, 
             status = r.status, results = r.results, cases = Cases().list(), 
             offices = Offices().list(), who=session['user'])
 
@@ -403,7 +403,7 @@ def requestDetail(_id):
             updates_mod.append(element)
         docrels = DocRels().list('request', _id)
         docs = Documents().list()
-        return render_template('requestshow.html', 
+        return render_template('request/show.html', 
                 _id=_id, 
                 req=req, 
                 office=office, 
@@ -428,7 +428,7 @@ def requestEdit(_id):
     #    return redirect('/requests/%s' % _id)
     users_right = Rights().listBySource('request', _id)
     users_list = Users().list()
-    return render_template('requestform.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
+    return render_template('request/form.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
 
 @app.route('/requests/<string:_id>/forward', methods=['GET'])
 def forwardRequest(_id):
@@ -480,7 +480,7 @@ def closeRequest(_id):
         return redirect('/requests/%s' % _id)
     if request.method == 'GET':
         req['result'] = r.results[req['result']]
-        return render_template('requestclose.html', _id=_id, req=req, results=r.results,
+        return render_template('request/close.html', _id=_id, req=req, results=r.results,
                 referrer=request.referrer, who=user)
     else:
         d = Dates().getDate()
