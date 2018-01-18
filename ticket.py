@@ -80,4 +80,12 @@ class Ticket:
         DB('tickets').update(_id, {'status': 'closed'})
     def open(self, _id):
         DB('tickets').update(_id, {'status': 'openned'})
-
+    def getByClient(self, client_id):
+        ids = DB('tickrels').list(filt={'client': client_id})
+        if ids:
+            ret = []
+            for identifier in ids:
+                ret.append(DB('tickets').get(ObjectId(identifier['ticket'])))
+            return ret
+        else:
+            return None

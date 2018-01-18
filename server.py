@@ -905,7 +905,7 @@ def clients():
     if not 'user' in session:
         return redirect('/')
     user = session['user']
-    return render_template('clientlist.html', 
+    return render_template('client/list.html', 
             clients = Clients().list(), who=user) 
 
 @app.route('/clients/new/', methods=['GET', 'POST'])
@@ -928,7 +928,7 @@ def clientNew():
         c = Clients()
         client = emptyDict(c.keys)
         _id = 'new/'
-        return render_template('clientform.html', _id=_id, client=client, 
+        return render_template('client/form.html', _id=_id, client=client, 
             kinds=c.kinds, vulnerables=c.vulnerables, ages=c.ages, who=user)
 
 @app.route('/clients/<string:_id>', methods=['GET', 'POST'])
@@ -944,14 +944,15 @@ def clientDetail(_id):
         return redirect('/clients/%s' % _id)
     else:
         c = Clients()
+        tickets = ticket.Ticket().getByClient(_id)
         client = c.get(_id)
-        return render_template('clientshow.html', 
+        return render_template('client/show.html', 
                 client=client,
                 kinds=c.kinds, 
                 vulnerables=c.vulnerables, 
                 ages=c.ages,
                 has_right = hasRight('client', _id, ['OPR', 'MNR', 'USR']),
-                who=session['user'])
+                year=Dates().getYear(), tickets=tickets, who=session['user'])
 
 @app.route('/clients/<string:_id>/edit')
 def clientEdit(_id):
@@ -960,7 +961,7 @@ def clientEdit(_id):
     if request.method == 'GET':
         c = Clients()
         client = c.get(_id)
-        return render_template('clientform.html', _id = _id, client = client, 
+        return render_template('client/form.html', _id = _id, client = client, 
             kinds=c.kinds, vulnerables=c.vulnerables, ages=c.ages, 
             who=session['user'])
 
@@ -1095,6 +1096,18 @@ def close_ticket():
         return redirect('/login')
     _id = request.form['ticket_id']
     ticket.Ticket().close(_id)
+    return redirect(request.environ['HTTP_REFERER'])
+
+@app.route("/ticket/link", methods=['POST'])
+def linkTicket():
+    if not 'user' in session:
+        return redirect('/login')
+    t = ticket.Ticket()
+    t.year = request.form['year']
+    t.ticket = int(request.form['ticket'])
+    t.update_hash(is_email=False)
+    if t.hash:
+        DB('tickrels').new({'ticket': t.hash, 'client': request.form['client']})
     return redirect(request.environ['HTTP_REFERER'])
 
 @app.route("/ticket/open", methods=['POST'])
