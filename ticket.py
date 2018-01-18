@@ -32,6 +32,7 @@ class Ticket:
         if ret:
             self.hash = str(ret['_id'])
             self.msg  = ret['msg']
+            self.status = ret['status']
         else:
             self.__init__()
     def updateMsg(self, msg):
@@ -73,7 +74,7 @@ class Ticket:
             'year': self.year,
             'email': self.email,
             'status': self.status,
-            'msg': msg
+            'msg': '' 
         })
     def close(self, _id):
         DB('tickets').update(_id, {'status': 'closed'})

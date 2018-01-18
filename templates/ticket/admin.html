@@ -19,27 +19,13 @@
 {{ macro.navTicket(rng, status) }}
    
 {% for ticket in tickets %}
-    <div>
+    <p>
         {% set pos = ticket['msg'].find('\n') %}
         <a href="/ticket/{{ticket['year']}}/{{ticket['ticket']}}">
             <strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>
         </a>
         {{ ticket['msg'][:pos] }}
-    
-        {% if 'status' in ticket and ticket['status'] == 'closed' %}
-            <form class="inline" action="/ticket/open" method="post">
-                <input name="ticket_id" type="hidden" 
-                    value="{{ ticket['_id'] }}">
-                <button class="inline">Reabrir</button>
-            </form>
-        {% else %}
-            <form class="inline" action="/ticket/close" method="post">
-                <input name="ticket_id" type="hidden" 
-                    value="{{ ticket['_id'] }}">
-                <button class="inline">Cerrar</button>
-            </form>
-        {% endif %}
-    </div>
+    </p>
 {% endfor %}
 
 {{ macro.navTicket(rng, status) }}
