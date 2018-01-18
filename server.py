@@ -531,7 +531,7 @@ def complains():
     drafts = replaceOfficeinRequests(complains.list(status='0'))
     running = replaceOfficeinRequests(complains.list(status='1'))
     done = replaceOfficeinRequests(complains.list(status='2'))
-    return render_template('complainlist.html', drafts=drafts, running=running,
+    return render_template('complain/list.html', drafts=drafts, running=running,
         done=done, who=user)
 
 @app.route('/complains/new/', methods=['GET', 'POST'])
@@ -560,7 +560,7 @@ def complainNew():
         o = Offices()
         offices = o.list()
         reviewers = o.list()
-        return render_template('complainform.html', _id=_id, complain=complain,
+        return render_template('complain/form.html', _id=_id, complain=complain,
             status = r.status, results = r.results, cases = Cases().list(),
             offices = offices, reviewers = reviewers, who=session['user'])
 
@@ -595,7 +595,7 @@ def complainDetail(_id):
         updates = joinUserData(Updates().list('complain', _id))
         docrels = DocRels().list('complain', _id)
         docs = Documents().list()
-        return render_template('complainshow.html', 
+        return render_template('complain/show.html', 
                 _id=_id, 
                 complain=complain,
                 office=office,
@@ -621,7 +621,7 @@ def complainEdit(_id):
     reviewers = o.list()
     users_right = Rights().listBySource('complain', _id)
     users_list = Users().list()
-    return render_template('complainform.html', _id=_id, complain=complain, status=r.status, results = r.results, cases=Cases().list(), offices=offices, reviewers=reviewers, users_right=users_right, users_list=users_list, who=user)
+    return render_template('complain/form.html', _id=_id, complain=complain, status=r.status, results = r.results, cases=Cases().list(), offices=offices, reviewers=reviewers, users_right=users_right, users_list=users_list, who=user)
 
 @app.route('/users')
 def users():
