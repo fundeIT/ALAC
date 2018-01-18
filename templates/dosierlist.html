@@ -57,5 +57,23 @@
     </div>
 </div>
 
+{% if who['kind'] in ['OPR', 'MNR'] %}
+
+<div class="row background-light-gray">
+    <div class="two columns center">
+        <a href="/offices">
+            <img src="/static/third/icons/svg/avatar.svg" width="64px">
+        </a>
+    </div>
+    <div class="ten columns">
+        <p><a href="/clients">Clientes</a></p>
+        <p>
+            Usuarios de ALAC
+        </p>
+    </div>
+</div>
+
+
+{% endif %}
 
 {% endblock %}
