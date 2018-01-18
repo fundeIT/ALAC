@@ -41,10 +41,8 @@ class DB:
     def raw(self):
         return self.collection.find().sort([('_id', 1)])
     def get(self, _id):
-        print(_id)
         return self.collection.find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
-        print(doc)
         self.collection.update({'_id': ObjectId(_id)}, {'$set': doc})
 
 # Clases para la consulta y actualización de la base de datos

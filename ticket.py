@@ -6,6 +6,7 @@ class Ticket:
         self.ticket = 0
         self.year = Dates().getYear()
         self.email = ""
+        self.msg = ''
         self.hash = None
         self.referrer = None
         self.threads = None
@@ -27,12 +28,15 @@ class Ticket:
                     'ticket': self.ticket, 
                     'year': self.year
             }
-        print(query)
         ret = db.collection.find_one(query)
         if ret:
             self.hash = str(ret['_id'])
+            self.msg  = ret['msg']
         else:
             self.__init__()
+    def updateMsg(self, msg):
+        self.msg = msg
+        DB('tickets').update(self.hash, {'msg': msg})
     def restore_cookie(self, request):
          if 'ticket' in request.cookies and self.referrer != 'start':
             self.ticket = int(request.cookies.get('ticket'))
@@ -45,7 +49,6 @@ class Ticket:
         self.email = request.form['email']
         self.update_hash()
     def get_documents(self, thread_id):
-        print(self.hash, thread_id)
         db = DB('ticketdocs')
         return db.collection.find({'ticket_id': self.hash, 'thread_id': thread_id})
     def get_threads(self):
@@ -64,7 +67,6 @@ class Ticket:
                 res = self.get_documents(el['_id'])
                 self.docs[el['_id']] = [x for x in res]
             self.threads = t 
-            print(t)
     def append_to_db(self, msg):
         self.hash = DB('tickets').new({
             'ticket': self.ticket,

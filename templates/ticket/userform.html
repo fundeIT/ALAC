@@ -4,6 +4,26 @@
     {% if ticket.hash %}
     <div class="row">
         <h3>Ticket: {{ ticket.ticket }}/{{ ticket.year }}</h3>
+        <p>
+            <strong>{{ ticket.msg }}</strong>
+            {% if who %}
+                [<a href="/ticket/{{ ticket.year }}/{{ ticket.ticket }}/msg">Editar...</a>]
+                {% if ticket.status == 'closed' %}
+                    <form class="inline" action="/ticket/open" method="post">
+                        <input name="ticket_id" type="hidden" 
+                            value="{{ ticket.hash }}">
+                        <button class="inline">Reabrir</button>
+                    </form>
+                {% else %}
+                    <form class="inline" action="/ticket/close" method="post">
+                        <input name="ticket_id" type="hidden" 
+                            value="{{ ticket.hash }}">
+                        <button class="inline">Cerrar</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+
+        </p>
     </div>
     {% endif %}
     {% if ticket.threads %}

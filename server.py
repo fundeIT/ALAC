@@ -1039,6 +1039,24 @@ def get_ticketByID(year, tckt):
         ticket=t, who=user))
     return resp
 
+@app.route("/ticket/<string:year>/<int:tckt>/msg", methods=['GET', 'POST'])
+def editTicketMsg(year, tckt):
+    if not 'user' in session:
+        return redirect('/login')
+    user = session['user']
+    if not user['kind'] in ['MNG', 'OPR']:
+        return redirect('/')
+    t = ticket.Ticket()
+    t.year = year
+    t.ticket = tckt
+    t.update_hash(is_email=False)
+    if request.method == 'POST':
+        msg = request.form['msg']
+        t.updateMsg(msg)
+        return redirect('/ticket/' + year + '/' + str(tckt))
+    else:
+        return render_template('editmsg.html', ticket=t, who=user)
+
 @app.route("/ticket/new", methods=['POST'])
 def new_ticket():
     user = None
@@ -1134,7 +1152,7 @@ def threadEdit(_id):
         t.email = ret['email']
         t.year = ret['year']
         t.get_threads()
-        return render_template("ticket/userform.html", ticket=t, who=user)
+        return redirect('/ticket/' + t.year + '/' + str(t.ticket)) 
 
 @app.route('/ticket/<string:status>')
 def adminTicket(status):
