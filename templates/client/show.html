@@ -1,0 +1,49 @@
+{% import "macros.html" as macro %}
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ client['name'] }}</h2>
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="Button"><a href='/clients/{{ client['_id'] }}/edit'>Editar</a></div>
+
+<p>
+Alias: {{ client['alias'] }}<br/>
+Rango de edad: {{ ages[client['age'] | int ] }}<br/>
+Sexo: {{ client['sex'] }}<br/>
+Sector: {{ kinds[client['kind'] | int ] }}<br/>
+Grupo vulnerable: {{ vulnerables[client['vulnerable'] | int ] }}<br/>
+Organización: {{ client['org'] }}<br/>
+Cargo: {{ client['rol'] }}<br/>
+Municipio: {{ client['city'] }}<br/>
+Teléfonos: {{ client['tel'] }}<br/>
+Correos: {{ client['email'] }}<br/>
+</p>
+
+<h3>Tickets</h3>
+
+{% if tickets %}
+{% for ticket in tickets %}
+     <p>
+        <a href="/ticket/{{ticket['year']}}/{{ticket['ticket']}}">
+            <strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>
+        </a>
+        {{ ticket['msg'] }}
+    </p>
+{% endfor %}
+{% endif %}
+
+
+<p><strong>Vincular ticket:</strong></p>
+
+<form action="/ticket/link" method="post">
+    <input type="hidden" name="client" value="{{ client['_id'] }}">
+    <input class="inline" type="text" name="year" value="{{ year }}" placeholder="Año">
+    <input class="inline" type="text" name="ticket" placeholder="No. de ticket">
+    <button class="inline">Enviar</button>
+</form>
+
+{% endif %}
+
+{% endblock %}
