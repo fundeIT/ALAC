@@ -785,7 +785,7 @@ def docrelNewWithDoc():
         return redirect(request.referrer)
     else:
         doc = {}
-        doc['title'] = request.form['prefix'] + ' - ' + request.form['title']
+        doc['title'] = request.form['title']
         doc['overview'] = ''
         doc['tags'] = ''
         doc['date'] = request.form['date'] 
