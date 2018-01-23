@@ -30,6 +30,7 @@ from attachment import *
 import emailmgr
 import ticket
 import govsearcher
+import iaip
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
@@ -1244,6 +1245,7 @@ application = Application([
     (r"/favicon.ico", StaticFileHandler, {'path': 'static/favicon.ico'}),
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
     (r"/govsearcher", govsearcher.GovSearcher),
+    (r"/iaip", iaip.IAIP),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
 
     (r".*", FallbackHandler, dict(fallback=tr)),
