@@ -71,7 +71,7 @@ def updateTokens():
         start = el['link'].rfind('/') + 1
         end = el['link'].rfind('.txt')
         title = el['link'][start:end].replace('-', ' ')
-        s = str(el['content'])
+        s = title + ' ' + title + ' ' + str(el['content'])
         t = tokenize(s)
         collection.update({'_id': el['_id']}, {'title': title, 'tokens': t})
 
