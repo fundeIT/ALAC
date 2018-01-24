@@ -55,6 +55,10 @@ def tokenize(s):
     for el in d:
         if len(el) <= 2:
             continue
+        if el[-1] in ('s', 'n'):
+            el = el[0:-1]
+        if el[-1] in ('a', 'e', 'o'):
+            el = el[0:-1]
         if el in tokens.keys():
             tokens[el] += 1
         else:
