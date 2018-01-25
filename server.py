@@ -123,7 +123,7 @@ def hasRight(source, source_id, categories):
 @app.before_request
 def before_request():
     f = open('log.txt', 'a')
-    line = str(datetime.datetime.now()) + ' ' + request.remote_addr + ' ' + request.path + '\n'
+    line = str(datetime.datetime.now()) + ' ' + request.remote_addr + ' ' + request.path + ' ' + str(request.accept_languages) + '\n'
     f.write(line)
     f.close()
 
