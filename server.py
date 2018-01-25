@@ -21,6 +21,7 @@ from werkzeug.utils import secure_filename
 # Other supporting libraries
 
 from markdown import markdown
+import datetime
 
 # Own libraries
 
@@ -119,18 +120,12 @@ def hasRight(source, source_id, categories):
 
 # Controllers
 
-"""
 @app.before_request
 def before_request():
-    ''' 
-    Check if communication is secured. If not, it changes to https mode.
-    This function is executed previous proccesing every request.
-    '''
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
-"""
+    f = open('log.txt', 'a')
+    line = str(datetime.datetime.now()) + ' ' + request.remote_addr + ' ' + request.path + '\n'
+    f.write(line)
+    f.close()
 
 @app.route('/')
 def index():
