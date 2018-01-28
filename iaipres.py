@@ -65,17 +65,6 @@ def tokenize(s):
             tokens[el] = 1
     return tokens
 
-def updateTokens():
-    ret = collection.collection.find()
-    for el in ret:
-        start = el['link'].rfind('/') + 1
-        end = el['link'].rfind('.txt')
-        title = el['link'][start:end].replace('-', ' ')
-        s = title + ' ' + title + ' ' + str(el['content'])
-        t = tokenize(s)
-        collection.update({'_id': el['_id']}, {'title': title, 'tokens': t})
-    tfidf()
-
 def tfidf():
     ret = collection.collection.find()
     corpora = {}
@@ -100,6 +89,17 @@ def tfidf():
         for key in el['tfidf'].keys():
             el['tfidf'][key] *= corpora[key]
         collection.update({'_id': el['_id']}, {'tfidf': el['tfidf']})
+
+def updateTokens():
+    ret = collection.collection.find()
+    for el in ret:
+        start = el['link'].rfind('/') + 1
+        end = el['link'].rfind('.txt')
+        title = el['link'][start:end].replace('-', ' ')
+        s = title + ' ' + str(el['content'])
+        t = tokenize(s)
+        collection.update({'_id': el['_id']}, {'title': title, 'tokens': t})
+    tfidf()
 
 def calcSim(t1, t2):
     corpora = list(set(list(t1.keys()) + list(t2.keys())))

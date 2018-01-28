@@ -25,4 +25,3 @@ class IAIP(web.RequestHandler):
         self.write(loader.load("main.html").generate(
             query=query, 
             results=results))
-
