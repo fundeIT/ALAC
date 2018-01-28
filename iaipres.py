@@ -74,6 +74,32 @@ def updateTokens():
         s = title + ' ' + title + ' ' + str(el['content'])
         t = tokenize(s)
         collection.update({'_id': el['_id']}, {'title': title, 'tokens': t})
+    tfidf()
+
+def tfidf():
+    ret = collection.collection.find()
+    corpora = {}
+    ndocs = 0
+    for el in ret:
+        nwords = 0
+        for key in el['tokens'].keys():
+            if key in corpora:
+                corpora[key] += 1
+            else:
+                corpora[key] = 1
+            nwords += el['tokens'][key] 
+        values = el['tokens'].copy()
+        for key in values.keys():
+            values[key] /= nwords
+        collection.update({'_id': el['_id']}, {'tfidf': values})
+        ndocs += 1
+    for key in corpora.keys():
+        corpora[key] = np.log(ndocs / corpora[key])
+    ret = collection.collection.find()
+    for el in ret:
+        for key in el['tfidf'].keys():
+            el['tfidf'][key] *= corpora[key]
+        collection.update({'_id': el['_id']}, {'tfidf': el['tfidf']})
 
 def calcSim(t1, t2):
     corpora = list(set(list(t1.keys()) + list(t2.keys())))
@@ -101,7 +127,7 @@ def rank(s):
     st = tokenize(s)
     ret = collection.collection.find()
     for el in ret:
-        sim = calcSim(st, el['tokens']) 
+        sim = calcSim(st, el['tfidf']) 
         if not sim or sim == 0:
             continue
         rnk = str(np.round(sim, 8))
