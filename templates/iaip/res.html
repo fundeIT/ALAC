@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/skeleton.css">
+        <link rel="stylesheet" href="/css/custom.css">
+    </head>
+    <body>
+        <div class="container">
+            <div id="search" class="row center">
+                <h1>Resoluciones del IAIP</h1>
+                {% include "form.html %}
+            </div>
+            <div id="results" class="row">
+                <h2>Resoluciones similares</h2>
+                {% for item in results %}
+                    <p>
+                        <a href="/iaip/{{ item['_id'] }}">{{ item['title'] }}</a>
+                    </p>
+                {% end %}
+            </div>
+            <hr>
+            <div class="row">
+                <h2>{{ rec['title'] }}</h2>
+                <pre>{{ rec['content'] }}</pre>
+            </div>
+            <hr>
+            <p><small><a href="https://github.com/fundeIT/ALAC/blob/master/iaipres.py">Código fuente</a></small></p>
+        </div>
+    </body>
+</html>
