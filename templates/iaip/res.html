@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/css/normalize.css">
-        <link rel="stylesheet" href="/static/css/skeleton.css">
+        <link rel="stylesheet" href="/static/third/skeleton/css/normalize.css">
+        <link rel="stylesheet" href="/static/third/skeleton/css/skeleton.css">
         <link rel="stylesheet" href="/static/css/custom.css">
     </head>
     <body>
@@ -14,12 +14,12 @@
                 {% include "form.html %}
             </div>
             <div id="results" class="row">
-                <h2>Resoluciones similares</h2>
+                <p><strong>Resoluciones similares</strong></p>
+                <ul><small>
                 {% for item in results %}
-                    <p>
-                        <a href="/iaip/{{ item['_id'] }}">{{ item['title'] }}</a>
-                    </p>
+                    <li><a href="/iaip/{{ item['_id'] }}">{{ item['title'] }}</a></li>
                 {% end %}
+                    </small></ul>
             </div>
             <hr>
             <div class="row">
@@ -27,7 +27,7 @@
                 <pre>{{ rec['content'] }}</pre>
             </div>
             <hr>
-            <p><small><a href="https://github.com/fundeIT/ALAC/blob/master/iaipres.py">Código fuente</a></small></p>
+            <p class="center"><small><a href="https://github.com/fundeIT/ALAC/blob/master/iaipres.py">Código fuente</a></small></p>
         </div>
     </body>
 </html>
