@@ -1,5 +1,7 @@
 from tornado import web, template
 import iaipres
+from db import DB
+from bson.objectid import ObjectId
 
 def search(s):
     n = 25
@@ -25,3 +27,23 @@ class IAIP(web.RequestHandler):
         self.write(loader.load("main.html").generate(
             query=query, 
             results=results))
+
+class Res(web.RequestHandler):
+    def get(self, ID):
+        db = DB('iaipres') 
+        loader = template.Loader("templates/iaip")
+        rec = db.get({'_id': ObjectId(ID)})
+        if not 'similar' in rec:
+            results = search(rec['title'] + ' ' + rec['content'])
+            similar = [str(item['_id']) for item in results]
+            db.update({'_id': ObjectId(ID)}, {'similar': similar})
+        else:
+            similar = rec['similar']
+        length = 6 if len(similar) >= 6 else len(similar)
+        results = []
+        for i in range(1, length):
+            res = db.collection.find_one({'_id': ObjectId(similar[i])})
+            if res:
+                results.append({'_id': res['_id'], 'title': res['title']})
+        print(results)
+        self.write(loader.load("res.html").generate(rec=rec, results=results, query=None)) 

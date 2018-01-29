@@ -11,18 +11,16 @@
         <div class="container">
             <div id="search" class="row center">
                 <h1>Resoluciones del IAIP</h1>
-                <form action="/iaip" method="get">
-                    <input name="query" class="ten columns" type="text" {% if query %}value="{{ query }}"{% end %}>
-                    <button class="two columns">Buscar</button>
-                </form>
+                {% include "form.html %}
             </div>
             <div id="results" class="row">
                 {% for item in results %}
                     <p>
-                        <a href="{{ item['url'] }}">{{ item['title'] }}</a>
+                        <a href="/iaip/{{ item['_id'] }}">{{ item['title'] }}</a>
                     </p>
                 {% end %}
             </div>
+            <hr>
             <p><small><a href="https://github.com/fundeIT/ALAC/blob/master/iaipres.py">Código fuente</a></small></p>
         </div>
     </body>

@@ -1247,10 +1247,11 @@ application = Application([
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
     (r"/govsearcher", govsearcher.GovSearcher),
     (r"/iaip", iaip.IAIP),
+    (r"/iaip/(.+)", iaip.Res),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
 
     (r".*", FallbackHandler, dict(fallback=tr)),
-])
+], debug=trust.debug)
 
 if __name__ == "__main__":
     try:

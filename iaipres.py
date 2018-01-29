@@ -131,7 +131,7 @@ def rank(s):
         if not sim or sim == 0:
             continue
         rnk = str(np.round(sim, 8))
-        rcd = {'title': el['title'], 'url': el['link']}
+        rcd = {'_id': el['_id'], 'title': el['title'], 'url': el['link']}
         if rnk in ranks.keys():
             ranks[rnk].append(rcd)
         else:
