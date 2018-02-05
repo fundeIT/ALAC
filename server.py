@@ -122,16 +122,25 @@ def hasRight(source, source_id, categories):
 
 @app.before_request
 def before_request():
+    """
+    Get information from every request taking date and time, url requested, and client language, platform and browser.
+    This information is appended to 'log.txt' file. Moreover, if protocol request is HTTP, it redirects to HTTPS.
+
+    """
+    # Saving request data to log.txt
     f = open('log.txt', 'a')
-    line = str(datetime.datetime.now()) + ' ' 
-    line += request.remote_addr + ' ' 
-    line += request.path + ' '
-    line += str(request.accept_languages) + ' '
-    line += request.user_agent.platform + ' '
-    line += request.user_agent.browser
+    line = str(datetime.datetime.now()) + ' '    # Date and time
+    line += request.remote_addr + ' '            # Client IP
+    line += request.path + ' '                   # URL requested
+    line += str(request.accept_languages) + ' '  # Accepted languages
+    line += request.user_agent.platform + ' '    # Operative system
+    line += request.user_agent.browser           # Browser
     line += '\n'
     f.write(line)
     f.close()
+    # Checking if request is HTTPS, if ot it redirects
+    if not request.url.startswith('https'):      # Is it HTTPS?
+        return redirect(request.url.replace('http', 'https'))
 
 @app.route('/')
 def index():
@@ -1243,8 +1252,8 @@ tr = WSGIContainer(app)
 
 application = Application([
     (r"/support", MainHandler),
-    (r"/favicon.ico", StaticFileHandler, {'path': 'static/favicon.ico'}),
     (r"/static/(.*)", StaticFileHandler, {'path': 'static'}),
+    (r"/favicon.ico", StaticFileHandler, {'path': 'static/favicon.ico'}),
     (r"/govsearcher", govsearcher.GovSearcher),
     (r"/iaip", iaip.IAIP),
     (r"/iaip/(.+)", iaip.Res),
@@ -1260,7 +1269,7 @@ if __name__ == "__main__":
         print(str(err))
         sys.exit(2)
     debug = False
-    port = 5000
+    port = 80
     for o, a in opts:
         if o in ["-d", "--debug"]:
             debug = True
@@ -1276,5 +1285,5 @@ if __name__ == "__main__":
             "keyfile": trust.key_priv
         })
         http_server.listen(443)
-        # application.listen(port)
+        application.listen(port)
         IOLoop.instance().start()
