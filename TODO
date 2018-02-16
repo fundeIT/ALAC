@@ -10,3 +10,4 @@
   guardado.
 - Considerar poner oficinas en formulario de consultas, para saber a dónde se
   pueden dirigir las peticiones.
+- Log: El servidor devuelve error cuando el cliente no proporciona datos de plataforma, lenguage, etc.
