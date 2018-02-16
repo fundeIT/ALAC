@@ -1,12 +1,3 @@
-body {
-    font-family: "Ubuntu", "Muli", sans-serif;
-    font-size: 14px;
-    /*
-    background: #01b1af;
-    */
-    height: 100%;
-}
-
 input {
     margin-top: 5px;
     margin-bottom: 5px;
