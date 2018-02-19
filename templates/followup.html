@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Seguimiento{% endblock %}
+{% block super %}Seguimiento de casos{% endblock %}
+{% block followup %}background1{% endblock%}
+
+{% block main %}
+
+<div class="row">
+
+    <div class="columns twelve">
+        <img src="/static/third/icons/svg/calendar.svg" width="64px">
+        <h3>Dar seguimiento:</h3>
+        <form action="/ticket" method="post">
+            <input type="text" name="year" placeholder="Año" value="{{ year }}" required>
+            <input type="text" name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
+            <input name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
+            <button class="button-primary">Enviar</button>
+            <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar
+        </form>
+        <p>Luego de hacer tu consulta, si dejas tu dirección de correo,
+        recibirás un número de ticket, con el cual podrás dar seguimiento al
+        requerimiento.</p>
+    </div>
+</div>
+
+{% endblock %}

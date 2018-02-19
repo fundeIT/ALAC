@@ -9,11 +9,16 @@ textarea {
 
 a {
     text-decoration: none;
-    color: #0066CC;
+    color: #376092;
 }
 
 .background1 {
-    background: #69D2E7;
+    background: #376092;
+    color: white;
+}
+
+.background1 a {
+    color: white;
 }
 
 .background2 {
@@ -73,5 +78,35 @@ article img {
 }
 
 .logo {
-    max-width: 40%;
+    max-width: 60%;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.logo-min {
+    height: 1.6em;
+    max-width: 100%;
+}
+
+.middle {
+    position: relative;
+    top: 50%;
+}
+
+.menu {
+    font-size: 75%;
+}
+
+.main-button {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #376092;
+    border-radius: 20px;
+    font-size: 150%;
+}
+
+.main-button:hover {
+    background: #F0F8FF;
 }

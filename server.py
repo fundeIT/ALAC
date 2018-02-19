@@ -38,6 +38,8 @@ app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 
+DEBUG = False
+
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
 def request_analytics(req):
@@ -123,24 +125,30 @@ def hasRight(source, source_id, categories):
 @app.before_request
 def before_request():
     """
-    Get information from every request taking date and time, url requested, and client language, platform and browser.
-    This information is appended to 'log.txt' file. Moreover, if protocol request is HTTP, it redirects to HTTPS.
-
+    Get information from every request taking date and time, url requested, and
+    client language, platform and browser.  This information is appended to
+    'log.txt' file. Moreover, if protocol request is HTTP, it redirects to
+    HTTPS.
     """
     # Saving request data to log.txt
     f = open('log.txt', 'a')
-    line = str(datetime.datetime.now()) + ' '    # Date and time
-    line += request.remote_addr + ' '            # Client IP
-    line += request.path + ' '                   # URL requested
-    line += str(request.accept_languages) + ' '  # Accepted languages
-    line += request.user_agent.platform + ' '    # Operative system
-    line += request.user_agent.browser           # Browser
+    line = str(datetime.datetime.now()) + ' '       # Date and time
+    if request.remote_addr:
+        line += request.remote_addr + ' '           # Client IP
+    line += request.path + ' '                      # URL requested
+    if request.accept_languages:
+        line += str(request.accept_languages) + ' ' # Accepted languages
+    if request.user_agent.platform:
+        line += request.user_agent.platform + ' '   # Operative system
+    if request.user_agent.browser:
+        line += request.user_agent.browser          # Browser
     line += '\n'
     f.write(line)
     f.close()
     # Checking if request is HTTPS, if ot it redirects
-    if not request.url.startswith('https'):      # Is it HTTPS?
-        return redirect(request.url.replace('http', 'https'))
+    if not DEBUG:
+       if not request.url.startswith('https'):      # Is it HTTPS?
+           return redirect(request.url.replace('http', 'https'))
 
 @app.route('/')
 def index():
@@ -846,7 +854,7 @@ def notes():
     for i in range(len(notelist)):
         a = notelist[i]['content']
         notelist[i]['content'] = markdown(a[0:a.find("\r\n\r\n")])
-    return render_template('ticket/notelist.html', notes=notelist, who=user)
+    return render_template('note/list.html', notes=notelist, who=user)
 
 @app.route('/notes/new/', methods=['GET', 'POST'])
 def newNote():
@@ -868,7 +876,7 @@ def newNote():
         note = emptyDict(n.keys)
         note['date'] = Dates().getDate()
         _id = 'new/'
-        return render_template('noteform.html', _id=_id, note=note, who=user)
+        return render_template('note/form.html', _id=_id, note=note, who=user)
 
 @app.route('/notes/<string:_id>', methods=['GET', 'POST'])
 def detailNote(_id):
@@ -893,7 +901,7 @@ def detailNote(_id):
     else:
         note = n.get(_id)
         note['content'] = markdown(note['content'])
-        return render_template('ticket/noteshow.html', _id=_id, note=note, who=user)
+        return render_template('note/show.html', _id=_id, note=note, who=user)
 
 @app.route('/notes/<string:_id>/edit')
 def editNote(_id):
@@ -975,6 +983,14 @@ def clientEdit(_id):
         return render_template('client/form.html', _id = _id, client = client, 
             kinds=c.kinds, vulnerables=c.vulnerables, ages=c.ages, 
             who=session['user'])
+
+
+@app.route('/followup')
+def followUp():
+    user = {}
+    if 'user' in session:
+        user = session['user']
+    return render_template('followup.html', who=user)
 
 @app.route('/data/requests')
 def dataRequest():
@@ -1277,6 +1293,7 @@ if __name__ == "__main__":
             port = int(a)
         else:
             assert False, "unhandled option"
+    DEBUG = debug
     if debug:
         app.run(port=port, host='0.0.0.0', debug=True)
     else:

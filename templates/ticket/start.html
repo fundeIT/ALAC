@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "begin.html" %}
 
 {% block head %}
 
@@ -6,48 +6,30 @@
 
 {% block main %}
 
-<div class="row background-light-gray">
-    ALAC es un servicio gratuito y confidencial de asesoría legal e incidencia. Ofrece asistencia a personas que solicitan información o que desean denunciar irregularidades en alguna institución pública. La asesoría ayuda a identificar: qué documentos solicitar y ante qué oficina hacerlo; cómo redactar una solicitud o denuncia; y qué hacer en caso de denegatoria o falta de respuesta. <a href="/faq">Más información...</a>
-</div>
- 
 <div class="row">
     <div class="six columns">
-        <a href="/ticket"><img src="/static/third/icons/svg/pen-letter.svg" width="64px"></a>
-        <h3>Una nueva consulta:</h3>
-            
-        <a class="button button-primary" href="/ticket">Consultar</a>
-        <p>¿Tienes dudas sobre cómo solicitar información pública? ¿Quieres denunciar un acto irregular o mal uso de recursos públicos? <a href="/ticket">Haz tu consulta</a>.</p>
-
-        <hr>
-        <!-- Begin MailChimp Signup Form -->
-        <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
-        <form action="https://funde.us17.list-manage.com/subscribe/post?u=418b47525b8d70fb92f64c5f8&amp;id=58bde756a2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-   <div id="mc_embed_signup_scroll">
-                    <label for="mce-EMAIL">Suscribase a lista de correo:</label>
-                        <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="correo electrónico" required>
-                            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_418b47525b8d70fb92f64c5f8_58bde756a2" tabindex="-1" value=""></div>
-                                    <div class="clear"><input type="submit" value="Enviar" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-                                        </div>
-    </form>
-
-<!--End mc_embed_signup-->
-
+        <a href="/ticket">
+        <div class="main-button center">
+            <img class="logo-min" src="/static/images/report.png">
+            DENUNCIA
+        </div>
+        </a>
     </div>
     <div class="six columns">
-        <img src="/static/third/icons/svg/calendar.svg" width="64px">
-        <h3>Dar seguimiento:</h3>
-        <form action="/ticket" method="post">
-            <input type="text" name="year" placeholder="Año" value="{{ year }}" required>
-            <input type="text" name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
-            <input name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
-            <button class="button-primary">Enviar</button>
-            <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar
-        </form>
-        <p>Luego de hacer tu consulta, si dejas tu dirección de correo,
-        recibirás un número de ticket, con el cual podrás dar seguimiento al
-        requerimiento.</p>
+        <a href="/ticket">
+        <div class="main-button center">
+            <img class="logo-min" src="/static/images/ask.png">
+            ASESORÁTE
+        </div>
+        </a>
     </div>
-</div>
+    <div class="columns twelve">
+    <a href="followup">
+    <div class="main-button center">
+        REVISA EL ESTADO DE TU CASO
+    </div>
+    </a>
+    </div>
 
+</div>
 {% endblock %}

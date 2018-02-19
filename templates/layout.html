@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>ALAC - Centro de Asesoría Legal Anticorrupción</title>
+        <title>{% block title %}{% endblock %}</title>
         <meta name="description" 
             content="Asesoría legal a peticionarios
                 de infomación y denunciantes de corrupción">
@@ -23,31 +23,43 @@
     </head>
     <body>
         <div class="container">
-           <div class="row center">
-                <img class="u-max-width logo" src="/static/images/alac-logo.svg" alt="ALAC">
-                <br/>
-                <small>
-                    "Tienes derecho a pedir información y a denunciar
-                    irregularidades en los servicios públicos"
-                </small>
-            </div>
-            <nav class="center">
-                <ul>
-                    <li><a href="/start">Inicio</a></li>
-                    <li><a href="/ticket">Consultar</a></li>
-                    <li><a href="/notes">Blog</a></li>
+            <div class="row center menu uppercase">
+                <div class="columns one">
+                </div>
+                <div class="columns two">
+                    <a href="/start">Inicio</a>
+                </div>
+                <div class="columns two {% block about %}{% endblock%}">
+                    <a href="/faq">Sobre ALAC</a>
+                </div>
+                <div class="columns two {% block followup %}{% endblock%}">
+                    <a href="/followup">Seguimiento</a>
+                </div>
+                <div class="columns two {% block dosiers %}{% endblock%}">
+                    <a href="/dosiers">Expedientes</a>
+                </div>
+                <div class="columns two {% block blog %}{% endblock%}">
+                    <a href="/notes">Blog</a>
+                </div>
+                <div class="columns one">
+                </div>
                     {% if who['kind'] in ['MNG', 'OPR'] %}
                         <li><a href="/ticket/openned">Tickets</a></li>
                     {% endif %}
-                    <li><a href="/dosiers">Expedientes</a></li>
-                    <li><a href="/faq">Acerca de</a></li>
-                </ul>
-            </nav>
+            </div>
 
+
+            <div class="row center menu background1">
+                <div class="columns two ">
+                    <img class="logo-min" src="/static/images/alac-logo-min.png" alt="ALAC">
+                </div>
+                <div class="columns ten uppercase" >
+                    {% block super %}{% endblock %}
+                </div>
+            </div>
             {% block main %}{% endblock %}
             
-            <hr/>
-            <div class="row center">
+            <div class="row">
                 <small>
                     <div class="four columns">
                         <img class="u-full-width" src="/static/images/funde-ti.svg">

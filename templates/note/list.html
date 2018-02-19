@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Blog{% endblock %}
+{% block super %}Blog de ALAC{% endblock %}
+{% block blog %}background1{% endblock %}
+
+{% block main %}
+
+{% for note in notes %}
+    <div class="row">
+        <a href="/notes/{{ note['_id'] }}">{{ note['title'] }}</a>.
+        <small>{{ note['date'] }}</small>
+    </div>
+{% endfor %}
+
+{% endblock %}
