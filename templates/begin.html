@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ALAC - Centro de Asesoría Legal Anticorrupción</title>
+        <meta name="description" 
+            content="Asesoría legal a peticionarios
+                de infomación y denunciantes de corrupción">
+        <meta name="author" content="FUNDE/TI - El Salvador">
+        <meta name="keywords" content="acceso,información,denuncia,corrupción">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', 
+                filename='third/skeleton/css/normalize.css') }}">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', 
+                filename='third/skeleton/css/skeleton.css') }}">
+        <link rel="stylesheet" 
+            href="{{ url_for('static', filename='css/custom.css') }}">
+
+        {% block head %}{% endblock %}
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row menu center uppercase">
+                <div class="columns one">
+                </div>
+                <div class="columns two background1">
+                    <a href="/start">Inicio</a>
+                </div>
+                <div class="columns two">
+                    <a href="/faq">Sobre ALAC</a>
+                </div>
+                <div class="columns two">
+                    <a href="/followup">Seguimiento</a>
+                </div>
+                <div class="columns two">
+                    <a href="/dosiers">Expedientes</a>
+                </div>
+                <div class="columns two">
+                    <a href="/notes">Blog</a>
+                </div>
+                <div class="columns one">
+                </div>
+                    {% if who['kind'] in ['MNG', 'OPR'] %}
+                        <li><a href="/ticket/openned">Tickets</a></li>
+                    {% endif %}
+            </div>
+
+            <div class="row center">
+                <img class="u-max-width logo" src="/static/images/alac-logo.png" alt="ALAC">
+            </div>
+            <div class="row center background1 menu uppercase">
+                Pedir información y denunciar irregularidades en los servicios
+                públicos es tu derecho. En ALAC te brindamos asesoría legal de
+                forma confidencial y gratuita.
+            </div>
+            {% block main %}{% endblock %}
+            
+            <div class="row">
+                <small>
+                    <div class="four columns">
+                        <img class="u-full-width" src="/static/images/funde-ti.svg">
+                    </div>
+                   <div class="four columns">
+                       <br/>
+                        ALAC es un servicio de la 
+                        <a href="http://www.funde.org">
+                            Fundación Nacional para el Desarrollo
+                        </a>
+                        (FUNDE), capítulo de 
+                        <a href="http://transparency.org">
+                            Transparencia Internacional
+                        </a> en El Salvador
+                    </div>
+                    <div class="four columns">
+                        <br/>
+                        Telefónos: +503 2209-5324, +503 7887-2688 ||
+                        Correo electrónico: 
+                        <a href="mailto:alac@funde.org">
+                            alac@funde.org
+                        </a> ||
+                        Dirección: <a href="https://goo.gl/maps/vYB8vzGS4Q52"
+                            target="_blank">
+                                Calle Arturo Ambrogi No. 411, Col. Escalón.
+                                San Salvador, El Salvador, C.A.
+                        </a>
+                    </div>
+ 
+                </small>
+            </div>
+        </div>
+    </body>
+</html>
