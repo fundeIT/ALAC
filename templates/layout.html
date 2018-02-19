@@ -31,19 +31,14 @@
                 <div class="columns two">
                     <a href="/start">Inicio</a>
                 </div>
-                <div class="columns two {% block about %}{% endblock%}">
+                <div class="columns three {% block about %}{% endblock%}">
                     <a href="/faq">Sobre ALAC</a>
                 </div>
-                <div class="columns two {% block followup %}{% endblock%}">
-                    <a href="/followup">Seguimiento</a>
-                </div>
-                <div class="columns two {% block dosiers %}{% endblock%}">
+                <div class="columns three {% block dosiers %}{% endblock%}">
                     <a href="/dosiers">Expedientes</a>
                 </div>
-                <div class="columns two {% block blog %}{% endblock%}">
+                <div class="columns three {% block blog %}{% endblock%}">
                     <a href="/notes">Blog</a>
-                </div>
-                <div class="columns one">
                 </div>
                     {% if who['kind'] in ['MNG', 'OPR'] %}
                         <li><a href="/ticket/openned">Tickets</a></li>
