@@ -3,6 +3,10 @@ body {
     font-weight: 300;
 }
 
+.container {
+    width: 100%;
+}
+
 textarea {
     height: 240px;
 }
@@ -109,4 +113,32 @@ article img {
 
 .main-button:hover {
     background: #F0F8FF;
+}
+
+@media only screen and (max-width: 620px) {
+    #menubar {
+        position: absolute;
+        top: 0px;
+        right: 20px;
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+        color: blue;
+    }
+    #menubar:hover {
+        top: 0;
+        left: 5px;
+        opacity: 0.95;
+        width: 100%;
+        height: 75%;
+        z-index: 99;
+        background: white;
+        color: black;
+        text-align: left;
+    }
+}
+@media only screen and (min-width: 621px) {
+    #menuheader {
+        display: none;
+    }
 }
