@@ -109,6 +109,7 @@ article img {
     border: 1px solid #376092;
     border-radius: 20px;
     font-size: 150%;
+    box-shadow: 5px 5px 5px #D0D6DD;
 }
 
 .main-button:hover {

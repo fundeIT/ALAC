@@ -2,24 +2,28 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<div class="row">
-<h3>{{ req['overview'] }}</h3>
+{% block title %}{{ req['overview'] }}{% endblock %}
+{% block super %}Solicitudes de información tramitadas por ALAC{% endblock %}
+{% block dosiers %}background1{% endblock %}
 
-{% if has_right %}
-	{% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
-		<a class="button" href='/requests/{{ req['_id'] }}/edit'>Editar</a>
-	{% endif %}
-	{% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
-	    {% if req['status'] == 'Borrador' %}
-			<a class="button" href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
-	    {% elif req['status'] == 'En trámite' %}
-			<a class="button" href="/requests/{{ req['_id'] }}/close">Cerrar</a>
-	    {% endif %}
-	{% endif %}
-{% endif %}
+<div class="row">
+    <h3>{{ req['overview'] }}</h3>
+
+    {% if has_right %}
+        {% if req['status'] != 'Cerrada' or who['kind'] == 'OPR' %}
+            <a class="button" href='/requests/{{ req['_id'] }}/edit'>Editar</a>
+        {% endif %}
+        {% if who['kind'] in ['OPR', 'USR', 'MNG'] %} 
+            {% if req['status'] == 'Borrador' %}
+                <a class="button" href="/requests/{{ req['_id'] }}/forward">Tramitar</a>
+            {% elif req['status'] == 'En trámite' %}
+                <a class="button" href="/requests/{{ req['_id'] }}/close">Cerrar</a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
 </div>
 
-<div class="row">
+<div class="row background-light-gray">
     <div class="six columns">
         Petición: {{ req['ref'] }}<br/>
         Fecha: {{ req['date'] }}<br/>
@@ -31,7 +35,7 @@
         Correo: {{ office['email'] }}<br/>
     </div>
 </div>
-<div class="row">
+<div class="row background-light-gray">
     <div class="six columns">
         Estado: {{ req['status'] }}<br/>
         Resultado: {{ req['result'] }}
