@@ -1,0 +1,58 @@
+{% import "macros.html" as macro %}
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>{{ office['name'] }}<br/></h2>
+
+{% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+
+<div class="Button"><a href='/offices/{{ office['_id'] }}/edit'>Editar</a></div>
+
+{% endif %}
+
+<p>
+Siglas: {{ office['acronym'] }}<br/>
+Oficial: {{ office['officer'] }}<br/>
+Correo: {{ office['email'] }}<br/>
+Teléfono: {{ office['phone'] }}<br/>
+</p>
+
+<p><strong>Notas:</strong></p>
+
+{{ office['notes'] | safe }}
+
+<nav>
+    <ul>
+        <li><a href="#" class="tablinks" 
+               onclick="openTab(event, 'requests')">Peticiones</a></li>
+        <li><a href="#" class="tablinks" 
+               onclick="openTab(event, 'complains')">Denuncias</a></li>
+        <li><a href="#" class="tablinks" 
+                onclick="openTab(event, 'updates')">Comentarios</a></li>
+    </ul>
+</nav>
+
+<div id="requests" class="tabcontent">
+
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <div class="MenuItem"><a href="/requests/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
+    {% endif %}
+    {{ macro.listItems('requests', requests) }}
+</div>
+
+<div id="complains" class="tabcontent">
+    
+    {% if who['kind'] in ['OPR', 'USR', 'MNR'] %}
+        <div class="MenuItem"><a href="/complains/new/?office_id={{ office['_id'] }}">Nueva...</a></div>
+    {% endif %}
+    {{ macro.listItems('complains', complains) }}
+</div>
+
+<div id="updates" class="tabcontent">
+    {{ macro.listUpdates(updates, 'office', office['_id'], who['_id'],
+    has_right, date) }} 
+</div>
+
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
+
+{% endblock %}

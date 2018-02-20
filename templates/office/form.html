@@ -1,0 +1,20 @@
+{% extends "form.html" %}
+{% block form %}
+
+    <form action="/offices/{{ _id }}" method="post">
+        <label>Nombre</label>
+        <input class="TextInput" name="name" value="{{ office['name'] }}">
+        <label>Siglas</label>
+        <input class="TextInput" name="acronym" value="{{ office['acronym'] }}">
+        <label>Oficial de información</label>
+        <input class="TextInput" name="officer" value="{{ office['officer'] }}">
+        <label>Correo electrónico</label>
+        <input class="TextInput" type="email" name="email" value="{{ office['email'] }}">
+        <label>Teléfono</label>
+        <input class="TextInput" name="phone" value="{{ office['phone'] }}">
+        <label>Notas</label>
+        <textarea name="notes" class="TextArea">{{ office['notes'] }}</textarea>
+        <button>Enviar</button>
+    </form>
+
+{% endblock %}
