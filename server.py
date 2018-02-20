@@ -284,7 +284,7 @@ def offices():
         user = session['user']
     else:
         user = {}
-    return render_template('officelist.html', offices = Offices().list(), 
+    return render_template('office/list.html', offices = Offices().list(), 
         who=user)
     
 @app.route('/offices/new/', methods=['GET', 'POST'])
@@ -300,7 +300,7 @@ def officeNew():
     else:
         office = emptyDict(Offices().keys)
         _id = 'new/'
-        return render_template('officeform.html', _id=_id, office=office, 
+        return render_template('office/form.html', _id=_id, office=office, 
             who=user)
 
 @app.route('/offices/<string:_id>', methods=['GET', 'POST'])
@@ -315,7 +315,7 @@ def officeDetail(_id):
         requests = replaceOfficeinRequests(Requests().list(office_id=_id))
         complains = replaceOfficeinRequests(Complains().list(office_id=_id))
         updates = joinUserData(Updates().list('office', _id))
-        return render_template('officeshow.html', 
+        return render_template('office/show.html', 
                 requests=requests,
                 complains=complains, 
                 office=office, 
@@ -330,7 +330,7 @@ def officeEdit(_id):
         user = session['user']
     else:
         user = {}
-    return render_template('officeform.html', _id = _id, office = Offices().get(_id), who=user)
+    return render_template('office/form.html', _id = _id, office = Offices().get(_id), who=user)
 
 @app.route('/requests')
 def requests():

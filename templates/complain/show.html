@@ -1,5 +1,10 @@
 {% import "macros.html" as macro %}
 {% extends "layout.html" %}
+
+{%block title %}{{ complain['overview'] }}{% endblock %}
+{%block super %}Denuncias presentadas por ALAC{% endblock %}
+{%block dosiers %}background1{% endblock %}
+
 {% block main %}
 
 <div class="row">
