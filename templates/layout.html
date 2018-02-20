@@ -3,23 +3,15 @@
     <head>
         <meta charset="utf-8">
         <title>{% block title %}{% endblock %}</title>
-        <meta name="description" 
-            content="Asesoría legal a peticionarios
-                de infomación y denunciantes de corrupción">
+        <meta name="description" content="Asesoría legal a peticionarios de infomación y denunciantes de corrupción">
         <meta name="author" content="FUNDE/TI - El Salvador">
         <meta name="keywords" content="acceso,información,denuncia,corrupción">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" 
-            href="{{ url_for('static', 
-                filename='third/skeleton/css/normalize.css') }}">
-        <link rel="stylesheet" 
-            href="{{ url_for('static', 
-                filename='third/skeleton/css/skeleton.css') }}">
-        <link rel="stylesheet" 
-            href="{{ url_for('static', filename='css/custom.css') }}">
-
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/skeleton.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         {% block head %}{% endblock %}
-
     </head>
     <body>
         <div class="container">
