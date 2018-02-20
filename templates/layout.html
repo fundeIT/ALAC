@@ -17,8 +17,7 @@
         <div class="container">
             <div id="menubar" class="row center menu uppercase">
                 <div class="columns one">
-                    <img id="menuheader" src="/static/images/menu.svg">
-                    &nbsp
+                    <img id="menuheader" src="/static/images/menu.svg">&nbsp
                 </div>
                 <div class="columns two">
                     <a href="/start">Inicio</a>
@@ -32,26 +31,34 @@
                 <div class="columns three {% block blog %}{% endblock%}">
                     <a href="/notes">Blog</a>
                 </div>
-                    {% if who['kind'] in ['MNG', 'OPR'] %}
-                        <li><a href="/ticket/openned">Tickets</a></li>
-                    {% endif %}
             </div>
-
-
-            <div class="row center menu background1">
-                <div class="columns two ">
+            <div class="row center menu uppercase">
+                    {% if who['kind'] in ['MNG', 'OPR'] %}
+                       <a href="/ticket/openned">Tickets</a> |
+                       <a href="/clients">Usuarios</a> |
+                    {% endif %}
+                    <a href="/requests">Peticiones</a> |
+                    <a href="/complains">Denuncias</a> |
+                    <a href="/offices">Oficinas</a>
+            </div>
+            <div class="row menu background1">
+                <div class="columns two center">
                     <img class="logo-min" src="/static/images/alac-logo-min.png" alt="ALAC">
                 </div>
                 <div class="columns ten uppercase" >
-                    {% block super %}{% endblock %}
+                    <big>{% block super %}{% endblock %}</big>
                 </div>
             </div>
+            <div class="row">
+                &nbsp
+            </div>
+
             {% block main %}{% endblock %}
             
             <div class="row">
                 <small>
                     <div class="four columns">
-                        <img class="u-full-width" src="/static/images/funde-ti.svg">
+                        <img class="logo-min" src="/static/images/funde-ti.svg">
                     </div>
                    <div class="four columns">
                        <br/>

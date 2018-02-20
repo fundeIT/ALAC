@@ -1,4 +1,9 @@
 {% extends "form.html" %}
+
+{% block title %}Usuarios de ALAC{% endblock %}
+{% block super %}Usuarios de ALAC{% endblock %}
+{% block dosiers %}background1{% endblock %}
+
 {% block form %}
 
     <form action="/clients/{{ _id }}" method="post">
