@@ -1049,6 +1049,17 @@ def get_ticket():
         resp.set_cookie('email', '', expires=0)
     return resp
 
+@app.route("/report")
+def report():
+    user = None
+    if 'user' in session:
+        user = session['user']
+    t = ticket.Ticket()
+    t.update_referrer(request)
+    resp = make_response(render_template("ticket/report.html", 
+        ticket=t, who=user))
+    return resp
+
 @app.route("/ticket/<string:year>/<int:tckt>")
 def get_ticketByID(year, tckt):
     # Checking privileges. Only managers and operators are

@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Denuncia la corrupción{% endblock %}
+{% block super %}Denuncia la corrupción{% endblock %}
+
+{% block main %}
+    <div class="row">
+        Puedes presentar tu denuncia llamando al 2209-5324, contactándonos vía
+        Whatsapp al 7887-1688, enviando un correo a <a
+         href="mailto:alac@funde.org">alac@funde.org</a> o llenando el siguiente
+     formulario.
+    </div>
+   <div class="row">
+        <div class="eight columns">
+            <form action="/ticket/new" method="post">
+                <input name="year" type="hidden" value="{{ ticket.year }}">
+                <input name="ticket" type="hidden" value="{{ ticket.ticket }}">
+                <input name="ticket_id" type="hidden" value="{{ ticket.hash }}">
+                <input name="email" type="hidden" value="{{ ticket.email }}">
+                <textarea class="u-full-width" name="msg" rows="10"
+                    placeholder="Escribe tu denuncia" required></textarea>
+                <div id="msgalert" class="alert"></div>
+                <button class="button-primary" id="send">Enviar</button>
+            </form>
+        </div>
+        <div class="four columns">
+                <div class="center">
+                    <img src="/static/third/icons/svg/checklist.svg" width="64px">
+                </div>
+                <p>
+                    <small>
+                        Tu denuncia es confidencial. Describe la irregularidad
+                        que deseas reportar, brindando nombres, lugares, fechas,
+                        circunstancias y cualquier detalle adicional. No es
+                        necesario que te identifiques, pero si quieres dar
+                        seguimiento proporciona un número de teléfono o un
+                        correo electrónico.
+                    </small>
+                <p>
+        </div>
+    </div>
+{% endblock %}
