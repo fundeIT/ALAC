@@ -915,7 +915,7 @@ def editNote(_id):
     note = n.get(_id)
     users_right = Rights().listBySource('note', _id)
     users_list = Users().list()
-    return render_template('noteform.html', _id=_id, note=note, 
+    return render_template('note/form.html', _id=_id, note=note, 
             users_right=users_right, users_list=users_list, 
             who=session['user'])
 
