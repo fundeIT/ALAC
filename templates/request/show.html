@@ -23,24 +23,24 @@
     {% endif %}
 </div>
 
-<div class="row background-light-gray">
-    <div class="six columns">
+<div class="row">
+    <div class="six columns background-light-gray">
         Petición: {{ req['ref'] }}<br/>
         Fecha: {{ req['date'] }}<br/>
         Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
     </div>
-    <div class="six columns">
+    <div class="six columns background-light-gray">
         Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
         Oficial de información: {{ office['officer'] }}<br/>
         Correo: {{ office['email'] }}<br/>
     </div>
 </div>
-<div class="row background-light-gray">
-    <div class="six columns">
+<div class="row">
+    <div class="six columns background-light-gray">
         Estado: {{ req['status'] }}<br/>
         Resultado: {{ req['result'] }}
     </div>
-    <div class="six columns">
+    <div class="six columns background-light-gray">
         {% if req['start'] %}
         <p>
         Inicio del trámite: {{ req['start'] }}<br/>

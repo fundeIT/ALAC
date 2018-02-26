@@ -8,7 +8,7 @@
 {% endmacro %}
 
 {% macro listUpdates(updates, source, source_id, user_id, has_right, date, operator=False) %}
-<div class="row">
+<div class="row background-light-gray">
     {% for update in updates %}
     <p>
             {{ update['date'] }}:
@@ -37,6 +37,7 @@
 {% endmacro %}
 
 {% macro listDocs(docrels, source, source_id, prefix, has_right, date) %}
+<div class="row background-light-gray">
         {% for dr in docrels %}
         <div class="row">
         {{ dr['date'] }}: <a href="/docs/{{ dr['_id'] }}">{{ dr['title'] }}</a>
@@ -63,4 +64,5 @@
         <button>Enviar</button>
     </form>
     {% endif %}
+</div>
 {% endmacro %} 
