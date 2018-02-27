@@ -18,7 +18,7 @@ def notify(year, ticket, email):
 Su ticket en trámite con la ALAC contiene nueva información.
 Para consultarlo, abra en su navegador la siguiente dirección:
 
-https://alac.funde.org/start
+https://alac.funde.org/followup
 
 En el cuadro "Seguimiento", introduzca los siguientes datos:
 
