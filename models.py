@@ -127,13 +127,13 @@ class Requests:
         }
         if case_id != None:
             return dbconn().requests.find({'case_id': case_id}, 
-                fields).sort('touched', -1)
+                fields).sort('date', 1)
         elif office_id != None:
-            return dbconn().requests.find({'office_id': office_id}, fields).sort('touched', -1)
+            return dbconn().requests.find({'office_id': office_id}, fields).sort('date', 1)
         elif status != None:
-            return dbconn().requests.find({'status': status}, fields).sort('touched', -1)
+            return dbconn().requests.find({'status': status}, fields).sort('date', 1)
         else:
-            return dbconn().requests.find({}, fields).sort('touched', -1)
+            return dbconn().requests.find({}, fields).sort('date', 1)
     def get(self, _id):
         request = dbconn().requests.find_one({'_id': ObjectId(_id)})
         if not 'start' in request:
@@ -200,13 +200,13 @@ class Complains:
     def list(self, case_id=None, office_id=None, status=None):
         fields = {'case_id': 1, 'office_id': 1, 'ref': 1, 'date': 1, 'overview': 1, 'touched': 1}
         if case_id != None:
-            return dbconn().complains.find({'case_id': case_id}, fields).sort('touched', -1)
+            return dbconn().complains.find({'case_id': case_id}, fields).sort('date', 1)
         elif office_id != None:
-            return dbconn().complains.find({'office_id': office_id}, fields).sort('touched', -1)
+            return dbconn().complains.find({'office_id': office_id}, fields).sort('date', 1)
         elif status != None:
-            return dbconn().complains.find({'status': status}, fields).sort('touched', -1)
+            return dbconn().complains.find({'status': status}, fields).sort('date', 1)
         else:
-            return dbconn().complains.find({}, fields).sort('touched', -1)
+            return dbconn().complains.find({}, fields).sort('date', 1)
     def get(self, _id):
         complain = dbconn().complains.find_one({'_id': ObjectId(_id)})
         for key in ['reviewer_id', 'start', 'finish']:
