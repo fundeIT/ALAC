@@ -1,4 +1,5 @@
 from markdown import markdown
+from bson.objectid import ObjectId
 from models import *
 
 class Ticket:
@@ -89,3 +90,14 @@ class Ticket:
             return ret
         else:
             return None
+
+def updated(month):
+    fout = open('updated.txt', 'w')
+    db = DB('threads')
+    res = db.collection.find({'date': {'$regex': month}})
+    tickets = [item['ticket_id'] for item in res]
+    db = DB('tickets')
+    for ID in tickets:
+        item = db.collection.find_one({'_id': ObjectId(ID)})
+        fout.write("%s-%s\n" % (item['year'], item['ticket'])) 
+    fout.close()
