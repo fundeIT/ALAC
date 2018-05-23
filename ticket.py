@@ -92,6 +92,7 @@ class Ticket:
             return None
 
 def updated(month):
+    # month: YYYY-MM
     fout = open('updated.txt', 'w')
     db = DB('threads')
     res = db.collection.find({'date': {'$regex': month}})
