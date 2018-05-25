@@ -1022,7 +1022,7 @@ def start():
         ticket = request.cookies.get('ticket')
         email = request.cookies.get('email')
         remember = True
-    return render_template("ticket/start.html", year=year, ticket=ticket, email=email, remember=remember, who=user)
+    return render_template("start.html", year=year, ticket=ticket, email=email, remember=remember, who=user)
         
 @app.route("/ticket", methods=['GET', 'POST'])
 def get_ticket():

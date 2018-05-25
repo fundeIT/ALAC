@@ -1,0 +1,12 @@
+body {
+    background-image: url("/static/images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+}
