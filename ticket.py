@@ -102,3 +102,14 @@ def updated(month):
         item = db.collection.find_one({'_id': ObjectId(ID)})
         fout.write("%s-%s\n" % (item['year'], item['ticket'])) 
     fout.close()
+
+def upd(month):
+    fout = open('upd.txt', 'w')
+    db = DB('updates')
+    res = db.collection.find({'date': {'$regex': month}})
+    for item in res:
+        fout.write("%s: %s\n" % (item['source'], item['source_id'])) 
+    fout.close()
+
+if __name__ == '__main__':
+    upd('2018-05')
