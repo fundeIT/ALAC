@@ -8,25 +8,20 @@
 {% block main %}
 
 <div class="row">
-<h3>Tickets de usuarios</h3>
-</div>
-
-<div class="row background-light-gray">
-    Esta es la sección de administración de tickets. Contiene la lista de
-    tickets según su estado (abiertos o cerrados).
+<h2>Tickets</h2>
 </div>
 
 {{ macro.navTicket(rng, status) }}
-   
+
+<p>
 {% for ticket in tickets %}
-    <p>
-        {% set pos = ticket['msg'].find('\n') %}
         <a href="/ticket/{{ticket['year']}}/{{ticket['ticket']}}">
             <strong>{{ ticket['ticket'] }}/{{ ticket['year'] }}</strong>
         </a>
-        {{ ticket['msg'][:pos] }}
-    </p>
+        {{ ticket['msg'] }}
+        <br/>
 {% endfor %}
+</p>
 
 {{ macro.navTicket(rng, status) }}
    
