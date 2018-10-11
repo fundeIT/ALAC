@@ -1,14 +1,23 @@
 #!/usr/bin/env python
+#
 # Get tickets updated during the indicated month
+#
 # (2018) Jaime Lopez <jailop AT gmail DOT com>
 
+# Python libraries
 import sys
 from bson.objectid import ObjectId
 
+# Own libraries
 from models import DB 
 
 def updated(month):
-    # month: YYYY-MM
+    """
+    Lock for every new thread created during
+    the indicated month. Next, it get data for
+    the respective tichet. Output is sent to
+    a TXT predefined file.
+    """
     fout = open('updated.txt', 'w')
     db = DB('threads')
     res = db.collection.find({'date': {'$regex': month}})

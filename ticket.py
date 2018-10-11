@@ -1,5 +1,8 @@
+# Standard libraries
 from markdown import markdown
 from bson.objectid import ObjectId
+
+# Own libraries
 from models import *
 
 class Ticket:
@@ -20,13 +23,13 @@ class Ticket:
         db = DB('tickets')
         if is_email:
             query = {
-                    'ticket': self.ticket, 
-                    'email': self.email, 
+                    'ticket': self.ticket,
+                    'email': self.email,
                     'year': self.year
             }
         else:
             query = {
-                    'ticket': self.ticket, 
+                    'ticket': self.ticket,
                     'year': self.year
             }
         ret = db.collection.find_one(query)
@@ -68,14 +71,14 @@ class Ticket:
                 t.append(el)
                 res = self.get_documents(el['_id'])
                 self.docs[el['_id']] = [x for x in res]
-            self.threads = t 
+            self.threads = t
     def append_to_db(self, msg):
         self.hash = DB('tickets').new({
             'ticket': self.ticket,
             'year': self.year,
             'email': self.email,
             'status': self.status,
-            'msg': '' 
+            'msg': ''
         })
     def close(self, _id):
         DB('tickets').update(_id, {'status': 'closed'})
@@ -91,25 +94,6 @@ class Ticket:
         else:
             return None
 
-def updated(month):
-    # month: YYYY-MM
-    fout = open('updated.txt', 'w')
-    db = DB('threads')
-    res = db.collection.find({'date': {'$regex': month}})
-    tickets = [item['ticket_id'] for item in res]
-    db = DB('tickets')
-    for ID in tickets:
-        item = db.collection.find_one({'_id': ObjectId(ID)})
-        fout.write("%s-%s\n" % (item['year'], item['ticket'])) 
-    fout.close()
-
-def upd(month):
-    fout = open('upd.txt', 'w')
-    db = DB('updates')
-    res = db.collection.find({'date': {'$regex': month}})
-    for item in res:
-        fout.write("%s: %s\n" % (item['source'], item['source_id'])) 
-    fout.close()
 
 if __name__ == '__main__':
     upd('2018-05')
