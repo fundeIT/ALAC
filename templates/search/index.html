@@ -1,0 +1,48 @@
+{% import 'macros.html' as macro %}
+{% extends "layout.html" %}
+
+{% block title %}Buscar{% endblock %}
+{% block search %}background1{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="row center">
+        <form action="/search" method="post"> 
+            <input class="columns eight" name="words" value="{{ words }}"
+                placeholder="Palabras de búsqueda">
+            <button class="columns two">Buscar</button>
+        </form>
+    </div>
+    <div class="row">
+        <small class="columns eight">
+            <strong>Nota:</strong> Indique las palabras de búsqueda separadas por espacio.
+            También puede utilizar los operadores "OR", "AND" y "NOT", así como
+            el comodín "*" para indicar la raíz de una palabra (Ej. "condicion*").
+        </small>
+    </div>
+    {% if results %}
+    <hr/>
+    <div class="row">
+            {% for el in results %}
+            <p>
+                <small>
+                {% if el['kind'] == 'request' %}
+                Solicitud de información:
+                {% else %}
+                Denuncia:
+                {% endif %}
+                </small><br/>
+                <a href="{{ el['path'] }}">{{ el['title'] }}</a>. 
+                <br/>
+                <small>
+                {{ el['office'] }}
+                ({{ el['date'] }}).
+                </small>
+            </p>
+            {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

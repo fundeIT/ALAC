@@ -1,63 +1,65 @@
+# searcher.py
+# Functions for creating, indexing, and searching
+# 
+# These functions are been implemented on Whoosh library, a Python search engine framework.
+# Searches are for requests and complains resources.
+#
+# (2018) Jaime Lopez <jailop AT gmail DOT com>
+
 from whoosh.index import create_in, open_dir
-from whoosh.fields import Schema, TEXT, ID 
 from whoosh.qparser import QueryParser
-import models
+from whoosh.fields import *
+import os.path
 
-DIR = 'indexdir'
+# Own libraries
+from models import *
 
-def get_schema():
-    return Schema(
-        title=TEXT(stored=True), 
-        path=ID(stored=True), 
-        kind=TEXT(stored=True),
-        date=TEXT(stored=True), 
-        content=TEXT
-    )
+def create():
+    """
+    This function defines an scheme to index the website resouces and creates a storage
+    to keep the generated indexes. The storage is a directory called "index". This function
+    only have to be run one time, at the beginning.
+    """
+    schema = Schema(
+                title=TEXT(stored=True), 
+                office=TEXT(stored=True),
+                date=TEXT(stored=True), 
+                path=ID(unique=True, stored=True),
+                kind=TEXT(stored=True), 
+                content=TEXT
+            )
+    if not os.path.exists("index"):
+        os.mkdir("index")
+    ix = create_in("index", schema)
 
-def update_requests():
-    ix = create_in(DIR, get_schema())
+def store_documents(resource, name):
+    ix = open_dir("index")
     writer = ix.writer()
-    req = models.Requests()
-    for item in req.list():
-        item = req.get(item['_id'])
-        writer.add_document(
-                title = item['overview'],
-                path = str(item['_id']),
-                kind = 'request',
-                date = item['date'],
-                content = item['detail']
-        )
+    list = resource.list()
+    for el in list:
+        doc = resource.get(el['_id'])
+        if doc['status'] in ['1', '2']:
+            office = Offices().get(doc['office_id'])['name']
+            writer.add_document(
+                    title = doc['overview'],
+                    office = office,
+                    date = doc['date'],
+                    path = "/%ss/%s" % (name, str(el['_id'])),
+                    kind = name,
+                    content = "%s %s %s" % (doc['overview'], office, doc['detail'])
+            )
     writer.commit()
 
-def update_complains():
-    ix = create_in(DIR, get_schema())
-    writer = ix.writer()
-    print(writer)
-    req = models.Complains()
-    for item in req.list():
-        item = req.get(item['_id'])
-        print(item)
-        writer.add_document(
-                title = item['overview'],
-                path = str(item['_id']),
-                kind = 'complain',
-                date = item['date'],
-                content = item['detail']
-        )
-    writer.commit()
+def indexer():
+    store_documents(Requests(), "request")
+    store_documents(Complains(), "complain")
 
-def search(qry):
-    ix = open_dir(DIR)
-    print(ix.schema)
+def search(words):
+    ix = open_dir("index")
+    ret = []
     with ix.searcher() as searcher:
-        query = QueryParser('content', ix.schema).parse(qry)
-        print(query)
-        res = searcher.search(query)
-        if res:
-            print(res[0])
-        else:
-            print('No results')
-
-
-if __name__ == '__main__':
-    search('This')
+        query = QueryParser("content", ix.schema).parse(words)
+        results = searcher.search(query)
+        for el in results:
+            ret.append(dict(el)) 
+    return ret

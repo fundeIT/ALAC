@@ -32,6 +32,7 @@ import emailmgr
 import ticket
 import govsearcher
 import iaip
+import searcher
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
@@ -1270,6 +1271,22 @@ def dosiers():
     else:
         user = {}
     return render_template('dosierlist.html', who=user)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = None
+    if request.method == 'GET':
+        return render_template('search/index.html', words="", results=None, who=user)
+    else:
+        words = request.form['words']
+        if len(words) == 0:
+            return render_template('search/index.html', words="", results=None, who=user)
+        else:
+            results = searcher.search(words)
+            return render_template('search/index.html', words=words, results=results, who=user)
 
 class MainHandler(RequestHandler):
     def get(self):
