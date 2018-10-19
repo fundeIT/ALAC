@@ -42,7 +42,7 @@ def store_documents(resource, name):
         if doc['status'] in ['1', '2']:
             office = Offices().get(doc['office_id'])['name']
             content = "%s %s %s" % (doc['overview'], office, doc['detail'])
-            content = unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower()
+            content = str(unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower())
             writer.add_document(
                     title = doc['overview'],
                     office = office,
@@ -58,7 +58,7 @@ def indexer():
     store_documents(Complains(), "complain")
 
 def search(words):
-    words = unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower()
+    words = str(unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower())
     ix = open_dir("index")
     ret = []
     with ix.searcher() as searcher:
