@@ -6,6 +6,7 @@
 #
 # (2018) Jaime Lopez <jailop AT gmail DOT com>
 
+import unicodedata
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 from whoosh.fields import *
@@ -40,13 +41,15 @@ def store_documents(resource, name):
         doc = resource.get(el['_id'])
         if doc['status'] in ['1', '2']:
             office = Offices().get(doc['office_id'])['name']
+            content = "%s %s %s" % (doc['overview'], office, doc['detail'])
+            content = unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower()
             writer.add_document(
                     title = doc['overview'],
                     office = office,
                     date = doc['date'],
                     path = "/%ss/%s" % (name, str(el['_id'])),
                     kind = name,
-                    content = "%s %s %s" % (doc['overview'], office, doc['detail'])
+                    content = content
             )
     writer.commit()
 
@@ -55,6 +58,7 @@ def indexer():
     store_documents(Complains(), "complain")
 
 def search(words):
+    words = unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower()
     ix = open_dir("index")
     ret = []
     with ix.searcher() as searcher:
