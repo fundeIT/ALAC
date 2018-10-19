@@ -44,7 +44,7 @@ def store_documents(resource, name):
             office = Offices().get(doc['office_id'])['name']
             content = "%s %s %s" % (doc['overview'], office, doc['detail'])
             content = str(unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower())
-            writer.add_document(
+            writer.update_document(
                     title = doc['overview'],
                     office = office,
                     date = doc['date'],

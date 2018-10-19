@@ -11,6 +11,14 @@
 
 {% block main %}
 
+<div class="row center">
+    <form action="/search" method="post"> 
+        <input class="columns eight" name="words" value="{{ words }}"
+            placeholder="Palabras de búsqueda">
+        <button class="columns two">Buscar</button>
+    </form>
+</div>
+
 <div class="row background-light-gray">
     <div class="two columns center">
         <a href="/requests">
