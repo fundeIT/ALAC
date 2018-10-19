@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # searcher.py
 # Functions for creating, indexing, and searching
 # 
@@ -58,12 +59,18 @@ def indexer():
     store_documents(Complains(), "complain")
 
 def search(words):
-    words = str(unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower())
+    w = str(unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower())
     ix = open_dir("index")
     ret = []
     with ix.searcher() as searcher:
-        query = QueryParser("content", ix.schema).parse(words)
+        query = QueryParser("content", ix.schema).parse(w)
         results = searcher.search(query)
         for el in results:
             ret.append(dict(el)) 
+    f = open('log-search.txt', 'a')
+    f.write("%s - %s [%d]\n" % (Dates().getDate(), words, len(ret)))
+    f.close()
     return ret
+
+if __name__ == '__main__':
+    indexer()
