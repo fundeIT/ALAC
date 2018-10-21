@@ -37,7 +37,10 @@ class DB:
     def count(self, sel={}):
         return self.collection.count(sel)
     def list(self, skip=0, limit=25, filt=None, order=1):
-        return self.collection.find(filt).sort([('_id', order)]).skip(skip).limit(limit)
+        if limit <= 0:
+            return self.collection.find(filt).sort([('_id', order)])
+        else:
+            return self.collection.find(filt).sort([('_id', order)]).skip(skip).limit(limit)
     def raw(self):
         return self.collection.find().sort([('_id', 1)])
     def get(self, _id):

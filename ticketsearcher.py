@@ -32,24 +32,26 @@ def create():
     ix = create_in("index-ticket", schema)
 
 def indexer():
+    counter = 0
     tickets = DB('tickets')
     threads = DB('threads')
     ix = open_dir("index-ticket")
     writer = ix.writer()
-    for el in tickets.list():
+    for el in tickets.list(limit=-1):
+        counter += 1
         ticket_id = str(el['_id'])
         content = el['msg']
         thrs = threads.list(filt={'ticket_id': ticket_id})
         for thr in thrs:
             content += ' ' + thr['msg'] 
         content = str(unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower())
-        print(content)
         writer.update_document(
                 title = el['msg'],
                 path = "/ticket/%s/%s" % (el['year'], str(el['ticket'])),
                 content = content
         )
     writer.commit()
+    print("%d documentos actualizados" % counter)
 
 def search(words):
     w = str(unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower())
