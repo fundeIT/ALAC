@@ -1291,10 +1291,11 @@ def search():
 
 @app.route('/ticket/search', methods=['GET', 'POST'])
 def ticket_search():
-    if 'user' in session:
-        user = session['user']
-    else:
-        user = None
+    if not 'user' in session:
+        return redirect('/login')
+    user = session['user']
+    if not user['kind'] in ['MNG', 'OPR']:
+        return redirect('/')
     if request.method == 'GET':
         return render_template('ticket/search.html', words="", results=None, who=user)
     else:
