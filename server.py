@@ -33,6 +33,7 @@ import ticket
 import govsearcher
 import iaip
 import searcher
+import ticketsearcher
 
 app = Flask(__name__)
 app.secret_key = trust.secret_key
@@ -1287,6 +1288,22 @@ def search():
         else:
             results = searcher.search(words)
             return render_template('search/index.html', words=words, results=results, who=user)
+
+@app.route('/ticket/search', methods=['GET', 'POST'])
+def ticket_search():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = None
+    if request.method == 'GET':
+        return render_template('ticket/search.html', words="", results=None, who=user)
+    else:
+        words = request.form['words']
+        if len(words) == 0:
+            return render_template('ticket/search.html', words="", results=None, who=user)
+        else:
+            results = ticketsearcher.search(words)
+            return render_template('ticket/search.html', words=words, results=results, who=user)
 
 class MainHandler(RequestHandler):
     def get(self):

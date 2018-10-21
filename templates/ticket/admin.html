@@ -10,7 +10,14 @@
 <div class="row">
 <h2>Tickets</h2>
 </div>
-
+<div class="row center">
+    <form action="/ticket/search" method="post"> 
+        <input class="columns eight" name="words" value="{{ words }}"
+            placeholder="Palabras de búsqueda">
+        <button class="columns two">Buscar</button>
+    </form>
+</div>
+ 
 {{ macro.navTicket(rng, status) }}
 
 <p>
