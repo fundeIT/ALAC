@@ -97,9 +97,10 @@ class Ticket:
         clients = DB('tickrels').list(filt={'ticket': self.hash})
         if not clients:
             return None
-        client_id = clients[0]['client']
-        client = DB('clients').get(client_id)
-        return client
+        for el in clients:
+            client_id = el['client']
+            client = DB('clients').get(client_id)
+            return client
 
 if __name__ == '__main__':
     upd('2018-05')
