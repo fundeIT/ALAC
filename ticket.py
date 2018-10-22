@@ -93,7 +93,13 @@ class Ticket:
             return ret
         else:
             return None
-
+    def getClient(self):
+        clients = DB('tickrels').list(filt={'ticket': self.hash})
+        if not clients:
+            return None
+        client_id = clients[0]['client']
+        client = DB('clients').get(client_id)
+        return client
 
 if __name__ == '__main__':
     upd('2018-05')

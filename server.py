@@ -1077,7 +1077,7 @@ def get_ticketByID(year, tckt):
     t.update_hash(is_email=False)
     t.get_threads()
     resp = make_response(render_template("ticket/userform.html", 
-        ticket=t, who=user))
+        ticket=t, client=t.getClient(), who=user))
     return resp
 
 @app.route("/ticket/<string:year>/<int:tckt>/msg", methods=['GET', 'POST'])

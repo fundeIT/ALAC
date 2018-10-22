@@ -2,11 +2,21 @@
 
 {% block main %}
     {% if ticket.hash %}
-    <div class="row">
-        <h3>Ticket: {{ ticket.ticket }}/{{ ticket.year }}<br/>
-        <small>{{ ticket.msg }}</small>
-        </h3>
+        <a id="start"></a>
+        <div class="row">
+            <h3>Ticket: {{ ticket.ticket }}/{{ ticket.year }}<br/>
+            <small>{{ ticket.msg }}</small>
+            </h3>
+        </div>
         {% if who %}
+            {% if client %}
+            <div class="row background-light-gray">
+                Usuario: <a href="/clients/{{ client['_id'] }}">{{ client['name'] }}</a><br/>
+                Teléfono: {{ client['tel'] }}<br/>
+                Correo: {{ client['email'] }}
+            </div>
+            {% endif %}
+            <div class="row">
             <a class="button" href="/ticket/{{ ticket.year }}/{{ ticket.ticket }}/msg">Editar</a>
             {% if ticket.status == 'closed' %}
                 <form class="inline" action="/ticket/open" method="post">
@@ -21,12 +31,15 @@
                     <button class="inline">Cerrar</button>
                 </form>
             {% endif %}
+            </div>
         {% endif %}
-    </div>
     {% endif %}
     {% if ticket.threads %}
         {% for thread in ticket.threads %}
             {% set thrd = thread['_id'] %}
+            {% if loop.last %}
+                <a id="last"></a>
+            {% endif %}
             <div {% if thread['name'] != '' %} class="row background-white-gray" {% else %} class="row background-light-gray" {% endif %}>
                 <p class="border-bottom">
                     <small>
@@ -36,6 +49,12 @@
                         {% endif %}
                         {% if who %}
                             [<a href="/threads/{{ thread['_id'] }}/edit">Editar...</a>]
+                        {% endif %}
+                        {% if loop.index == 1 %}
+                            [<a href="#last">Ir al final</a>]
+                        {% endif %}
+                        {% if loop.last %}
+                            [<a href="#start">Ir al inicio</a>]
                         {% endif %}
                     </small>
                 </p>
