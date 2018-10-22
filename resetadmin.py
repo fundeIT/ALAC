@@ -10,18 +10,30 @@
 
 import models
 
-dbUsers = models.Users()
-admin = dbUsers.getByName('admin')
-if admin: 
-    # Does it exist? Yes
-    admin['password'] = '1234'
-    admin['kind'] = 'OPR'
-    dbUsers.update(admin['_id'], admin)
-else:
-    admin = {
-        'name': 'admin', 
-        'email': 'admin@localhost', 
-        'password': '1234',
-        'kind': 'OPR'
-    }
-    dbUsers.new(admin)
+def ResetAdminCredentials():
+    dbUsers = models.Users()
+    admin = dbUsers.getByName('admin')
+    if admin: 
+        # Does it exist? Yes
+        admin['password'] = '1234'
+        admin['kind'] = 'OPR'
+        dbUsers.update(admin['_id'], admin)
+    else:
+        admin = {
+            'name': 'admin', 
+            'email': 'admin@localhost', 
+            'password': '1234',
+            'kind': 'OPR'
+        }
+        dbUsers.new(admin)
+
+def TestResetAdminCredentials():
+    ResetAdminCredentials()
+    dbUsers = models.Users()
+    admin = dbUsers.getByName('admin')
+    assert admin
+    assert admin['password'] == dbUsers.encrypt('1234')
+    assert admin['kind'] == 'OPR'
+
+if __name__ == '__main__':
+    ResetAdminCredentials()
