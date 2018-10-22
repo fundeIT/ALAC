@@ -73,4 +73,6 @@ def search(words):
     return ret
 
 if __name__ == '__main__':
+    # If you run this script, the indexer function is launched.
+    # So, a storage must exist, otherwise you'll get an error.
     indexer()
