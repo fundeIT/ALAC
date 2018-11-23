@@ -29,8 +29,10 @@
                 <small>
                 {% if el['kind'] == 'request' %}
                 Solicitud de información:
-                {% else %}
+                {% elif el['kind'] == 'complain'  %}
                 Denuncia:
+                {% else %}
+                Nota:
                 {% endif %}
                 </small><br/>
                 <a href="{{ el['path'] }}">{{ el['title'] }}</a>. 
