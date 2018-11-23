@@ -34,6 +34,25 @@ def create():
         os.mkdir("index")
     ix = create_in("index", schema)
 
+def store_notes():
+    resource = Notes()
+    ix = open_dir("index")
+    writer = ix.writer()
+    list = resource.list()
+    for el in list:
+        doc = resource.get(el['_id'])
+        content = "%s %s" % (doc['title'], doc['content'])
+        content = str(unicodedata.normalize('NFD', content).encode('ascii', 'ignore').lower())
+        writer.update_document(
+                title = doc['title'],
+                office = "",
+                date = doc['date'],
+                path = "/notes/%s" % str(el['_id']),
+                kind = "note",
+                content = content
+        )
+    writer.commit()
+
 def store_documents(resource, name):
     ix = open_dir("index")
     writer = ix.writer()
@@ -57,6 +76,7 @@ def store_documents(resource, name):
 def indexer():
     store_documents(Requests(), "request")
     store_documents(Complains(), "complain")
+    store_notes()
 
 def search(words):
     w = str(unicodedata.normalize('NFD', words).encode('ascii', 'ignore').lower())
