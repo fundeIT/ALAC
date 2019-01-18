@@ -11,7 +11,7 @@ function openTab(evt, tabName) {
     if (tabName) {
         el = document.getElementById(tabName).style.display = "block";
 		// el.className += " active";
-        // evt.currentTarget.className += " active";
+        evt.currentTarget.className += " active";
     }
     else {
         tabcontent = document.getElementsByClassName("tabcontent");
