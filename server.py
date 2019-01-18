@@ -156,7 +156,7 @@ def before_request():
 def index():
     if 'user' in session:
         user = session['user']
-        return redirect('/notes')
+        return redirect('/start')
     else:
         user = {}
         if 'user_id' in request.cookies:
