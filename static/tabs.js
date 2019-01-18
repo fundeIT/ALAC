@@ -19,6 +19,7 @@ function openTab(evt, tabName) {
         tablinks = document.getElementsByClassName("tablinks");
         tablinks[0].className = tablinks[0].className += " active";
     }
+    window.scrollTo(0,0);
 }
 
 window.onload = function() {
