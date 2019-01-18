@@ -3,7 +3,16 @@
 {% block main %}
 <br/>
 
-<div class="row  background-light-gray">
+
+<nav>
+    <ul class="tab">
+        <li><a href="#dosiers" class="tablinks" onclick="openTab(event, 'dosiers')">Búsquedas en expedientes</a></li>
+        <li><a href="#report" class="tablinks" onclick="openTab(event, 'report')">Consultas y denuncias</a></li>
+        <li><a href="#followup" class="tablinks" onclick="openTab(event, 'followup')">Seguimiento de casos</a></li>
+    </ul>
+</nav>
+
+<div id="dosiers" class="row tabcontent">
     <div class="four columns">
         <div class="center">
             <img src="/static/third/icons/svg/folder-ribbon.svg" width="48px">
@@ -27,7 +36,8 @@
     </form>
     </div>
 </div>
-<div class="row background-light-gray">
+
+<div id="report" class="row tabcontent">
     <div class="four columns">
         <div class="center">
             <img src="/static/third/icons/svg/checklist.svg" width="48px">
@@ -55,7 +65,8 @@
         </form>
     </div>
 </div>
-<div class="row background-light-gray">
+
+<div id="followup" class="row tabcontent">
     <div class="four columns">
         <div class="center">
             <img src="/static/third/icons/svg/calendar.svg" width="48px">
@@ -74,13 +85,17 @@
     <div class="columns eight">
         <strong>Seguimiento</strong><br/><br/>
         <form action="/ticket" method="post">
-            <input type="text" name="year" placeholder="Año" value="{{ year }}" required>
-            <input type="text" name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
-            <input name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
+            <input class="u-full-width" type="text" name="year" placeholder="Año" value="{{ year }}" required>
+            <input class="u-full-width" type="text" name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
+            <input class="u-full-width" name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
             <button class="button-primary">Enviar</button>
             <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar
         </form>
     </div>
 
 </div>
+
+
+<script src="{{ url_for('static', filename='tabs.js') }}"></script>
+
 {% endblock %}
