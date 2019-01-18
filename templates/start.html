@@ -1,30 +1,85 @@
 {% extends "begin.html" %}
 
 {% block main %}
+<br/>
 
-<div class="row">
-    <div class="six columns">
-        <a href="/ticket">
-        <div class="main-button center">
-            <img class="logo-min" src="/static/images/report.png">
-            DENUNCIA
+<div class="row  background-light-gray">
+    <div class="four columns">
+        <div class="center">
+            <img src="/static/third/icons/svg/folder-ribbon.svg" width="48px">
         </div>
-        </a>
+        <p>
+            <small>
+                Puede consultar expedientes de solicitudes de información,
+                apelaciones y denuncias tramitadas por ALAC. Cada expediente
+                contiene un registro del trámite realizado, las solicitudes
+                o escritos formulados y los documentos entregados por las
+                instituciones.
+            </small>
+        </p>
     </div>
-    <div class="six columns">
-        <a href="/ticket">
-        <div class="main-button center">
-            <img class="logo-min" src="/static/images/ask.png">
-            ASESORATE
+    <div class="columns eight">
+    <strong>Búsqueda en expedientes</strong><br/><br/>
+    <form action="/search" method="post"> 
+        <input class="u-full-width" name="words" value="{{ words }}"
+                                                placeholder="Palabras de búsqueda">
+        <button class="">Buscar</button>
+    </form>
+    </div>
+</div>
+<div class="row background-light-gray">
+    <div class="four columns">
+        <div class="center">
+            <img src="/static/third/icons/svg/checklist.svg" width="48px">
         </div>
-        </a>
+        <p>
+            <small>
+                Su consulta o denuncia es confidencial. Describa su requerimiento
+                de información pública o la irregularidad que desea
+                reportar.  Entre los datos, si es pertinente, mencione:
+                nombres, lugares, períodos o fechas, circunstancias,
+                etc. Si desea dar seguimiento, indique sus datos de
+                contacto.
+            </small>
+        <p>
     </div>
-    <div class="columns twelve">
-    <a href="followup">
-    <div class="main-button center">
-        REVISA EL ESTADO DE TU CASO
+    <div class="eight columns">
+        <form action="/ticket/new" method="post">
+            <input name="year" type="hidden" value="2019">
+            <input name="ticket" type="hidden" value="0">
+            <input name="ticket_id" type="hidden" value="None">
+            <label>Consultas y denuncias</label>
+            <textarea class="u-full-width" name="msg" rows="10" placeholder="Describa su consulta o denuncia" required></textarea>
+            <input name="email" type="email" placeholder="Correo electrónico">
+            <button class="button-primary" id="send">Enviar</button>
+        </form>
     </div>
-    </a>
+</div>
+<div class="row background-light-gray">
+    <div class="four columns">
+        <div class="center">
+            <img src="/static/third/icons/svg/calendar.svg" width="48px">
+        </div>
+        <p>
+            <small>
+                Luego de hacer su consulta, si ha indicado su dirección de correo,
+                recibirá un número de ticket, con el cual podrá dar
+                seguimiento al requerimiento. Si no cuenta con su número de
+                ticket, puede llamar a las oficinas de ALAC para que se lo
+                brinden. Recuerde que el servicio es confidencial.
+            </small>
+        </p>
+
+    </div>
+    <div class="columns eight">
+        <strong>Seguimiento</strong><br/><br/>
+        <form action="/ticket" method="post">
+            <input type="text" name="year" placeholder="Año" value="{{ year }}" required>
+            <input type="text" name="ticket" value="{{ ticket }}" placeholder="Número de ticket" required>
+            <input name="email" type="email" value="{{ email }}" placeholder="Correo electrónico" required>
+            <button class="button-primary">Enviar</button>
+            <input type="checkbox" name="remember" {% if remember %}checked{% endif %}>Recordar
+        </form>
     </div>
 
 </div>

@@ -186,7 +186,7 @@ def login():
         if user:
             user['_id'] = str(user['_id'])
             session['user'] = user
-            resp = make_response(redirect('/'))
+            resp = make_response(redirect('/start'))
             if 'remember' in request.form:
                 exp = datetime.datetime.now() + datetime.timedelta(days=30)
                 resp.set_cookie('user_id', user['_id'], expires=exp)
