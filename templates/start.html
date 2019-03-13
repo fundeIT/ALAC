@@ -6,11 +6,37 @@
 
 <nav>
     <ul class="tab">
+        <li><a href="#dosiers" class="tablinks" onclick="openTab(event, 'dosiers')">Buscar</a></li>
         <li><a href="#report" class="tablinks active" onclick="openTab(event, 'report')">Denunciar</a></li>
         <li><a href="#followup" class="tablinks" onclick="openTab(event, 'followup')">Seguimiento</a></li>
-        <li><a href="#dosiers" class="tablinks" onclick="openTab(event, 'dosiers')">Buscar</a></li>
     </ul>
 </nav>
+
+<div id="dosiers" class="row tabcontent">
+    <div class="four columns">
+        <div class="center">
+            <img src="/static/third/icons/svg/folder-ribbon.svg" width="48px">
+        </div>
+        <p>
+            <small>
+                Puede consultar expedientes de solicitudes de información,
+                apelaciones y denuncias tramitadas por ALAC. Cada expediente
+                contiene un registro del trámite realizado, las solicitudes
+                o escritos formulados y los documentos entregados por las
+                instituciones.
+            </small>
+        </p>
+    </div>
+    <div class="columns eight">
+    <strong>Búsqueda en expedientes</strong><br/><br/>
+    <form action="/search" method="post"> 
+        <input class="u-full-width" name="words" value="{{ words }}"
+                                                placeholder="Palabras de búsqueda">
+        <button class="">Buscar</button>
+    </form>
+    </div>
+</div>
+
 
 <div id="report" class="row tabcontent">
     <div class="four columns">
@@ -69,32 +95,6 @@
     </div>
 
 </div>
-
-<div id="dosiers" class="row tabcontent">
-    <div class="four columns">
-        <div class="center">
-            <img src="/static/third/icons/svg/folder-ribbon.svg" width="48px">
-        </div>
-        <p>
-            <small>
-                Puede consultar expedientes de solicitudes de información,
-                apelaciones y denuncias tramitadas por ALAC. Cada expediente
-                contiene un registro del trámite realizado, las solicitudes
-                o escritos formulados y los documentos entregados por las
-                instituciones.
-            </small>
-        </p>
-    </div>
-    <div class="columns eight">
-    <strong>Búsqueda en expedientes</strong><br/><br/>
-    <form action="/search" method="post"> 
-        <input class="u-full-width" name="words" value="{{ words }}"
-                                                placeholder="Palabras de búsqueda">
-        <button class="">Buscar</button>
-    </form>
-    </div>
-</div>
-
 
 
 <script src="{{ url_for('static', filename='tabs.js') }}"></script>
