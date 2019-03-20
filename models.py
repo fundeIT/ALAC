@@ -19,6 +19,8 @@ class Dates:
         return self.now.strftime("%Y-%m-%d")
     def getDatePath(self):
         return self.now.strftime("%Y/%m/")
+    def getDateByMonth(self):
+        return self.now.strftime("%Y%02m")
     def getYear(self):
         return self.now.strftime("%Y")
     def getMonth(self):

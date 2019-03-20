@@ -16,6 +16,7 @@ from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
 from flask import Flask, request, render_template, redirect, session, \
                   send_file, make_response, jsonify, Response
+from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
 
 # Other supporting libraries
@@ -35,6 +36,8 @@ import iaip
 import searcher
 import ticketsearcher
 
+##############################################################################
+
 app = Flask(__name__)
 app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
@@ -43,6 +46,18 @@ app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 DEBUG = False
 
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
+
+##############################################################################
+
+api = Api(app)
+
+class AppStart(Resource):
+    def get(self):
+        return {'message': 'Hello, world'}
+
+api.add_resource(AppStart, '/api/v1/appstats')
+
+##############################################################################
 
 def request_analytics(req):
     print(req.path)
@@ -129,11 +144,12 @@ def before_request():
     """
     Get information from every request taking date and time, url requested, and
     client language, platform and browser.  This information is appended to
-    'log.txt' file. Moreover, if protocol request is HTTP, it redirects to
+    a log file. Moreover, if protocol request is HTTP, it redirects to
     HTTPS.
     """
     # Saving request data to log.txt
-    f = open('log.txt', 'a')
+    logfile = './log/hits/' + Dates().getDateByMonth()
+    f = open(logfile, 'a')
     line = str(datetime.datetime.now()) + ' '       # Date and time
     if request.remote_addr:
         line += request.remote_addr + ' '           # Client IP

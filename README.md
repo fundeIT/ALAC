@@ -7,7 +7,7 @@ This app supports ALAC's information system. Right now it includes recording inf
 ## Requeriments
 
 - Python 3.0
-- Python libraries: pymongo, flask, markdown
+- Python libraries: pymongo, flask, markdown, numpy, whoosh
 - MongoDB
 
 ## Installation
