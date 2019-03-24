@@ -16,6 +16,7 @@ from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
 from flask import Flask, request, render_template, redirect, session, \
                   send_file, make_response, jsonify, Response
+from flask_restful import reqparse, abort, Api, Resource
 from werkzeug.utils import secure_filename
 
 # Other supporting libraries
@@ -39,6 +40,14 @@ app = Flask(__name__)
 app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
+
+api = Api(app)
+
+class ApiTest(Resource):
+    def get(self):
+        return {'hello': 'world'}
+
+api.add_resource(ApiTest, '/api/test')
 
 DEBUG = False
 
