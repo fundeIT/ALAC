@@ -6,6 +6,7 @@ import os
 import sys
 import getopt
 import json
+import datetime
 
 # Import specific libraries for web deploying
 
@@ -16,7 +17,7 @@ from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
 from flask import Flask, request, render_template, redirect, session, \
                   send_file, make_response, jsonify, Response
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from werkzeug.utils import secure_filename
 
 # Other supporting libraries
@@ -50,12 +51,63 @@ ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 ##############################################################################
 
 api = Api(app)
+parser = reqparse.RequestParser()
+parser.add_argument('startdate', type=str, help='Starting date')
+parser.add_argument('enddate', type=str, help='Ending date')
+parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
+parser.add_argument('limit', type=int, default=10, help='Records by page')
 
 class AppStart(Resource):
     def get(self):
         return {'message': 'Hello, world'}
 
+class apiRequests(Resource):
+    def get(self):
+        args = parser.parse_args()
+        if args['enddate'] == None:
+            args['enddate'] = datetime.date.today()
+        if args['startdate'] == None:
+            args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
+        db = DB('requests')
+        ret = db.collection.find({
+            'date': {
+                '$lte': args['enddate'],
+                '$gte': args['startdate']
+                },
+            'status': {
+                '$gte': '1',
+                '$lte': '2'
+                }
+        }).skip(args['page'] * args['limit']).limit(args['limit'])
+        res = []
+        for el in ret:
+            el['_id'] = str(el['_id'])
+            del el['touched']
+            if el['status'] == '1':
+                el['status'] = 'En trámite'
+            else:
+                el['status'] = 'Cerrada'
+            el['result'] = Requests().results[el['result']]
+            el['office'] = Offices().get(el['office_id'])['name'] 
+            updates = Updates().list('request', el['_id'])
+            el['updates'] = []
+            for upd in updates:
+                del upd['_id']
+                del upd['source']
+                del upd['source_id']
+                del upd['user_id']
+                el['updates'].append(upd)
+            docrels = DocRels().list('request', el['_id'])
+            el['documents'] = []
+            for doc in docrels:
+                doc['_id'] = str(doc['_id'])
+                doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
+                el['documents'].append(doc)
+            res.append(el)
+        return res
+
 api.add_resource(AppStart, '/api/v1/appstats')
+api.add_resource(apiRequests, '/api/v1/requests')
 
 ##############################################################################
 
