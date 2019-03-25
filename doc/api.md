@@ -13,28 +13,28 @@ Los párametros para usar la API son los siguientes:
 
 Se desean obtener las peticiones de información realizadas por ALAC durante el año 2018:
 
-- startdate = 2018-01-01
-- enddate = 2018-12-31
-- page = 0 (valor por defecto)
-- limit = 25 (las primeras 25)
+    startdate=2018-01-01
+    enddate=2018-12-31
+    page=0 (valor por defecto)
+    limit=25 (las primeras 25)
 
-El URL quedaría así:
+El URL queda así:
 
 <https://alac.funde.org/api/v1/requests?startdate=2018-01-01&enddate=2018-12-31&page=0&limit=25>
 
-Para ver las siguientes 25, solo hay que cambiar page=1, etc.
+Para obtener las siguientes 25 peticiones, solo hay que cambiar a `page=1` y así sucesivamente.
 
 La estructura de cada registro es la siguiente (los principales campos):
 
-- \_id: Código de identificación único
-- date: Fecha de elaboración de la petición
-- overview: resumen de la petición
-- detail: detalle de la petición
-- start: Fecha de inicio del trámite
-- end: Fecha de finalización del trámite
-- status: Estado de la petición (en trámite o cerrada)
-- result: Resultado del trámite
-- comment: Comentarios
-- office: Nombre de la oficina
-- updates: Anotaciones de actualización del trámite (bitácora)
-- documents: Documentos asociados a la petición
+- `_id`: Código de identificación único
+- `date`: Fecha de elaboración de la petición
+- `overview`: resumen de la petición
+- `detail`: detalle de la petición
+- `start`: Fecha de inicio del trámite
+- `end`: Fecha de finalización del trámite
+- `status`: Estado de la petición (en trámite o cerrada)
+- `result`: Resultado del trámite
+- `comment`: Comentarios
+- `office`: Nombre de la oficina
+- `updates`: Anotaciones de actualización del trámite (bitácora)
+- `documents`: Documentos asociados a la petición
