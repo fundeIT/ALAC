@@ -87,7 +87,7 @@ class apiRequests(Resource):
         for el in ret:
             el['_id'] = str(el['_id'])
             el['url'] = 'https://alac.funde.org/requests/' + el['_id']
-            if 'touched' in el.keys:
+            if 'touched' in el.keys():
                 del el['touched']
             if el['status'] == '1':
                 el['status'] = 'En trámite'
