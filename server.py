@@ -87,7 +87,8 @@ class apiRequests(Resource):
         for el in ret:
             el['_id'] = str(el['_id'])
             el['url'] = 'https://alac.funde.org/requests/' + el['_id']
-            del el['touched']
+            if 'touched' in el.keys:
+                del el['touched']
             if el['status'] == '1':
                 el['status'] = 'En trámite'
             else:
@@ -100,7 +101,8 @@ class apiRequests(Resource):
                 del upd['_id']
                 del upd['source']
                 del upd['source_id']
-                del upd['user_id']
+                if 'user_id' in upd.keys():
+                    del upd['user_id']
                 el['updates'].append(upd)
             docrels = DocRels().list('request', el['_id'])
             el['documents'] = []
