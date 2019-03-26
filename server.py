@@ -17,11 +17,7 @@ from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
 from flask import Flask, request, render_template, redirect, session, \
                   send_file, make_response, jsonify, Response
-<<<<<<< HEAD
-from flask_restful import reqparse, abort, Api, Resource
-=======
 from flask_restful import Resource, Api, reqparse
->>>>>>> eac60f8dc2c8b0670fb3adab4eca24d280459892
 from werkzeug.utils import secure_filename
 
 # Other supporting libraries
@@ -69,10 +65,6 @@ parser.add_argument('enddate', type=str, help='Ending date')
 parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
 parser.add_argument('limit', type=int, default=10, help='Records by page')
 
-class AppStart(Resource):
-    def get(self):
-        return {'message': 'Hello, world'}
-
 class apiRequests(Resource):
     def get(self):
         args = parser.parse_args()
@@ -118,7 +110,6 @@ class apiRequests(Resource):
             res.append(el)
         return res
 
-api.add_resource(AppStart, '/api/v1/appstats')
 api.add_resource(apiRequests, '/api/v1/requests')
 
 ##############################################################################
