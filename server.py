@@ -44,6 +44,14 @@ app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 
+api = Api(app)
+
+class ApiTest(Resource):
+    def get(self):
+        return {'hello': 'world'}
+
+api.add_resource(ApiTest, '/api/test')
+
 DEBUG = False
 
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
@@ -57,10 +65,13 @@ parser.add_argument('enddate', type=str, help='Ending date')
 parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
 parser.add_argument('limit', type=int, default=10, help='Records by page')
 
+<<<<<<< HEAD
 @app.route('/api/v1')
 def apiV1():
     return render_template('api/v1.html', who='')
 
+=======
+>>>>>>> cf9f7d9f3afea601cbb27c99f89fb6263edbf8eb
 class apiRequests(Resource):
     def get(self):
         args = parser.parse_args()
@@ -82,7 +93,9 @@ class apiRequests(Resource):
         res = []
         for el in ret:
             el['_id'] = str(el['_id'])
-            del el['touched']
+            el['url'] = 'https://alac.funde.org/requests/' + el['_id']
+            if 'touched' in el.keys():
+                del el['touched']
             if el['status'] == '1':
                 el['status'] = 'En trámite'
             else:
@@ -95,7 +108,8 @@ class apiRequests(Resource):
                 del upd['_id']
                 del upd['source']
                 del upd['source_id']
-                del upd['user_id']
+                if 'user_id' in upd.keys():
+                    del upd['user_id']
                 el['updates'].append(upd)
             docrels = DocRels().list('request', el['_id'])
             el['documents'] = []
