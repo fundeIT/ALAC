@@ -57,9 +57,9 @@ parser.add_argument('enddate', type=str, help='Ending date')
 parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
 parser.add_argument('limit', type=int, default=10, help='Records by page')
 
-class AppStart(Resource):
-    def get(self):
-        return {'message': 'Hello, world'}
+@app.route('/api/v1')
+def apiV1():
+    return render_template('api/v1.html', who='')
 
 class apiRequests(Resource):
     def get(self):
@@ -106,7 +106,6 @@ class apiRequests(Resource):
             res.append(el)
         return res
 
-api.add_resource(AppStart, '/api/v1/appstats')
 api.add_resource(apiRequests, '/api/v1/requests')
 
 ##############################################################################
