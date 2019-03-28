@@ -65,13 +65,10 @@ parser.add_argument('enddate', type=str, help='Ending date')
 parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
 parser.add_argument('limit', type=int, default=10, help='Records by page')
 
-<<<<<<< HEAD
 @app.route('/api/v1')
 def apiV1():
     return render_template('api/v1.html', who='')
 
-=======
->>>>>>> cf9f7d9f3afea601cbb27c99f89fb6263edbf8eb
 class apiRequests(Resource):
     def get(self):
         args = parser.parse_args()
