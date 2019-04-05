@@ -25,23 +25,23 @@
 </div>
 
 <div class="row background-light-gray">
-    <div class="six columns">
+    <div id="reference" class="six columns">
         Petición: {{ req['ref'] }}<br/>
         Fecha: {{ req['date'] }}<br/>
         Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
     </div>
-    <div class="six columns">
+    <div id="office" class="six columns">
         Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
         Oficial de información: {{ office['officer'] }}<br/>
         Correo: {{ office['email'] }}<br/>
     </div>
 </div>
 <div class="row background-light-gray">
-    <div class="six columns">
+    <div id="status" class="six columns">
         Estado: {{ req['status'] }}<br/>
         Resultado: {{ req['result'] }}
     </div>
-    <div class="six columns">
+    <div id="times" class="six columns">
         {% if req['start'] %}
         <p>
         Inicio del trámite: {{ req['start'] }}<br/>
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<div class="row">
+<div id="content" class="row">
 {{ req['detail'] | safe }}
 
 {% if req['comment'] %}

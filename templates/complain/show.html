@@ -15,25 +15,25 @@
 </div>
 
 <div class="row">
-    <div class="six columns">
+    <div id="reference" class="six columns">
         Denuncia: {{ complain['ref'] }}<br/>
         Fecha: {{ complain['date'] }}<br/>
         Caso: <a href="/cases/{{ case['_id'] }}">{{ case['title'] }}</a><br/>
     </div>
-    <div class="six columns">
+    <div id="office" class="six columns">
         Oficina: <a href="/offices/{{ office['_id'] }}">{{ office['name'] }}</a><br/>
         Oficial de información: {{ office['officer'] }}<br/>
         Correo: {{ office['email'] }}<br/>
     </div>
 </div>
 <div class="row">
-    <div class="six columns">
+    <div id="status" class="six columns">
         Estado: {{ complain['status'] }}<br/>
         Resultado: {{ complain['result'] }}
     </div>
 </div>
 
-<div class="row">
+<div id="content" class="row">
 {{ complain['detail'] | safe }}
 {% if complain['comment'] %}
     <p>
