@@ -15,28 +15,27 @@
     </head>
     <body>
         <div class="container">
-            <div id="menubar" class="row menu center uppercase">
-                <div class="columns one">
-                    <img id="menuheader" src="/static/images/menu.svg">
-                    &nbsp
-                </div>
-                <div class="columns two background1">
+            <div id="menubar" class="row center menu uppercase">
+                    <img id="menuheader" src="/static/images/menu.svg">&nbsp&nbsp&nbsp
+                <span>
                     <a href="/start">Inicio</a>
-                </div>
-                <div class="columns two">
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block about %}{% endblock%}">
                     <a href="/faq">Sobre ALAC</a>
-                </div>
-                <div class="columns two">
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block dosiers %}{% endblock%}">
                     <a href="/dosiers">Expedientes</a>
-                </div>
-                <div class="columns two">
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block blog %}{% endblock%}">
                     <a href="/notes">Blog</a>
-                </div>
-                <div class="columns two">
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block search %}{% endblock%}">
                     <a href="/search">Buscar</a>
-                </div>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block api %}{% endblock%}">
+                    <a href="/api/v1">API</a>
+                </span>
             </div>
-
             <div class="row center">
                 <img class="u-max-width logo" src="/static/images/alac-logo.png" alt="ALAC">
             </div>

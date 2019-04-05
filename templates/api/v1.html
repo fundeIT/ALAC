@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}API versión 1{% endblock %}
+{% block api %}background1{% endblock %}
+
+{% block main %}
+
+<h2>API versión 1</h2>
+
+<p>La API de peticiones de ALAC permite descargar en formato procesable las
+peticiones de información tramitadas por ALAC en un período de tiempo definido
+por el usuario. La dirección base de la API es la siguiente:</p>
+
+<p><a href="https://alac.funde.org/api/v1/requests">https://alac.funde.org/api/v1/requests</a></p>
+
+<p>Los párametros para usar la API son los siguientes:</p>
+
+<ul>
+<li><code>startdate</code>: Fecha de inicio en formato YYYY-MM-DD</li>
+<li><code>enddate</code>: Fecha de finalización del período en formato YYYY-MM-DD</li>
+<li><code>page</code>: Número de página, empezando de cero (0 por defecto)</li>
+<li><code>limit</code>: Máximo de elementos a ser obtenidos (10 por defecto)</li>
+</ul>
+
+<p>Ejemplo:</p>
+
+<p>Se desean obtener las peticiones de información realizadas por ALAC durante el año 2018:</p>
+
+<pre>
+startdate=2018-01-01
+enddate=2018-12-31
+page=0 (valor por defecto)
+limit=25 (las primeras 25)
+</pre>
+
+<p>El URL queda así:</p>
+
+<p><a href="https://alac.funde.org/api/v1/requests?startdate=2018-01-01&enddate=2018-12-31&page=0&limit=25">https://alac.funde.org/api/v1/requests?startdate=2018-01-01&enddate=2018-12-31&page=0&limit=25</a></p>
+
+<p>Para obtener las siguientes 25 peticiones, solo hay que cambiar a <code>page=1</code> y así sucesivamente.</p>
+
+<p>La estructura de cada registro es la siguiente (los principales campos):</p>
+
+<ul>
+<li><code>_id:</code> Código de identificación único</li>
+<li><code>date:</code> Fecha de elaboración de la petición</li>
+<li><code>overview:</code> resumen de la petición</li>
+<li><code>detail:</code> detalle de la petición</li>
+<li><code>start:</code> Fecha de inicio del trámite</li>
+<li><code>end:</code> Fecha de finalización del trámite</li>
+<li><code>status:</code> Estado de la petición (en trámite o cerrada)</li>
+<li><code>result:</code> Resultado del trámite</li>
+<li><code>comment:</code> Comentarios</li>
+<li><code>office:</code> Nombre de la oficina</li>
+<li><code>updates:</code> Anotaciones de actualización del trámite (bitácora)</li>
+<li><code>documents:</code> Documentos asociados a la petición</li>
+</ul>
+
+{% endblock %}
