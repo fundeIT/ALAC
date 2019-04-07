@@ -108,7 +108,7 @@ class apiRequests(Resource):
                 doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
                 el['documents'].append(doc)
             res.append(el)
-        return res
+        return jsonify(res)
 
 class apiComplains(Resource):
     def get(self):
@@ -158,7 +158,7 @@ class apiComplains(Resource):
                 doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
                 el['documents'].append(doc)
             res.append(el)
-        return res
+        return jsonify(res)
 
 
 api.add_resource(apiRequests, '/api/v1/requests')
