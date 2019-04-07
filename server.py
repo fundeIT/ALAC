@@ -62,6 +62,42 @@ parser.add_argument('limit', type=int, default=10, help='Records by page')
 def apiV1():
     return render_template('api/v1.html', who='')
 
+class apiTickets(Resource):
+    def post(self):
+        if 'api_key' in request.form.keys():
+            api_key = request.form['api_key']
+        else:
+            return jsonify({'msg': 'Invalid access'})
+        if 'enddate' in request.form.keys():
+            enddate = request.form['enddate']
+        else:
+            enddate = datetime.date.today()
+        if 'startdate' in request.form.keys():
+            startdate = request.form['startdate']
+        else:
+            startdate = datetime.date.today() - datetime.timedelta(6*365/12)
+        if 'page' in request.form.keys():
+            page = int(request.form['page'])
+        else:
+            page = 0
+        if 'limit' in request.form.keys():
+            limit = int(request.form['limit'])
+        else:
+            limit = 25
+        tickets = DB('tickets')
+        threads = DB('threads')
+        ret = tickets.collection.find().skip(page * limit).limit(limit)
+        res = []
+        for el in ret:
+            el['_id'] = str(el['_id'])
+            aux = threads.collection.find({ 'ticket_id' : el['_id']})
+            el['threads'] = []
+            for item in aux:
+                item['_id'] = str(item['_id'])
+                el['threads'].append(item)
+            res.append(el)
+        return jsonify(res) 
+
 class apiRequests(Resource):
     def get(self):
         args = parser.parse_args()
@@ -163,6 +199,7 @@ class apiComplains(Resource):
 
 api.add_resource(apiRequests, '/api/v1/requests')
 api.add_resource(apiComplains, '/api/v1/complains')
+api.add_resource(apiTickets, '/api/v1/tickets')
 
 ##############################################################################
 
