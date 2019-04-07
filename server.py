@@ -142,7 +142,7 @@ class apiComplains(Resource):
             el['result'] = Complains().results[el['result']]
             el['office'] = off.get(el['office_id'])['name'] 
             el['reviewer'] = off.get(el['reviewer_id'])['name']
-            updates = Updates().list('complains', el['_id'])
+            updates = Updates().list('complain', el['_id'])
             el['updates'] = []
             for upd in updates:
                 del upd['_id']
