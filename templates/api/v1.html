@@ -7,19 +7,23 @@
 
 <h2>API versión 1</h2>
 
-<p>La API de peticiones de ALAC permite descargar en formato procesable las
-peticiones de información tramitadas por ALAC en un período de tiempo definido
-por el usuario. La dirección base de la API es la siguiente:</p>
+<p>La API de peticiones de ALAC permite descargar en formato procesable (JSON)
+las peticiones de información y recursos (apelaciones, avisos, denuncias, etc.)
+tramitados por ALAC en un período de tiempo definido por el usuario. Las
+direcciones base de la API son las siguientes:</p>
 
-<p><a href="https://alac.funde.org/api/v1/requests">https://alac.funde.org/api/v1/requests</a></p>
+<ul>
+    <li>Peticiones: <a href="https://alac.funde.org/api/v1/requests">https://alac.funde.org/api/v1/requests</a></li>
+    <li>Recursos: <a href="https://alac.funde.org/api/v1/complains">https://alac.funde.org/api/v1/complains</a></li>
+</ul>
 
 <p>Los párametros para usar la API son los siguientes:</p>
 
 <ul>
-<li><code>startdate</code>: Fecha de inicio en formato YYYY-MM-DD</li>
-<li><code>enddate</code>: Fecha de finalización del período en formato YYYY-MM-DD</li>
-<li><code>page</code>: Número de página, empezando de cero (0 por defecto)</li>
-<li><code>limit</code>: Máximo de elementos a ser obtenidos (10 por defecto)</li>
+    <li><code>startdate</code>: Fecha de inicio en formato YYYY-MM-DD</li>
+    <li><code>enddate</code>: Fecha de finalización del período en formato YYYY-MM-DD</li>
+    <li><code>page</code>: Número de página, empezando de cero (0 por defecto)</li>
+    <li><code>limit</code>: Máximo de elementos a ser obtenidos (10 por defecto)</li>
 </ul>
 
 <p>Ejemplo:</p>
@@ -43,12 +47,12 @@ limit=25 (las primeras 25)
 
 <ul>
 <li><code>_id:</code> Código de identificación único</li>
-<li><code>date:</code> Fecha de elaboración de la petición</li>
-<li><code>overview:</code> resumen de la petición</li>
-<li><code>detail:</code> detalle de la petición</li>
+<li><code>date:</code> Fecha de elaboración del escrito</li>
+<li><code>overview:</code> resumen del escrito</li>
+<li><code>detail:</code> detalle del escrito</li>
 <li><code>start:</code> Fecha de inicio del trámite</li>
 <li><code>end:</code> Fecha de finalización del trámite</li>
-<li><code>status:</code> Estado de la petición (en trámite o cerrada)</li>
+<li><code>status:</code> Estado de la gestión (en trámite o cerrada)</li>
 <li><code>result:</code> Resultado del trámite</li>
 <li><code>comment:</code> Comentarios</li>
 <li><code>office:</code> Nombre de la oficina</li>

@@ -44,16 +44,9 @@ app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 
-api = Api(app)
-
-class ApiTest(Resource):
-    def get(self):
-        return {'hello': 'world'}
-
-api.add_resource(ApiTest, '/api/test')
+##############################################################################
 
 DEBUG = False
-
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
 ##############################################################################
@@ -117,7 +110,59 @@ class apiRequests(Resource):
             res.append(el)
         return res
 
+class apiComplains(Resource):
+    def get(self):
+        args = parser.parse_args()
+        if args['enddate'] == None:
+            args['enddate'] = datetime.date.today()
+        if args['startdate'] == None:
+            args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
+        db = DB('complains')
+        ret = db.collection.find({
+            'date': {
+                '$lte': args['enddate'],
+                '$gte': args['startdate']
+                },
+            'status': {
+                '$gte': '1',
+                '$lte': '2'
+                }
+        }).skip(args['page'] * args['limit']).limit(args['limit'])
+        res = []
+        off = Offices()
+        for el in ret:
+            el['_id'] = str(el['_id'])
+            el['url'] = 'https://alac.funde.org/complains/' + el['_id']
+            if 'touched' in el.keys():
+                del el['touched']
+            if el['status'] == '1':
+                el['status'] = 'En trámite'
+            else:
+                el['status'] = 'Cerrada'
+            el['result'] = Complains().results[el['result']]
+            el['office'] = off.get(el['office_id'])['name'] 
+            el['reviewer'] = off.get(el['reviewer_id'])['name']
+            updates = Updates().list('request', el['_id'])
+            el['updates'] = []
+            for upd in updates:
+                del upd['_id']
+                del upd['source']
+                del upd['source_id']
+                if 'user_id' in upd.keys():
+                    del upd['user_id']
+                el['updates'].append(upd)
+            docrels = DocRels().list('complain', el['_id'])
+            el['documents'] = []
+            for doc in docrels:
+                doc['_id'] = str(doc['_id'])
+                doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
+                el['documents'].append(doc)
+            res.append(el)
+        return res
+
+
 api.add_resource(apiRequests, '/api/v1/requests')
+api.add_resource(apiComplains, '/api/v1/complains')
 
 ##############################################################################
 
