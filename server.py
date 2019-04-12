@@ -62,6 +62,18 @@ parser.add_argument('limit', type=int, default=10, help='Records by page')
 def apiV1():
     return render_template('api/v1.html', who='')
 
+class apiOffices(Resource):
+    def get(self):
+        db = DB('offices')
+        ret = db.collection.find()
+        res = []
+        for el in ret:
+            el['_id'] = str(el['_id'])
+            if '0' in el.keys():
+                del el['0']
+            res.append(el)
+        return jsonify(res)
+
 class apiTickets(Resource):
     def post(self):
         if 'api_key' in request.form.keys():
@@ -200,6 +212,7 @@ class apiComplains(Resource):
 api.add_resource(apiRequests, '/api/v1/requests')
 api.add_resource(apiComplains, '/api/v1/complains')
 api.add_resource(apiTickets, '/api/v1/tickets')
+api.add_resource(apiOffices, '/api/v1/offices')
 
 ##############################################################################
 
