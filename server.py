@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+# This is the main program of ALAC's web site, used to support
+# disclosured ticket information from users and public files about
+# legal cases.
+#
+# 2016-2019 Jaime Lopez <jailop AT protonmail DOT com>
+
 # Importing standard libraries
 
 import os
@@ -1496,7 +1502,6 @@ application = Application([
     (r"/iaip", iaip.IAIP),
     (r"/iaip/(.+)", iaip.Res),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
-
     (r".*", FallbackHandler, dict(fallback=tr)),
 ], debug=trust.debug)
 
