@@ -1,3 +1,13 @@
+# Backup - ALAC app
+#
+# This script makes a backup from the server where the ALAC
+# app is running.
+#
+# 2019 - Fundación Nacional para el Desarrollo
+#
+# Contributors:
+#   Jaime Lopez <jailop AT protonmail DOT com>
+
 # Makinig a dump from the database
 ssh root@alac.funde.org "mongodump --db alac"
 # Generating a compressed file of the database dump
