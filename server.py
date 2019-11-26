@@ -114,7 +114,7 @@ class apiTickets(Resource):
                 item['_id'] = str(item['_id'])
                 el['threads'].append(item)
             res.append(el)
-        return jsonify(res) 
+        return jsonify(res)
 
 class apiRequests(Resource):
     def get(self):
@@ -145,7 +145,7 @@ class apiRequests(Resource):
             else:
                 el['status'] = 'Cerrada'
             el['result'] = Requests().results[el['result']]
-            el['office'] = Offices().get(el['office_id'])['name'] 
+            el['office'] = Offices().get(el['office_id'])['name']
             updates = Updates().list('request', el['_id'])
             el['updates'] = []
             for upd in updates:
@@ -194,7 +194,7 @@ class apiComplains(Resource):
             else:
                 el['status'] = 'Cerrada'
             el['result'] = Complains().results[el['result']]
-            el['office'] = off.get(el['office_id'])['name'] 
+            el['office'] = off.get(el['office_id'])['name']
             el['reviewer'] = off.get(el['reviewer_id'])['name']
             updates = Updates().list('complain', el['_id'])
             el['updates'] = []
@@ -1299,9 +1299,12 @@ def new_ticket():
     name = ''
     if 'user' in session:
         name = session['user']['name']
-    if t.email != '':
-        emailmgr.notify(t.year, t.ticket, t.email)
-    emailmgr.notify(t.year, t.ticket, trust.email_user)
+    try:
+        if t.email != '':
+            emailmgr.notify(t.year, t.ticket, t.email)
+        emailmgr.notify(t.year, t.ticket, trust.email_user)
+    except:
+        print('Connection with email server failed')
     thread = {
         'ticket_id': t.hash,
         'msg': msg,
