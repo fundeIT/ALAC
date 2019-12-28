@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 # This is the main program of ALAC's web site, used to support
 # disclosured ticket information from users and public files about
@@ -42,6 +42,7 @@ import govsearcher
 import iaip
 import searcher
 import ticketsearcher
+import monitoring
 
 ##############################################################################
 
@@ -458,6 +459,11 @@ def caseEdit(_id):
         case = Cases().get(_id)
         return render_template('caseform.html', _id = _id, case = case,
             who=session['user'])
+
+@app.route('/monitoring/', methods=['GET', 'POST'])
+def monitoring():
+    if request.method == 'GET':
+        return render_template('monitoring.html', who=session['user']) 
 
 @app.route('/offices')
 def offices():
