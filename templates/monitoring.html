@@ -1,0 +1,12 @@
+{% extends "form.html" %}
+{% block form %}
+
+<form action="/monitoring" method="post">
+    <label>Fecha de inicio</label>
+    <input class="TextInput" type="date" name="start">
+    <label>Fecha de finalización</label>
+    <input class="TextInput" type="date" name="end">
+    <button>Enviar</button>
+</form>
+
+{% endblock %}
