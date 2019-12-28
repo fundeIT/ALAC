@@ -1,0 +1,56 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/3fdf28bc/
+API_KEY	__init__.py	/^API_KEY = 'kljaaoTI*%89f92nklf@#fadi3'$/;"	v
+DATA_PATH	__init__.py	/^DATA_PATH = 'data'$/;"	v
+ENDING_DATE	__init__.py	/^ENDING_DATE = '2019-10-31'$/;"	v
+GEOIP4_PATH	__init__.py	/^GEOIP4_PATH = '\/usr\/share\/GeoIP\/GeoIPCity.dat'$/;"	v
+GEOIP6_PATH	__init__.py	/^GEOIP6_PATH = '\/usr\/share\/GeoIP\/GeoIPCityv6.dat'$/;"	v
+IMAGES_PATH	__init__.py	/^IMAGES_PATH = 'images'$/;"	v
+LOG_FILES_PATH	__init__.py	/^LOG_FILES_PATH = 'hits'$/;"	v
+STARTING_DATE	__init__.py	/^STARTING_DATE = '2017-04-01'$/;"	v
+URL	__init__.py	/^URL = 'http:\/\/alac.funde.org'$/;"	v
+by_month	__init__.py	/^        by_month = threads_by_month(threads)$/;"	v
+complains_actions	__init__.py	/^def complains_actions(data):$/;"	f
+complains_by_function	__init__.py	/^def complains_by_function(by_office):$/;"	f
+complains_by_month	__init__.py	/^def complains_by_month(data):$/;"	f
+complains_by_office	__init__.py	/^def complains_by_office(data):$/;"	f
+complains_by_program	__init__.py	/^def complains_by_program(by_office):$/;"	f
+complains_by_result	__init__.py	/^def complains_by_result(data):$/;"	f
+complains_by_reviewer	__init__.py	/^def complains_by_reviewer(data):$/;"	f
+complains_by_sector	__init__.py	/^def complains_by_sector(by_office):$/;"	f
+complains_forecast	__init__.py	/^def complains_forecast(updates):$/;"	f
+complains_save	__init__.py	/^def complains_save(data, updates):$/;"	f
+getReferences	__init__.py	/^def getReferences(path):$/;"	f
+getResources	__init__.py	/^def getResources(month, resource, limit=25):$/;"	f
+get_complains	__init__.py	/^def get_complains(date_start, date_end):$/;"	f
+get_complains_last_month	__init__.py	/^def get_complains_last_month():$/;"	f
+get_hits	__init__.py	/^def get_hits():$/;"	f
+get_requests	__init__.py	/^def get_requests(date_start, date_end):$/;"	f
+get_requests_last_month	__init__.py	/^def get_requests_last_month():$/;"	f
+get_ticket_threads	__init__.py	/^def get_ticket_threads(data):$/;"	f
+get_tickets	__init__.py	/^def get_tickets(date_start, date_end):$/;"	f
+hits_by_month	__init__.py	/^def hits_by_month(df):$/;"	f
+hits_forecast	__init__.py	/^def hits_forecast(df):$/;"	f
+hits_make_maps	__init__.py	/^def hits_make_maps():$/;"	f
+pd	__init__.py	/^import pandas as pd               # To manage datasets$/;"	I
+plt	__init__.py	/^import matplotlib.pyplot as plt   # Plotting library$/;"	I
+requests_actions	__init__.py	/^def requests_actions(data):$/;"	f
+requests_actions_by_month	__init__.py	/^def requests_actions_by_month(updates):$/;"	f
+requests_by_function	__init__.py	/^def requests_by_function(by_office):$/;"	f
+requests_by_month	__init__.py	/^def requests_by_month(data):$/;"	f
+requests_by_office	__init__.py	/^def requests_by_office(data):$/;"	f
+requests_by_program	__init__.py	/^def requests_by_program(by_office):$/;"	f
+requests_by_result	__init__.py	/^def requests_by_result(data):$/;"	f
+requests_by_sector	__init__.py	/^def requests_by_sector(by_office):$/;"	f
+requests_forecast	__init__.py	/^def requests_forecast(updates):$/;"	f
+save_requests_actions	__init__.py	/^def save_requests_actions(data, updates):$/;"	f
+save_ticket_threads	__init__.py	/^def save_ticket_threads(threads):$/;"	f
+threads	__init__.py	/^	threads = get_ticket_threads(tickets)  $/;"	v
+threads_by_month	__init__.py	/^def threads_by_month(threads):$/;"	f
+threads_forecast	__init__.py	/^def threads_forecast(threads):$/;"	f
+tickets	__init__.py	/^	tickets = get_tickets('2017-04-01', '2019-11-30')$/;"	v
