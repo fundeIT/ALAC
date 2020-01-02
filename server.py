@@ -462,8 +462,12 @@ def caseEdit(_id):
 
 @app.route('/monitoring/', methods=['GET', 'POST'])
 def monitoring():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = {}
     if request.method == 'GET':
-        return render_template('monitoring.html', who=session['user']) 
+        return render_template('monitoring.html', who=user) 
 
 @app.route('/offices')
 def offices():
