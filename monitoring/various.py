@@ -198,10 +198,10 @@ def requests_by_function(by_office):
 #%% Actions for requests
 
 def requests_actions(data):
-    aux = [{**item, 'office': row['office'], 'url': row['url']} 
-        for index, row in data.iterrows() 
+    aux = [{**item, 'office': row['office'], 'url': row['url']}
+        for index, row in data.iterrows()
         for item in row['updates']
-    ] 
+    ]
     updates = pd.DataFrame(aux)
     updates['month'] = updates.date.apply(lambda x: str(x)[:7])
     updates = updates[updates.month <= ENDING_DATE]
@@ -299,7 +299,7 @@ def complains_by_result(data):
     by_result = data[data.status == 'Cerrada'] \
         .groupby('result') \
         .count()['_id'] \
-        .sort_values(ascending=False) 
+        .sort_values(ascending=False)
     by_result.to_csv('data/complains-by-result.csv', header=True)
     fig = by_result.plot(kind='bar', figsize=(16,9), alpha=0.5)
     plt.title('Complains by result')
@@ -393,10 +393,10 @@ def complains_by_month(data):
     return by_month
 
 def complains_actions(data):
-    aux = [{**item, 'title': row['overview'], 'office': row['office'], 'url': row['url']} 
-        for index, row in data.iterrows() 
+    aux = [{**item, 'title': row['overview'], 'office': row['office'], 'url': row['url']}
+        for index, row in data.iterrows()
         for item in row['updates']
-    ] 
+    ]
     updates = pd.DataFrame(aux)
     updates['month'] = updates.date.apply(lambda x: str(x)[:7])
     updates = updates[updates.month <= ENDING_DATE]
@@ -476,9 +476,9 @@ def get_hits(date_start, date_end):
         fields = item.strip().split(' ')
         if len(fields) >= 3:
             data.append({
-                "Date": fields[0], 
-                "Time": fields[1], 
-                "IP": fields[2], 
+                "Date": fields[0],
+                "Time": fields[1],
+                "IP": fields[2],
                 "Resource": fields[3]
             })
     df = pd.DataFrame(data)
@@ -616,7 +616,7 @@ def hits_make_maps():
 def fetch_tickets(date_start, date_end):
     res = {}
     res['tickets'] = get_tickets(date_start, date_end)
-    res['actions'] = get_ticket_threads(res['tickets'])  
+    res['actions'] = get_ticket_threads(res['tickets'])
     save_ticket_threads(res['actions'])
     res['by_month'] = threads_by_month(res['actions'])
     return res
@@ -626,10 +626,10 @@ def fetch_requests(date_start, date_end):
     res['requests'] = get_requests(date_start, date_end)
     res['by_result'] = requests_by_result(res['requests'])
     res['by_office'] = requests_by_office(res['requests'])
-    res['by_program'] = requests_by_program(res['by_office']) 
+    res['by_program'] = requests_by_program(res['by_office'])
     res['by_sector'] = requests_by_sector(res['by_office'])
     res['by_function'] = requests_by_function(res['by_office'])
-    res['actions'] = requests_actions(res['requests']) 
+    res['actions'] = requests_actions(res['requests'])
     res['by_month'] = requests_actions_by_month(res['requests'], res['actions'])
     save_requests_actions(res['requests'], res['actions'])
     return res
@@ -638,7 +638,7 @@ def fetch_complains(date_start, date_end):
     res = {}
     res['complains'] = get_complains(date_start, date_end)
     res['by_result'] = complains_by_result(res['complains'])
-    res['by_office'] = complains_by_office(res['complains']) 
+    res['by_office'] = complains_by_office(res['complains'])
     res['by_program'] = complains_by_program(res['by_office'])
     res['by_sector'] = complains_by_sector(res['by_office'])
     res['by_function'] = complains_by_function(res['by_office'])
@@ -647,7 +647,7 @@ def fetch_complains(date_start, date_end):
     res['by_month'] = complains_actions_by_month(res['complains'], res['actions'])
     complains_save(res['complains'], res['actions'])
     return res
-    
+
 def fetch_hits(date_start, date_end):
     res = {}
     res['hits'] = get_hits(date_start, date_end)
@@ -661,5 +661,3 @@ if __name__ == '__main__':
     requests = fetch_requests(date_start, date_end)
     complains = fetch_complains(date_start, date_end)
     hits = fetch_hits(date_start, date_end)
-    
-
