@@ -2,7 +2,7 @@ import os                         # To access operative system functions
 import requests                   # To get webpages from Internet
 import pandas as pd               # To manage datasets
 import json                       # To manage JSON files
-from fbprophet import Prophet     # To make predictions based on time series
+# from fbprophet import Prophet     # To make predictions based on time series
 import matplotlib.pyplot as plt   # Plotting library
 from lxml import html
 # from mpl_toolkits.basemap import Basemap, cm
@@ -89,6 +89,7 @@ def threads_by_month(threads):
 
 # Predictions
 
+"""
 def threads_forecast(threads):
     by_day = threads.groupby('date').count()['_id'].reset_index()
     by_day.rename(columns={'date': 'ds', '_id': 'y'}, inplace=True)
@@ -98,6 +99,7 @@ def threads_forecast(threads):
     forecast = m.predict(future)
     forecast.to_csv('data/tickets_forecast.csv', index=False)
     return forecast
+"""
 
 """
 f = m.plot(forecast)
@@ -233,6 +235,7 @@ def requests_actions_by_month(data, updates):
 
 #%% Predictions
 
+"""
 def requests_forecast(updates):
     by_day = updates.groupby('date').count()['detail'].reset_index()
     by_day.rename(columns={'date': 'ds', 'detail': 'y'}, inplace=True)
@@ -242,6 +245,8 @@ def requests_forecast(updates):
     forecast = m.predict(future)
     forecast.to_csv('data/requests-forecasts.csv', index=False)
     return forecast
+"""
+
 
 """
 f = m.plot(forecast)
@@ -416,6 +421,7 @@ def complains_actions_by_month(data, updates):
 
 #%% Predictions
 
+"""
 def complains_forecast(updates):
     by_day = updates.groupby('date').count()['detail'].reset_index()
     by_day.rename(columns={'date': 'ds', 'detail': 'y'}, inplace=True)
@@ -426,6 +432,7 @@ def complains_forecast(updates):
     forecast = m.predict(future)
     forecast.to_csv('data/complains-forecasts.csv', index=False)
     return forecast
+"""
 
 """
 f = m.plot(forecast)
@@ -500,6 +507,7 @@ def hits_by_month(df):
 
 #%% Predictions
 
+"""
 def hits_forecast(df):
     by_day = df.groupby('Date').count()['IP'].reset_index()
     by_day.rename(columns={'Date': 'ds', 'IP': 'y'}, inplace=True)
@@ -510,6 +518,7 @@ def hits_forecast(df):
     forecast = m.predict(future)
     forecast.to_csv('data/website-hits-forecast.csv', index=False)
     return forecast
+"""
 
 """
 f = m.plot(forecast)

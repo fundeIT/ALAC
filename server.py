@@ -4,7 +4,11 @@
 # disclosured ticket information from users and public files about
 # legal cases.
 #
-# 2016-2019 Jaime Lopez <jailop AT protonmail DOT com>
+# 2016-2019 Fundación Nacional para el Desarroll
+# El Salvador C.A.
+#
+# Contributors:
+#   Jaime Lopez <jailop AT protonmail DOT com>
 
 # Importing standard libraries
 
@@ -42,7 +46,8 @@ import govsearcher
 import iaip
 import searcher
 import ticketsearcher
-import monitoring
+import monitoring.website
+import apiclasses
 
 ##############################################################################
 
@@ -50,6 +55,7 @@ app = Flask(__name__)
 app.secret_key = trust.secret_key
 app.config['UPLOAD_FOLDER'] = trust.docs_path
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
+
 
 ##############################################################################
 
@@ -59,167 +65,17 @@ ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 ##############################################################################
 
 api = Api(app)
-parser = reqparse.RequestParser()
-parser.add_argument('startdate', type=str, help='Starting date')
-parser.add_argument('enddate', type=str, help='Ending date')
-parser.add_argument('page', type=int, default=0, help='Page number, for pagination')
-parser.add_argument('limit', type=int, default=10, help='Records by page')
 
 @app.route('/api/v1')
 def apiV1():
     return render_template('api/v1.html', who='')
 
-class apiOffices(Resource):
-    def get(self):
-        db = DB('offices')
-        ret = db.collection.find()
-        res = []
-        for el in ret:
-            el['_id'] = str(el['_id'])
-            if '0' in el.keys():
-                del el['0']
-            res.append(el)
-        return jsonify(res)
+api.add_resource(apiclasses.apiRequests, '/api/v1/requests')
+api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
+api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
+api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
 
-class apiTickets(Resource):
-    def post(self):
-        if 'api_key' in request.form.keys():
-            api_key = request.form['api_key']
-        else:
-            return jsonify({'msg': 'Invalid access'})
-        if 'enddate' in request.form.keys():
-            enddate = request.form['enddate']
-        else:
-            enddate = datetime.date.today()
-        if 'startdate' in request.form.keys():
-            startdate = request.form['startdate']
-        else:
-            startdate = datetime.date.today() - datetime.timedelta(6*365/12)
-        if 'page' in request.form.keys():
-            page = int(request.form['page'])
-        else:
-            page = 0
-        if 'limit' in request.form.keys():
-            limit = int(request.form['limit'])
-        else:
-            limit = 25
-        tickets = DB('tickets')
-        threads = DB('threads')
-        ret = tickets.collection.find().skip(page * limit).limit(limit)
-        res = []
-        for el in ret:
-            el['_id'] = str(el['_id'])
-            aux = threads.collection.find({ 'ticket_id' : el['_id']})
-            el['threads'] = []
-            for item in aux:
-                item['_id'] = str(item['_id'])
-                el['threads'].append(item)
-            res.append(el)
-        return jsonify(res)
-
-class apiRequests(Resource):
-    def get(self):
-        args = parser.parse_args()
-        if args['enddate'] == None:
-            args['enddate'] = datetime.date.today()
-        if args['startdate'] == None:
-            args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
-        db = DB('requests')
-        ret = db.collection.find({
-            'date': {
-                '$lte': args['enddate'],
-                '$gte': args['startdate']
-                },
-            'status': {
-                '$gte': '1',
-                '$lte': '2'
-                }
-        }).skip(args['page'] * args['limit']).limit(args['limit'])
-        res = []
-        for el in ret:
-            el['_id'] = str(el['_id'])
-            el['url'] = 'https://alac.funde.org/requests/' + el['_id']
-            if 'touched' in el.keys():
-                del el['touched']
-            if el['status'] == '1':
-                el['status'] = 'En trámite'
-            else:
-                el['status'] = 'Cerrada'
-            el['result'] = Requests().results[el['result']]
-            el['office'] = Offices().get(el['office_id'])['name']
-            updates = Updates().list('request', el['_id'])
-            el['updates'] = []
-            for upd in updates:
-                del upd['_id']
-                del upd['source']
-                del upd['source_id']
-                if 'user_id' in upd.keys():
-                    del upd['user_id']
-                el['updates'].append(upd)
-            docrels = DocRels().list('request', el['_id'])
-            el['documents'] = []
-            for doc in docrels:
-                doc['_id'] = str(doc['_id'])
-                doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
-                el['documents'].append(doc)
-            res.append(el)
-        return jsonify(res)
-
-class apiComplains(Resource):
-    def get(self):
-        args = parser.parse_args()
-        if args['enddate'] == None:
-            args['enddate'] = datetime.date.today()
-        if args['startdate'] == None:
-            args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
-        db = DB('complains')
-        ret = db.collection.find({
-            'date': {
-                '$lte': args['enddate'],
-                '$gte': args['startdate']
-                },
-            'status': {
-                '$gte': '1',
-                '$lte': '2'
-                }
-        }).skip(args['page'] * args['limit']).limit(args['limit'])
-        res = []
-        off = Offices()
-        for el in ret:
-            el['_id'] = str(el['_id'])
-            el['url'] = 'https://alac.funde.org/complains/' + el['_id']
-            if 'touched' in el.keys():
-                del el['touched']
-            if el['status'] == '1':
-                el['status'] = 'En trámite'
-            else:
-                el['status'] = 'Cerrada'
-            el['result'] = Complains().results[el['result']]
-            el['office'] = off.get(el['office_id'])['name']
-            el['reviewer'] = off.get(el['reviewer_id'])['name']
-            updates = Updates().list('complain', el['_id'])
-            el['updates'] = []
-            for upd in updates:
-                del upd['_id']
-                del upd['source']
-                del upd['source_id']
-                if 'user_id' in upd.keys():
-                    del upd['user_id']
-                el['updates'].append(upd)
-            docrels = DocRels().list('complain', el['_id'])
-            el['documents'] = []
-            for doc in docrels:
-                doc['_id'] = str(doc['_id'])
-                doc['path'] = 'https://alac.funde.org/docs/' + doc['_id']
-                el['documents'].append(doc)
-            res.append(el)
-        return jsonify(res)
-
-
-api.add_resource(apiRequests, '/api/v1/requests')
-api.add_resource(apiComplains, '/api/v1/complains')
-api.add_resource(apiTickets, '/api/v1/tickets')
-api.add_resource(apiOffices, '/api/v1/offices')
+api.add_resource(monitoring.website.apiWebsiteUsage, '/api/v1/admin/website_usage')
 
 ##############################################################################
 
@@ -467,7 +323,7 @@ def monitoring():
     else:
         user = {}
     if request.method == 'GET':
-        return render_template('monitoring.html', who=user) 
+        return render_template('monitoring.html', who=user)
 
 @app.route('/offices')
 def offices():
