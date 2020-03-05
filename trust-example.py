@@ -1,0 +1,15 @@
+secret_key = ""
+docs_path = "~/alac/files/"
+log_path = "log/"
+db_server = "localhost"
+db_name = "alac"
+db_port = 27017
+db_user = ""
+db_password = ""
+email_user = ""
+email_password = ""
+email_server = ""
+email_port = 465
+cert_file = ""
+key_priv = ""
+debug = False
