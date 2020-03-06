@@ -1,0 +1,25 @@
+body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+}
+
+th, td {
+  font-family: sans-serif;
+  font-size: 9px;
+}
+
+select, option {
+    font-size: 80%;
+}
+
+.row {
+    padding-top: 10px;
+}
+
+.dropdown-menu, .dropdown-item {
+  font-size: 12px;
+}
+
+.navbar{
+  list-style-type: none;
+}

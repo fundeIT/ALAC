@@ -30,6 +30,13 @@ from flask import Flask, request, render_template, redirect, session, \
 from flask_restful import Resource, Api, reqparse
 from werkzeug.utils import secure_filename
 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
+
 # Other supporting libraries
 
 from markdown import markdown
@@ -183,10 +190,12 @@ def before_request():
     line += '\n'
     f.write(line)
     f.close()
+    """
     # Checking if request is HTTPS, if ot it redirects
     if not DEBUG:
        if not request.url.startswith('https'):      # Is it HTTPS?
            return redirect(request.url.replace('http', 'https'))
+    """
 
 @app.route('/')
 def index():
@@ -1361,7 +1370,74 @@ class MainHandler(RequestHandler):
     def get(self):
         self.write("Hello")
 
+###############################################################################
+
+board = dash.Dash(
+    __name__,
+    server=app,
+    assets_folder='board/assets',
+    external_stylesheets=[
+        dbc.themes.BOOTSTRAP,
+        'https://fonts.googleapis.com/css?family=Raleway&display=swap',
+        'style.css'
+    ]
+)
+
+# board.config.suppress_callback_exceptions = True
+
+board.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>Centro de Asesoría Legal Anticorrupción</title>
+        <meta name="viewport" content="width=device-width, initival-scale=1"/>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        <div></div>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+        <div></div>
+    </body>
+</html>
+'''
+
+import boardcomp
+
+board.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    dbc.Container([
+        html.Div(id='page-content'),
+    ])
+])
+
+default_content = html.Div([
+    dbc.Container([
+        dbc.Row(dbc.Col(
+            html.H2('Centro de Asesoría Legal Anticorrupción - Estadísticas')
+        )),
+        dbc.Row(dbc.Col(
+            boardcomp.layout
+        ))
+    ])
+])
+
+@board.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/stats':
+        return default_content
+
+###############################################################################
+
 tr = WSGIContainer(app)
+br = WSGIContainer(board)
 
 application = Application([
     (r"/support", MainHandler),
@@ -1371,6 +1447,7 @@ application = Application([
     (r"/iaip", iaip.IAIP),
     (r"/iaip/(.+)", iaip.Res),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
+    (r"/stats/.*", FallbackHandler, dict(fallback=br)),
     (r".*", FallbackHandler, dict(fallback=tr)),
 ], debug=trust.debug)
 
@@ -1390,13 +1467,17 @@ if __name__ == "__main__":
         else:
             assert False, "unhandled option"
     DEBUG = debug
-    if debug:
+    if debug or not (port in [80, 443]):
         app.run(port=port, host='0.0.0.0', debug=True)
     else:
-        http_server = HTTPServer(application, ssl_options={
-            "certfile": trust.cert_file,
-            "keyfile": trust.key_priv
-        })
-        http_server.listen(443)
-        application.listen(port)
+        if port == 443:
+            http_server = HTTPServer(application, ssl_options={
+                "certfile": trust.cert_file,
+                "keyfile": trust.key_priv
+            })
+            http_server.listen(443)
+            # application.listen(port)
+        else:
+            http_server = HTTPServer(application)
+            http_server.listen(80)
         IOLoop.instance().start()

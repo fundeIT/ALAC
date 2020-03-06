@@ -41,16 +41,8 @@ def count_hits():
 class apiWebsiteUsage(Resource):
     def get(self):
         stats = count_hits()
-        """
-        output = make_response({
-            'month': list(stats.month.values),
-            'hits': list(stats.hits.values)
-        })
+        output = make_response(stats.to_csv(index=False))
         output.headers["Content-Disposition"] = \
-            "attachment; filename=website_usage.json"
-        output.headers["Content-type"] = "application/json"
-        """
-        return jsonify({
-            'month': list(stats.month.values),
-            'hits': list(stats.hits.values)
-        })
+            "attachment; filename=website_usage.csv"
+        output.headers["Content-type"] = "text/csv"
+        return output
