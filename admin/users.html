@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ALAC - Usuarios de la aplicación</title>
+    <meta charset="utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+      crossorigin="anonymous">
+    <link rel="stylesheet" href="static/css/style.css">
+  </head>
+  <body class="container">
+    <div id="header" class="page-header bg-white">
+      <p>Centro de Asesoría Legal Anticorrupción</p>
+      <h2>Usuarios de la aplicación</h2>
+    </div>
+    <hr>
+    <div  id="main" class="row">
+      <div id="leftside" class="col-4">
+        <ul class="list-group">
+          <li 
+            v-for="(r, idx) in record"
+            v-bind:id="'rec' + idx"
+            class="list-group-item list-group-item-action" 
+            v-on:click="changeRecord(idx)"
+            v-bind:class="{ active : idx == 0 ? true : false }">
+            {{ r.name }}
+          </li>
+        </ul>
+      </div>
+      <div id="rightside" class="col-8">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input id="name" class="form-control" v-model="record[idx].name"/>
+          </div>
+          <div class="form-group">
+            <label for="mail">Correo electrónico</label>
+            <input id="mail" class="form-control" v-model="record[idx].email"/>
+          </div>
+          <div class="form-group">
+            <label for="passw">Contraseña</label>
+            <input id="passw" type="password" class="form-control" v-model="record[idx].password"/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input id="phone" class="form-control" v-model="record[idx].phone"/>
+          </div>
+          <div class="form-group">
+            <label for="pos">Punto de servicio</label>
+            <select id="pos" v-model="record[idx].pos">
+              <option 
+                v-for="p in pos" 
+                v-bind:value="p._id">
+                {{ p.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kind">Tipo de usuario</label>
+            <select id="kind" v-model="record[idx].kind">
+              <option 
+                v-for="k in Object.keys(kinds)" 
+                v-bind:value="k">
+                {{ kinds[k] }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input id="active" type="checkbox" class="form-check-input" v-model="record[idx].active"/>
+            <label for="active">Activo</label>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" v-on:click="newRecord()">Nuevo</button>
+            <button class="btn btn-primary" v-on:click="updateRecord()">Guardar</button>
+            <button class="btn btn-danger" v-on:click="deleteRecord()">Eliminar</button>
+          </div>
+      </div>
+    </div>
+    <div id="footer">
+    </div>
+  </body>
+  <script>
+    empty_rec = {
+      _id : '', 
+      name : '',
+      email: '',
+      phone: '',
+      pos: '',
+      kind: '',
+      active: true,
+    }
+    kinds = {
+        GSS: 'Invitado', 
+        USR: 'Editor', 
+        MNG: 'Revisor', 
+        OPR: 'Operador'
+    }
+    record = [
+      Object.assign({}, empty_rec),
+    ]
+    app = new Vue({
+      el: "#main",
+      data : {
+        record : record,
+        idx : 0,
+        pos : [],
+        kinds : kinds,
+        password : '',
+      },
+      created : function () {
+        self = this
+        axios.get('/api/v1/user')
+          .then(function (response) {
+            if (response.data.length > 0) {
+              self.record = response.data
+              self.idx = 0
+            }
+          })
+          .catch(function (error) {console.log(error)})
+        axios.get('/api/v1/pos')
+          .then(function (response) {
+            self.pos = response.data
+          })
+          .catch(function (error) {console.log(error)})
+      },
+      methods : {
+        changeRecord : function(idx) {
+          document.getElementById('rec' + this.idx).classList.remove('active')
+          this.idx = idx 
+          document.getElementById('rec' + idx).classList.add('active')
+        },
+        newRecord : function() {
+          document.getElementById('rec' + this.idx).classList.remove('active')
+          var p = Object.assign({}, empty_rec)
+          this.idx = this.record.push(p) - 1
+          document.getElementById('name').focus()
+          //document.getElementById('record' + this.idx).classList.add('active')
+        },
+        updateRecord : function() {
+          self = this
+          axios.post('/api/v1/user', this.record[this.idx])
+            .then(function (response) {
+              self.record[self.idx]._id = response.data
+            })
+            .catch(function (error) {console.log(error)})
+        },
+        deleteRecord : function() {
+          var self = this
+          var check = window.confirm('La eliminación de este registro no puede ser revertida. ¿Desea borrar el registro?')
+          if (check) {
+            document.getElementById('rec' + self.idx).classList.remove('active')
+            axios.delete('/api/v1/user', {
+              hearders: {Authorization: ''},
+              data: {_id: self.record[self.idx]._id}
+            })
+              .then(function (response) {
+                self.record.splice(self.idx, 1)
+                self.idx = 0
+                document.getElementById('rec' + self.idx).classList.add('active')
+              })
+              .catch(function (error) {console.log(error)})
+          }
+        }
+      }
+    })
+  </script>
+  <script 
+    src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" 
+    crossorigin="anonymous"></script>
+  <script 
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+    crossorigin="anonymous"></script>
+  <script 
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+    crossorigin="anonymous"></script>
+</html>

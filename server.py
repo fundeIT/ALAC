@@ -55,6 +55,7 @@ import searcher
 import ticketsearcher
 import monitoring.website
 import apiclasses
+import admin
 
 ##############################################################################
 
@@ -83,6 +84,8 @@ api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
 api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
 
 api.add_resource(monitoring.website.apiWebsiteUsage, '/api/v1/admin/website_usage')
+api.add_resource(admin.PoS, '/api/v1/pos')
+api.add_resource(admin.User, '/api/v1/user')
 
 ##############################################################################
 
@@ -190,12 +193,10 @@ def before_request():
     line += '\n'
     f.write(line)
     f.close()
-    """
     # Checking if request is HTTPS, if ot it redirects
     if not DEBUG:
        if not request.url.startswith('https'):      # Is it HTTPS?
            return redirect(request.url.replace('http', 'https'))
-    """
 
 @app.route('/')
 def index():
@@ -1366,6 +1367,20 @@ def ticket_search():
             results = ticketsearcher.search(words)
             return render_template('ticket/search.html', words=words, results=results, who=user)
 
+@app.route('/admin/<string:path>')
+def sendPosForm(path):
+    if not 'user' in session:
+        return redirect('/start')
+    user = session['user']
+    if not user['kind'] in ['OPR']:
+        return redirect('/start')
+    html = open('admin/' + path, 'r').read() 
+    return html
+
+###############################################################################
+
+
+
 class MainHandler(RequestHandler):
     def get(self):
         self.write("Hello")
@@ -1376,6 +1391,7 @@ board = dash.Dash(
     __name__,
     server=app,
     assets_folder='board/assets',
+    url_base_pathname='/stats/',
     external_stylesheets=[
         dbc.themes.BOOTSTRAP,
         'https://fonts.googleapis.com/css?family=Raleway&display=swap',
@@ -1431,13 +1447,13 @@ default_content = html.Div([
 @board.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/stats':
+    if pathname == '/stats/index':
         return default_content
 
 ###############################################################################
 
 tr = WSGIContainer(app)
-br = WSGIContainer(board)
+# br = WSGIContainer(board)
 
 application = Application([
     (r"/support", MainHandler),
@@ -1447,7 +1463,7 @@ application = Application([
     (r"/iaip", iaip.IAIP),
     (r"/iaip/(.+)", iaip.Res),
     (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
-    (r"/stats/.*", FallbackHandler, dict(fallback=br)),
+#    (r"/stats/.*", FallbackHandler, dict(fallback=br)),
     (r".*", FallbackHandler, dict(fallback=tr)),
 ], debug=trust.debug)
 

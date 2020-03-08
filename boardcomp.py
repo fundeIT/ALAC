@@ -1,13 +1,7 @@
-import requests
-import json
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
-import dash_table
-import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
-import plotly.express as px
 
 import monitoring.website
 
@@ -35,16 +29,6 @@ def make_figure():
         )
     ])
     
-
-"""
-layout = html.Div(
-    dbc.Tabs([
-        dbc.Tab(dbc.Row(make_figure()), label='Gráfica', tab_id='graphic', className='text-center'),
-        dbc.Tab(dbc.Row(make_table()), label='Tabla', tab_id='table', className='text-center')
-    ])
-)
-"""
-
 layout = dbc.Container([
     dbc.Row(dbc.Col(html.H3('Uso del sitio web'))),
     dbc.Row(dbc.Col([make_figure()])),

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ALAC - Puntos de servicio</title>
+    <meta charset="utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+      crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body class="container">
+    <div id="header" class="page-header bg-white">
+      <p>Centro de Asesoría Legal Anticorrupción</p>
+      <h2>Puntos de servicio</h2>
+    </div>
+    <hr>
+    <div  id="main" class="row">
+      <div id="leftside" class="col-4">
+        <ul class="list-group">
+          <li 
+            v-for="(p, idx) in pos"
+            v-bind:id="'pos' + idx"
+            class="list-group-item list-group-item-action" 
+            v-on:click="changePos(idx)"
+            v-bind:class="{ active : idx == 0 ? true : false }">
+            {{ p.name }}
+          </li>
+        </ul>
+      </div>
+      <div id="rightside" class="col-8">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input id="name" class="form-control" v-model="pos[idx].name"/>
+          </div>
+          <div class="form-group">
+            <label for="person">Persona de contacto</label>
+            <input id="person" class="form-control" v-model="pos[idx].person"/>
+          </div>
+          <div class="form-group">
+            <label for="org">Organización</label>
+            <input id="org" class="form-control" v-model="pos[idx].org"/>
+          </div>
+          <div class="form-group">
+            <label for="address">Dirección</label>
+            <input id="address" class="form-control" v-model="pos[idx].address"/>
+          </div>
+          <div class="form-group">
+            <label for="city">Ciudad</label>
+            <input id="city" class="form-control" v-model="pos[idx].city"/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input id="phone" class="form-control" v-model="pos[idx].phone"/>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input id="email" class="form-control" v-model="pos[idx].email"/>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" v-on:click="newPos()">Nuevo</button>
+            <button class="btn btn-primary" v-on:click="updateContent()">Guardar</button>
+          </div>
+      </div>
+    </div>
+    <div id="footer">
+    </div>
+  </body>
+  <script>
+    empty_rec = {
+      _id : '', 
+      name : '',
+      person : '',
+      org : '',
+      address: '',
+      city: '',
+      phone: '',
+      email: '',
+    }
+    pos = [
+      Object.assign({}, empty_rec),
+    ]
+    app = new Vue({
+      el: "#main",
+      data : {
+        pos : pos,
+        idx : 0,
+      },
+      created : function () {
+        self = this
+        axios.get('/api/v1/pos')
+          .then(function (response) {
+            if (response.data.length > 0) {
+              self.pos = response.data
+              self.idx = 0
+            }
+          })
+          .catch(function (error) {console.log(error)})
+      },
+      methods : {
+        changePos : function(idx) {
+          document.getElementById('pos' + this.idx).classList.remove('active')
+          this.idx = idx 
+          document.getElementById('pos' + idx).classList.add('active')
+        },
+        newPos : function() {
+          document.getElementById('pos' + this.idx).classList.remove('active')
+          var p = Object.assign({}, empty_rec)
+          this.idx = this.pos.push(p) - 1
+          document.getElementById('name').focus()
+          //document.getElementById('pos' + this.idx).classList.add('active')
+        },
+        updateContent : function() {
+          self = this
+          axios.post('/api/v1/pos', this.pos[this.idx])
+            .then(function (response) {
+              self.pos[self.idx]._id = response.data
+            })
+            .catch(function (error) {console.log(error)})
+        }
+      }
+    })
+  </script>
+  <script 
+    src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" 
+    crossorigin="anonymous"></script>
+  <script 
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+    crossorigin="anonymous"></script>
+  <script 
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+    crossorigin="anonymous"></script>
+</html>

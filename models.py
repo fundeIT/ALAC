@@ -237,7 +237,7 @@ class Updates:
         return dbconn().updates.remove({'_id': ObjectId(_id)})
 
 class Users:
-    keys = ['name', 'email', 'kind', 'password']
+    keys = ['name', 'email', 'kind', 'pos', 'password']
     kinds = {
         'GSS': 'Invitado', 
         'USR': 'Editor', 
@@ -250,14 +250,14 @@ class Users:
         return m.digest()
     def new(self, user):
         user['password'] = self.encrypt(user['password']) 
-        return dbconn().users.insert_one(user).inserted_id
+        return str(dbconn().users.insert_one(user).inserted_id)
     def get(self, _id):
         return dbconn().users.find_one({'_id': ObjectId(_id)})
     def getByName(self, name):
         return dbconn().users.find_one({'name': name})
     def list(self):
-        fields = {'name': 1, 'email': 1, 'kind': 1}
-        return dbconn().users.find({}, fields).sort('name')
+        # fields = {'name': 1, 'email': 1, 'kind': 1, 'pos': 1}
+        return dbconn().users.find({}).sort('name')
     def update(self, _id, user):
         if 'password' in user:
             user['password'] = self.encrypt(user['password'])
@@ -276,7 +276,7 @@ class Users:
             return False
     def login(self, email, password):
         user = dbconn().users.find_one({'email': email})
-        if user != None:
+        if user != None and not user['deleted']:
             if self.checkPassword(user['_id'], password):
                 return user
             else:
