@@ -276,11 +276,11 @@ class Users:
             return False
     def login(self, email, password):
         user = dbconn().users.find_one({'email': email})
-        if user != None and not user['deleted']:
-            if self.checkPassword(user['_id'], password):
-                return user
-            else:
+        if user != None:
+            if 'deleted' in user.keys() and user['deleted']:
                 return None
+            if self.checkPassword(user['_id'], password):
+                    return user
         return None
 
 class Documents:
