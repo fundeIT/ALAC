@@ -1169,7 +1169,8 @@ def new_ticket():
     t.hash = request.form['ticket_id']
     msg = request.form['msg']
     if t.ticket == 0:
-        t.ticket = newCounter('ticket', d.getYear())
+        t.year = d.getYear()
+        t.ticket = newCounter('ticket', t.year)
         t.append_to_db(msg)
     t.open(t.hash)
     name = ''
