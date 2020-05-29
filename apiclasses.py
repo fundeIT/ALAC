@@ -23,6 +23,7 @@ class apiOffices(Resource):
 
 class apiTickets(Resource):
     def post(self):
+        print(request.form)
         if 'api_key' in request.form.keys():
             api_key = request.form['api_key']
         else:

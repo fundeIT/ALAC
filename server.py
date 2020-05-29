@@ -54,7 +54,6 @@ import iaip
 import searcher
 import ticketsearcher
 import monitoring.website
-import apiclasses
 import admin
 
 ##############################################################################
@@ -70,7 +69,11 @@ app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 DEBUG = False
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
 
-##############################################################################
+###################
+### API SECTION ###
+###################
+
+import apiclasses
 
 api = Api(app)
 
@@ -83,11 +86,14 @@ api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
 api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
 api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
 
-api.add_resource(monitoring.website.apiWebsiteUsage, '/api/v1/admin/website_usage')
+api.add_resource(
+    monitoring.website.apiWebsiteUsage, 
+    '/api/v1/admin/website_usage'
+)
 api.add_resource(admin.PoS, '/api/v1/pos')
 api.add_resource(admin.User, '/api/v1/user')
 
-##############################################################################
+###################
 
 def request_analytics(req):
     print(req.path)
