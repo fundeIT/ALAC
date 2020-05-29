@@ -1,3 +1,5 @@
+# Website statistics of usage
+
 import os
 import pandas as pd
 from flask import make_response, jsonify
@@ -34,7 +36,7 @@ def count_hits():
                 stats.loc[stats.month == lf, 'updated'] = updated
                 stats.loc[stats.month == lf, 'hits'] = hits
     stats = stats.sort_values('month')
-    stats.to_csv("stats.csv", index=False)
+    stats.to_csv(STATSFILE, index=False)
     stats.drop(['updated'], axis=1, inplace=True)
     return stats
 

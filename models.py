@@ -13,17 +13,41 @@ def emptyDict(keys):
     return {key: '' for key in keys}
 
 class Dates:
+    """
+    This class implements methods to deal with dates
+    in a more easy way using predefined template strings.
+
+    Suggestion:
+
+    This class should be moved to another file, maybe 
+    a file with general utilities.
+    """
     def __init__(self):
         self.now = datetime.datetime.now()
     def getDate(self):
+        """
+        Returns date in YYYY-MM-DD format
+        """
         return self.now.strftime("%Y-%m-%d")
     def getDatePath(self):
+        """
+        Returns year and month to be used in file paths
+        """
         return self.now.strftime("%Y/%m/")
     def getDateByMonth(self):
+        """
+        Returns year and month as YYYYMM
+        """
         return self.now.strftime("%Y%02m")
     def getYear(self):
+        """
+        Returns the current year
+        """
         return self.now.strftime("%Y")
     def getMonth(self):
+        """
+        Returns the current month
+        """
         return self.now.strftime("%m")
 
 class DB:
