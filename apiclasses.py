@@ -1,8 +1,14 @@
-from flask import make_response, jsonify
+# apiclasses.py
+# Classes for API responses
+# (2020) Fundación Nacional para el Desarrollo
+
+# Importing libraries
+from datetime import datetime
+from flask import jsonify
 from flask_restful import request, Resource, reqparse
+import models
 
-from models import *
-
+# Setting API global variables
 parser = reqparse.RequestParser()
 parser.add_argument('startdate', type=str, help='Starting date')
 parser.add_argument('enddate', type=str, help='Ending date')
@@ -11,7 +17,7 @@ parser.add_argument('limit', type=int, default=10, help='Records by page')
 
 class apiOffices(Resource):
     def get(self):
-        db = DB('offices')
+        db = models.DB('offices')
         ret = db.collection.find()
         res = []
         for el in ret:
@@ -23,19 +29,7 @@ class apiOffices(Resource):
 
 class apiTickets(Resource):
     def post(self):
-        print(request.form)
-        if 'api_key' in request.form.keys():
-            api_key = request.form['api_key']
-        else:
-            return jsonify({'msg': 'Invalid access'})
-        if 'enddate' in request.form.keys():
-            enddate = request.form['enddate']
-        else:
-            enddate = datetime.date.today()
-        if 'startdate' in request.form.keys():
-            startdate = request.form['startdate']
-        else:
-            startdate = datetime.date.today() - datetime.timedelta(6*365/12)
+        # Recovering data arguments
         if 'page' in request.form.keys():
             page = int(request.form['page'])
         else:
@@ -44,18 +38,20 @@ class apiTickets(Resource):
             limit = int(request.form['limit'])
         else:
             limit = 25
-        tickets = DB('tickets')
-        threads = DB('threads')
+        # Querying the database
+        tickets = models.DB('tickets')
+        threads = models.DB('threads')
         ret = tickets.collection.find().skip(page * limit).limit(limit)
         res = []
         for el in ret:
             el['_id'] = str(el['_id'])
-            aux = threads.collection.find({ 'ticket_id' : el['_id']})
+            aux = threads.collection.find({'ticket_id' : el['_id']})
             el['threads'] = []
             for item in aux:
                 item['_id'] = str(item['_id'])
                 el['threads'].append(item)
             res.append(el)
+        # Returning the response
         return jsonify(res)
 
 class apiRequests(Resource):
@@ -65,7 +61,7 @@ class apiRequests(Resource):
             args['enddate'] = datetime.date.today()
         if args['startdate'] == None:
             args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
-        db = DB('requests')
+        db = models.DB('requests')
         ret = db.collection.find({
             'date': {
                 '$lte': args['enddate'],
@@ -86,9 +82,9 @@ class apiRequests(Resource):
                 el['status'] = 'En trámite'
             else:
                 el['status'] = 'Cerrada'
-            el['result'] = Requests().results[el['result']]
-            el['office'] = Offices().get(el['office_id'])['name']
-            updates = Updates().list('request', el['_id'])
+            el['result'] = models.Requests().results[el['result']]
+            el['office'] = models.Offices().get(el['office_id'])['name']
+            updates = models.Updates().list('request', el['_id'])
             el['updates'] = []
             for upd in updates:
                 del upd['_id']
@@ -97,7 +93,7 @@ class apiRequests(Resource):
                 if 'user_id' in upd.keys():
                     del upd['user_id']
                 el['updates'].append(upd)
-            docrels = DocRels().list('request', el['_id'])
+            docrels = models.DocRels().list('request', el['_id'])
             el['documents'] = []
             for doc in docrels:
                 doc['_id'] = str(doc['_id'])
@@ -113,7 +109,7 @@ class apiComplains(Resource):
             args['enddate'] = datetime.date.today()
         if args['startdate'] == None:
             args['startdate'] = datetime.date.today() + datetime.timedelta(6*365/12)
-        db = DB('complains')
+        db = models.DB('complains')
         ret = db.collection.find({
             'date': {
                 '$lte': args['enddate'],
@@ -125,7 +121,7 @@ class apiComplains(Resource):
                 }
         }).skip(args['page'] * args['limit']).limit(args['limit'])
         res = []
-        off = Offices()
+        off = models.Offices()
         for el in ret:
             el['_id'] = str(el['_id'])
             el['url'] = 'https://alac.funde.org/complains/' + el['_id']
@@ -135,10 +131,10 @@ class apiComplains(Resource):
                 el['status'] = 'En trámite'
             else:
                 el['status'] = 'Cerrada'
-            el['result'] = Complains().results[el['result']]
+            el['result'] = models.Complains().results[el['result']]
             el['office'] = off.get(el['office_id'])['name']
             el['reviewer'] = off.get(el['reviewer_id'])['name']
-            updates = Updates().list('complain', el['_id'])
+            updates = models.Updates().list('complain', el['_id'])
             el['updates'] = []
             for upd in updates:
                 del upd['_id']
@@ -147,7 +143,7 @@ class apiComplains(Resource):
                 if 'user_id' in upd.keys():
                     del upd['user_id']
                 el['updates'].append(upd)
-            docrels = DocRels().list('complain', el['_id'])
+            docrels = models.DocRels().list('complain', el['_id'])
             el['documents'] = []
             for doc in docrels:
                 doc['_id'] = str(doc['_id'])

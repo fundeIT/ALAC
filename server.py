@@ -12,38 +12,36 @@
 
 # Importing standard libraries
 
+#%% Loading of libraries
+
+# Standard libraries
 import os
 import sys
 import getopt
-import json
 import datetime
 
 # Import specific libraries for web deploying
-
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
 from flask import Flask, request, render_template, redirect, session, \
-                  send_file, make_response, jsonify, Response
-from flask_restful import Resource, Api, reqparse
+                  send_file, make_response, jsonify
+from flask_restful import Api
 from werkzeug.utils import secure_filename
 
+# Data app libraries
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
-import dash_bootstrap_components as dbc
 
-# Other supporting libraries
-
+# Other third-party libraries
 from markdown import markdown
-import datetime
 
 # Own libraries
-
 from models import *
 import trust
 from attachment import *
@@ -55,6 +53,8 @@ import searcher
 import ticketsearcher
 import monitoring.website
 import admin
+
+#%%
 
 ##############################################################################
 

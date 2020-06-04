@@ -2,7 +2,7 @@
 
 import os
 import pandas as pd
-from flask import make_response, jsonify
+from flask import make_response
 from flask_restful import Resource
 
 import trust
