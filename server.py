@@ -1456,7 +1456,8 @@ def monitoring_form():
     end = request.args.get('end', end)
     activated = request.args.get('activated', "0")
     print(activated)
-    if activated ==  "1":
+    if activated == "1":
+        print('Processing monitoring files')
         oldmon.prepare_datasets(start, end)
     return render_template(
         'monitoring/form.html', 

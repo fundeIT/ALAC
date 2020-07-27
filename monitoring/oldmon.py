@@ -1,5 +1,6 @@
 # Monitoring module
 
+import os
 import datetime as dt
 import subprocess as sp
 
@@ -11,7 +12,10 @@ def suggested_dates():
     return DATE_START, last_month.strftime('%Y-%m-%d')
     
 def prepare_datasets(starting_date, ending_date):
+    print(os.getcwd())
     ret = sp.run(['python', 'makereports.py', starting_date, ending_date], capture_output=True, cwd='monitoring')
+    print(ret)
     ret = sp.run(['zip', '-r', 'monitoring.zip', 'data/', 'images/'], capture_output=True, cwd='monitoring')
+    print(ret)
     
     
