@@ -55,11 +55,14 @@
     </div>
     <div class="eight columns">
         <form action="/ticket/new" method="post">
+            <input name="key" type="hidden" value="{{ key }}">
             <input name="year" type="hidden" value="">
             <input name="ticket" type="hidden" value="0">
             <input name="ticket_id" type="hidden" value="None">
             <label>Consultas y denuncias</label>
-            <textarea class="u-full-width" name="msg" rows="10" placeholder="Describa su consulta o denuncia" required></textarea>
+            <textarea class="u-full-width" name="msg" rows="10" 
+                placeholder="Describa su consulta o denuncia" required
+            ></textarea>
             <input name="email" type="email" placeholder="Correo electrónico">
             <button class="button-primary" id="send">Enviar</button>
         </form>

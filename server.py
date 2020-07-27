@@ -12,15 +12,13 @@
 
 # Importing standard libraries
 
-#%% Loading of libraries
-
-# Standard libraries
+## Standard libraries
 import os
 import sys
 import getopt
 import datetime
 
-# Import specific libraries for web deploying
+## Import specific libraries for web deploying
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
@@ -31,17 +29,17 @@ from flask import Flask, request, render_template, redirect, session, \
 from flask_restful import Api
 from werkzeug.utils import secure_filename
 
-# Data app libraries
+## Data app libraries
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-# Other third-party libraries
+## Other third-party libraries
 from markdown import markdown
 
-# Own libraries
+## Own libraries
 from models import *
 import trust
 from attachment import *
@@ -53,47 +51,8 @@ import searcher
 import ticketsearcher
 import monitoring.website
 import admin
-
-#%%
-
-##############################################################################
-
-app = Flask(__name__)
-app.secret_key = trust.secret_key
-app.config['UPLOAD_FOLDER'] = trust.docs_path
-app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
-
-
-##############################################################################
-
-DEBUG = False
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
-
-###################
-### API SECTION ###
-###################
-
 import apiclasses
-
-api = Api(app)
-
-@app.route('/api/v1')
-def apiV1():
-    return render_template('api/v1.html', who='')
-
-api.add_resource(apiclasses.apiRequests, '/api/v1/requests')
-api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
-api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
-api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
-
-api.add_resource(
-    monitoring.website.apiWebsiteUsage, 
-    '/api/v1/admin/website_usage'
-)
-api.add_resource(admin.PoS, '/api/v1/pos')
-api.add_resource(admin.User, '/api/v1/user')
-
-###################
+from monitoring import oldmon
 
 def request_analytics(req):
     print(req.path)
@@ -173,6 +132,27 @@ def hasRight(source, source_id, categories):
     else:
         return False
 
+# Setting and starting Flask app & api managers
+app = Flask(__name__)
+app.secret_key = trust.secret_key
+app.config['UPLOAD_FOLDER'] = trust.docs_path
+app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024  # 128 MB
+api = Api(app)
+DEBUG = False
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
+
+# API managers
+api.add_resource(apiclasses.apiRequests, '/api/v1/requests')
+api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
+api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
+api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
+api.add_resource(
+    monitoring.website.apiWebsiteUsage, 
+    '/api/v1/admin/website_usage'
+)
+api.add_resource(admin.PoS, '/api/v1/pos')
+api.add_resource(admin.User, '/api/v1/user')
+
 # Controllers
 
 @app.before_request
@@ -220,6 +200,10 @@ def index():
             return redirect('/')
         else:
             return redirect('/start')
+
+@app.route('/api/v1')
+def apiV1():
+    return render_template('api/v1.html', who='')
 
 @app.route('/faq')
 def faq():
@@ -332,6 +316,7 @@ def caseEdit(_id):
         return render_template('caseform.html', _id = _id, case = case,
             who=session['user'])
 
+"""
 @app.route('/monitoring/', methods=['GET', 'POST'])
 def monitoring():
     if 'user' in session:
@@ -340,6 +325,7 @@ def monitoring():
         user = {}
     if request.method == 'GET':
         return render_template('monitoring.html', who=user)
+"""
 
 @app.route('/offices')
 def offices():
@@ -393,7 +379,12 @@ def officeEdit(_id):
         user = session['user']
     else:
         user = {}
-    return render_template('office/form.html', _id = _id, office = Offices().get(_id), who=user)
+    return render_template(
+        'office/form.html', 
+        _id = _id, 
+        office = Offices().get(_id), 
+        who=user
+    )
 
 @app.route('/requests')
 def requests():
@@ -405,11 +396,13 @@ def requests():
     drafts = replaceOfficeinRequests(r.list(status='0'))
     running = replaceOfficeinRequests(r.list(status='1'))
     done = replaceOfficeinRequests(r.list(status='2'))
-    return render_template('request/list.html',
-            drafts=drafts,
-            running=running,
-            done=done,
-            who=user)
+    return render_template(
+        'request/list.html',
+        drafts=drafts,
+        running=running,
+        done=done,
+        who=user
+    )
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
 def requestNew():
@@ -510,7 +503,18 @@ def requestEdit(_id):
     #    return redirect('/requests/%s' % _id)
     users_right = Rights().listBySource('request', _id)
     users_list = Users().list()
-    return render_template('request/form.html', _id=_id, req=req, status=r.status, results=r.results, cases = Cases().list(), offices = Offices().list(), users_right=users_right, users_list=users_list, who=user)
+    return render_template(
+        'request/form.html', 
+        _id=_id, 
+        req=req, 
+        status=r.status, 
+        results=r.results, 
+        cases=Cases().list(), 
+        offices=Offices().list(), 
+        users_right=users_right, 
+        users_list=users_list, 
+        who=user
+    )
 
 @app.route('/requests/<string:_id>/forward', methods=['GET'])
 def forwardRequest(_id):
@@ -562,8 +566,14 @@ def closeRequest(_id):
         return redirect('/requests/%s' % _id)
     if request.method == 'GET':
         req['result'] = r.results[req['result']]
-        return render_template('request/close.html', _id=_id, req=req, results=r.results,
-                referrer=request.referrer, who=user)
+        return render_template(
+            'request/close.html', 
+            _id=_id, 
+            req=req, 
+            results=r.results,
+            referrer=request.referrer, 
+            who=user
+        )
     else:
         d = Dates().getDate()
         req['status'] = '2'
@@ -703,14 +713,30 @@ def complainEdit(_id):
     reviewers = o.list()
     users_right = Rights().listBySource('complain', _id)
     users_list = Users().list()
-    return render_template('complain/form.html', _id=_id, complain=complain, status=r.status, results = r.results, cases=Cases().list(), offices=offices, reviewers=reviewers, users_right=users_right, users_list=users_list, who=user)
+    return render_template(
+        'complain/form.html', 
+        _id=_id, 
+        complain=complain, 
+        status=r.status, 
+        results = r.results, 
+        cases=Cases().list(), 
+        offices=offices, 
+        reviewers=reviewers, 
+        users_right=users_right, 
+        users_list=users_list, 
+        who=user
+    )
 
 @app.route('/users')
 def users():
     if not 'user' in session:
         return redirect('/')
     else:
-        return render_template('userlist.html', users=Users().list(), who=session['user'])
+        return render_template(
+            'userlist.html', 
+            users=Users().list(), 
+            who=session['user']
+        )
 
 @app.route('/users/new/', methods=['GET', 'POST'])
 def userNew():
@@ -737,7 +763,15 @@ def userNew():
             )
     else:
         user = emptyDict(u.keys)
-        return render_template('userform.html', _id=_id, user=user, message='', password1='', kinds=u.kinds, who=session['user'])
+        return render_template(
+            'userform.html', 
+            _id=_id, 
+            user=user, 
+            message='', 
+            password1='', 
+            kinds=u.kinds, 
+            who=session['user']
+        )
 
 @app.route('/users/<string:_id>', methods=['GET', 'POST'])
 def userDetail(_id):
@@ -754,8 +788,15 @@ def userDetail(_id):
             else:
                 user['password'] = ''
                 message = 'Las contraseñas deben ser iguales. Verifique.'
-                return render_template('userform.html', _id=_id, user=user,
-                        message=message, password1='', kinds=u.kinds, who=session['user'])
+                return render_template(
+                    'userform.html', 
+                    _id=_id, 
+                    user=user,
+                    message=message, 
+                    password1='', 
+                    kinds=u.kinds, 
+                    who=session['user']
+                )
         else:
             del user['password']
             u.update(_id, user)
@@ -845,7 +886,11 @@ def docDownload(_id):
     Return a file corresponding to the _id given.
     """
     d = Attachment('docs').get(_id)
-    return send_file(d['path'], as_attachment=True, attachment_filename=d['name'])
+    return send_file(
+        d['path'], 
+        as_attachment=True, 
+        attachment_filename=d['name']
+    )
 
 @app.route('/docrels/new/', methods=['POST'])
 def docrelNew():
@@ -1079,16 +1124,25 @@ def start():
     user = {}
     if 'user' in session:
         user = session['user']
+    key = ticket.request_key()
     year = Dates().getYear()
-    ticket = ''
+    tck = ''
     email = ''
     remember = False
     if 'ticket' in request.cookies:
         year = request.cookies.get('year')
-        ticket = request.cookies.get('ticket')
+        tck = request.cookies.get('ticket')
         email = request.cookies.get('email')
         remember = True
-    return render_template("start.html", year=year, ticket=ticket, email=email, remember=remember, who=user)
+    return render_template(
+        "start.html", 
+        key=key,
+        year=year, 
+        ticket=tck,
+        email=email, 
+        remember=remember, 
+        who=user
+    )
 
 @app.route("/ticket", methods=['GET', 'POST'])
 def get_ticket():
@@ -1102,8 +1156,9 @@ def get_ticket():
     else: # POST
         t.get_form(request)
     t.get_threads()
+    key = ticket.request_key()
     resp = make_response(render_template("ticket/userform.html",
-        ticket=t, who=user))
+        key=key, ticket=t, who=user))
     if 'remember' in request.form:
         exp = datetime.datetime.now() + datetime.timedelta(days=90)
         resp.set_cookie('ticket', str(t.ticket), expires=exp)
@@ -1167,6 +1222,12 @@ def new_ticket():
     user = None
     if 'user' in session:
         user = session['user']
+    # Validating form key
+    key = request.form['key']
+    if not ticket.check_key(key):
+        # The key doesn't exists, data is rejected
+        return render_template("ticket/invalid.html", who=user)
+    # Key is valid, so data will be accepted
     d = Dates()
     t = ticket.Ticket()
     t.ticket = int(request.form['ticket'])
@@ -1383,6 +1444,35 @@ def sendPosForm(path):
         return redirect('/start')
     html = open('admin/' + path, 'r').read() 
     return html
+    
+@app.route('/monitoring/index')
+def monitoring_form():
+    if 'user' in session:
+        user = session['user']
+    else:
+        user = None
+    start, end = oldmon.suggested_dates()  
+    start = request.args.get('start', start)
+    end = request.args.get('end', end)
+    activated = request.args.get('activated', "0")
+    print(activated)
+    if activated ==  "1":
+        oldmon.prepare_datasets(start, end)
+    return render_template(
+        'monitoring/form.html', 
+        start=start, 
+        end=end, 
+        file_available=activated,
+        who=user
+    )        
+    
+@app.route('/monitoring/download')
+def monitoring_download():
+    return send_file(
+        'monitoring/monitoring.zip', 
+        as_attachment=True, 
+        attachment_filename='monitoring.zip'
+    ) 
 
 ###############################################################################
 

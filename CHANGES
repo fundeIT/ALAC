@@ -1,38 +1,7 @@
-2018-10-18
+2020-07
 
-- Searcher for requests and complains were added.
+Ticket forms included a dynamic key with is validated when data is send. If a
+given key doesn't exist in the system, data is rejected. This is a mechanism to
+avoid data to be sent from other sites (spam).
 
-2016-09-27
 
-- Option to attach documents in cases, requests and complais was added
-
-2016-09-26:
-
-- Request show template now shows updates in a table. Detail of each update is
-  converted from markdown to html. Form to insert a new update was move to
-  below.
-- Function to download documents was added.
-- Permission to access the application for any URL, not only '/'
-
-2016-10-06:
-
-- Option to append documents and show pages was added.
-- Record of rights for specific documents
-
-2016-10-07
-
-- Section 'mine' was added
-
-2016-10-08
-
-- User login and logout options
-
-2016-10-09
-
-- Blog section added
-- Mistakes in user validation corrected
-- Markdown formatting in complain updates
-
-2016-10-10
-
-- Request process: draft-running-closed was incorporated

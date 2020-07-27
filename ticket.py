@@ -1,9 +1,35 @@
 # Standard libraries
+import hashlib
+import time
 from markdown import markdown
 from bson.objectid import ObjectId
 
 # Own libraries
 from models import *
+
+EXPIRATION_TIME = 3600
+
+ticket_keys = {}
+
+def request_key():
+    cleanup_keys()
+    moment = time.time_ns()
+    key = hashlib.sha1(str(moment).encode()).hexdigest()
+    ticket_keys[key] = moment
+    return key
+    
+def check_key(key):
+    flag = False
+    if key in ticket_keys:
+        flag = True
+    return flag
+    
+def cleanup_keys():
+    moment = time.time_ns()
+    for key in ticket_keys.keys():
+        diff = moment - ticket_keys[key] - EXPIRATION_TIME * 1e-9
+        if diff < 0.0:
+            ticket_keys.pop(key)
 
 class Ticket:
     def __init__(self):

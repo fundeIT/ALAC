@@ -96,6 +96,7 @@
     <div class="row">
         <div class="eight columns">
             <form action="/ticket/new" method="post">
+                <input name="key" type="hidden" value="{{ key }}">
                 <input name="year" type="hidden" value="{{ ticket.year }}">
                 <input name="ticket" type="hidden" value="{{ ticket.ticket }}">
                 <input name="ticket_id" type="hidden" value="{{ ticket.hash }}">

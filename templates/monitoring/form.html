@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h2>Reportes de monitoreo</h2>
+
+<p>Esta página permite generar datasets e gráficas de monitoreo de las 
+acciones realizadas en un período determinado. Los archivos correspondientes
+pueden ser descargados en el archivo.</p>
+
+<div class="row">
+<form action="/monitoring/index" method="get">
+    <label>Fecha de inicio</label>
+    <input type="date" name="start" value="{{ start }}" required>
+    <label>Fecha de finalización</label>
+    <input type="date" name="end" value="{{ end }}" required>
+    <input type="hidden" name="activated" value="1">
+    <button class="button-primary">Enviar</button>
+</form>
+
+{% if file_available == '1' %}
+
+<a href='/monitoring/download'>Descargar</a>
+
+{% endif %}
+
+
+{% endblock %}
