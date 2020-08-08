@@ -1183,6 +1183,11 @@ def report():
 
 @app.route("/ticket/<string:year>/<int:tckt>")
 def get_ticketByID(year, tckt):
+    """
+    To render a page with the ticket given by year/number.
+    It includes a form at the end of the page to send new
+    comments or attach documents.
+    """
     # Checking privileges. Only managers and operators are
     # allowed to use this function.
     if not 'user' in session:
@@ -1191,12 +1196,18 @@ def get_ticketByID(year, tckt):
     if not user['kind'] in ['MNG', 'OPR']:
         return redirect('/')
     t = ticket.Ticket()
+    key = ticket.request_key()
     t.year = year
     t.ticket = tckt
     t.update_hash(is_email=False)
     t.get_threads()
-    resp = make_response(render_template("ticket/userform.html",
-        ticket=t, client=t.getClient(), who=user))
+    resp = make_response(render_template(
+        "ticket/userform.html",
+        ticket=t,
+        key=key,
+        client=t.getClient(), 
+        who=user
+    ))
     return resp
 
 @app.route("/ticket/<string:year>/<int:tckt>/msg", methods=['GET', 'POST'])
@@ -1346,10 +1357,10 @@ def adminTicket(status):
     if not user['kind'] in ['MNG', 'OPR']:
         return redirect('/')
     # Setting list parameters
-    #   Default values
+    # Default values
     limit = 20    # How many items
     skip = 0      # Get since this item
-    #   Checking if user gives own values
+    # Checking if user gives own values
     if 'limit' in request.args:
         limit = int(request.args.get('limit'))
     if 'skip' in request.args:
@@ -1359,8 +1370,13 @@ def adminTicket(status):
     count = db.count({'status': status}) # How many items exist
     r = range(0, count, limit)           # Ranges for pagination
     tickets = db.list(skip, limit, {'status': status}, -1) # Getting data
-    return render_template('ticket/admin.html',
-        tickets=tickets, status=status, rng=r, who=session['user'])
+    return render_template(
+        'ticket/admin.html',
+        tickets=tickets, 
+        status=status, 
+        rng=r, 
+        who=session['user']
+    )
 
 @app.route('/ticket/admin')
 def adminEmptyTicket():
@@ -1409,14 +1425,29 @@ def search():
     else:
         user = None
     if request.method == 'GET':
-        return render_template('search/index.html', words="", results=None, who=user)
+        return render_template(
+            'search/index.html', 
+            words="", 
+            results=None, 
+            who=user
+        )
     else:
         words = request.form['words']
         if len(words) == 0:
-            return render_template('search/index.html', words="", results=None, who=user)
+            return render_template(
+                'search/index.html', 
+                words="", 
+                results=None, 
+                who=user
+            )
         else:
             results = searcher.search(words)
-            return render_template('search/index.html', words=words, results=results, who=user)
+            return render_template(
+                'search/index.html', 
+                words=words, 
+                results=results, 
+                who=user
+            )
 
 @app.route('/ticket/search', methods=['GET', 'POST'])
 def ticket_search():
@@ -1476,8 +1507,6 @@ def monitoring_download():
     ) 
 
 ###############################################################################
-
-
 
 class MainHandler(RequestHandler):
     def get(self):
