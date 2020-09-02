@@ -1,83 +1,127 @@
+<!--
+  complain form
+
+  Using this form the user is able to create or modify a new
+  complaint record.  
+
+  2017-2020 Fundacion Nacional para el Desarrollo
+-->
+
 {% extends "form.html" %}
 
-{%block title %}{{ complain['overview'] }}{% endblock %}
-{%block super %}Denuncias presentadas por ALAC{% endblock %}
-{%block dosiers %}background1{% endblock %}
+{% block title %}{{ complain['overview'] }}{% endblock %}
+{% block super %}Denuncias presentadas por ALAC{% endblock %}
+{% block dosiers %}background1{% endblock %}
 
 {% block form %}
 
-    <form action="/complains/{{ _id }}" method="post">
-        <label>Referencia</label>
-        <input type="text" name="ref" value="{{ complain['ref'] }}">
-        <label>Fecha</label>
-        <input type="text" type="date" name="date" value="{{ complain['date'] }}" required>
-        <label>Asunto</label>
-        <input class="u-full-width" class="u-full-width" type="text" name="overview" value="{{ complain['overview'] }}" required>
-        <label>Detalle</label>
-        <textarea class="u-full-width" name="detail" required>{{ complain['detail'] }}</textarea>
-        <label>Caso</label>
-        <select class="u-full-width" name="case_id">
-            {% for case in cases %}
-                <option value="{{ case['_id'] }}" {% if case['_id']|string() == complain['case_id']|string() %}selected{% endif %}>{{ case['title'] }}</option>
-            {% endfor %}
-        </select>
-        <label>Oficina denunciada</label>
-        <select class="u-full-width" name="office_id">
-            {% for office in offices %}
-                <option value="{{ office['_id'] }}" {% if office['_id']|string() == complain['office_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
-            {% endfor %}
-        </select>
-        <label>Oficina revisora</label>
-        <select class="u-full-width" name="reviewer_id">
-            {% for office in reviewers %}
-                <option value="{{ office['_id'] }}" {% if office['_id']|string() == complain['reviewer_id']|string() %}selected{% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
-            {% endfor %}
-        </select>
-        <label>Inicio del trámite</label>
-        <input type="date" name="start" value="{{ complain['start'] }}">
-        <label>Finalización del trámite</label>
-        <input type="date" name="finish" value="{{ complain['finish'] }}">
-        <label>Estado</label>
-        <select name='status'>
-            {% for s in status %}
-                <option value="{{ loop.index0 }}" {% if complain['status']|int() == loop.index0 %}selected{% endif %}>{{ s }}</option>
-            {% endfor %}             
-        </select>
-        <label>Resultado</label>
-        <select name='result'>
-            {% for k in results %}
-                <option value="{{ k }}" {% if complain['result']|string() == k|string() %}selected{% endif %}>{{ results[k] }}</option>
-            {% endfor %}
-        </select>
-        <label>Comentarios</label>
-        <textarea class="u-full-width" name="comment">{{ complain['comment'] }}</textarea>
-        <button>Enviar</button>
+  <form action="/complains/{{ _id }}" method="post">
+    
+    <label>Referencia</label>
+    <input type="text" name="ref" value="{{ complain['ref'] }}">
+    
+    <label>Fecha</label>
+    <input type="date" name="date" value="{{ complain['date'] }}" required>
+    
+    <label>Asunto</label>
+    <input class="u-full-width" type="text" name="overview" 
+         value="{{ complain['overview'] }}" required>
+    
+    <label>Detalle</label>
+    <textarea class="u-full-width" name="detail" 
+          required>{{ complain['detail'] }}</textarea>
+    
+    <label>Caso</label>
+    <select class="u-full-width" name="case_id">
+      {% for case in cases %}
+        <option value="{{ case['_id'] }}" 
+        {% if case['_id']|string() == complain['case_id']|string() %}
+          selected
+        {% endif %}>{{ case['title'] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Oficina denunciada</label>
+    <select class="u-full-width" name="office_id">
+      {% for office in offices %}
+        <option value="{{ office['_id'] }}" 
+          {% if office['_id']|string() == complain['office_id']|string() %}
+            selected
+          {% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
+      {% endfor %}
+    </select>
+    
+    <label>Oficina revisora</label>
+    <select class="u-full-width" name="reviewer_id">
+      {% for office in reviewers %}
+        <option value="{{ office['_id'] }}" 
+          {% if office['_id']|string() == complain['reviewer_id']|string() %}
+            selected
+          {% endif %}>{{ office['acronym'] }} - {{ office['name'] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Inicio del trámite</label>
+    <input type="date" name="start" value="{{ complain['start'] }}">
+    
+    <label>Finalización del trámite</label>
+    <input type="date" name="finish" value="{{ complain['finish'] }}">
+    
+    <label>Estado</label>
+    <select name='status'>
+      {% for s in status %}
+        <option value="{{ loop.index0 }}" 
+          {% if complain['status']|int() == loop.index0 %}
+            selected
+          {% endif %}>{{ s }}</option>
+      {% endfor %}       
+    </select>
+
+    <label>Resultado</label>
+    <select name='result'>
+      {% for k in results %}
+        <option value="{{ k }}" 
+          {% if complain['result']|string() == k|string() %}
+            selected
+          {% endif %}>{{ results[k] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Comentarios</label>
+    <textarea class="u-full-width" 
+      name="comment">{{ complain['comment'] }}</textarea>
+    
+    <button>Enviar</button>
+  </form>
+
+  {% if who['kind'] == 'OPR' and _id != 'new/' %}
+
+  <div class="CautionSet">
+
+    <p><strong>Usuarios con derechos de edición:</strong></p>
+
+      {% for user in users_right%}
+        {{ user['name'] }}
+		    {% if not loop.last %}, {% endif %}
+      {% endfor %}
+
+    <form action='/rights/new/' method='post'>
+      
+      <select name='user_id'>
+        {% for user in users_list %}
+          <option value="{{ user['_id'] }}">{{ user['name'] }}</option>
+        {% endfor %}
+      </select>
+      
+      <input type="hidden" name="source" value="complain">
+      
+      <input type="hidden" name='source_id' value="{{ complain['_id'] }}">
+      
+      <button class="MenuCaution">Agregar</button>
     </form>
 
-    {% if who['kind'] == 'OPR' and _id != 'new/' %}
+  </div>
 
-    <div class="CautionSet">
-
-        <p><strong>Usuarios con derechos de edición:</strong></p>
-
-            {% for user in users_right%}
-                {{ user['name'] }}
-		{% if not loop.last %}, {% endif %}
-            {% endfor %}
-
-        <form action='/rights/new/' method='post'>
-            <select name='user_id'>
-                {% for user in users_list %}
-                    <option value="{{ user['_id'] }}">{{ user['name'] }}</option>
-                {% endfor %}
-            </select>
-            <input type="hidden" name="source" value="complain">
-            <input type="hidden" name='source_id' value="{{ complain['_id'] }}">
-            <button class="MenuCaution">Agregar</button>
-        </form>
-
-    </div>
-
-    {% endif %}
-        
+  {% endif %}
+    
 {% endblock %}
