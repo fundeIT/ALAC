@@ -1,0 +1,9 @@
+URL = 'http://alac.funde.org'
+API_KEY = 'kljaaoTI*%89f92nklf@#fadi3'
+
+LOG_FILES_PATH = '../log/hits'
+DATA_PATH = 'data'
+IMAGES_PATH = 'images'
+
+GEOIP4_PATH = '/usr/share/GeoIP/GeoIPCity.dat'
+GEOIP6_PATH = '/usr/share/GeoIP/GeoIPCityv6.dat'
