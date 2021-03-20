@@ -15,7 +15,7 @@ Flask-RESTful==0.3.8
 future==0.18.2
 idna==2.9
 itsdangerous==1.1.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 kiwisolver==1.2.0
 lxml==4.5.0
 Markdown==3.2.1
