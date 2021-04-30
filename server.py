@@ -401,7 +401,7 @@ def officeEdit(_id):
     )
 
 @app.route('/requests')
-def requests():
+def request_list():
     if 'user' in session:
         user = session['user']
     else:
@@ -419,36 +419,46 @@ def requests():
     )
 
 @app.route('/requests/new/', methods=['GET', 'POST'])
-def requestNew():
+def request_new():
     if not 'user' in session:
         return redirect('/requests')
     user = session['user']
+    current_date = Dates().getDate()
+    # POST method
     if request.method == 'POST':
+        # Getting data from the submited form
         req = {key: request.form[key] for key in Requests().keys}
+        # Storing record in the database
         _id = Requests().new(req)
+        # Settings right for future updatings
         right = {
             'source': 'request',
             'source_id': str(_id),
             'user_id': user['_id']
         }
         Rights().new(right)
-        d = Dates().getDate()
+        # Logging request creation
         msg = 'Petición creada'
         update = {
                 'source': 'request',
                 'source_id': str(_id),
-                'date': d,
+                'date': current_date,
                 'detail': msg,
                 'user_id': str(user['_id'])
         }
         Updates().new(update)
+        # Return current record visualization
         return redirect('/requests/%s' % str(_id))
+    # GET method
     else:
+        # Creating an empty record
         r = Requests()
         req = emptyDict(r.keys)
-        req['date'] = Dates().getDate()
+        req['date'] = current_date
+        req['start'] = current_date
         req['result'] = 'ND'
         req['status'] = '0'
+        # Checking if the new record is part of a defined case
         case_id = request.args.get('case_id')
         if case_id != None:
             req['case_id'] = case_id
@@ -458,7 +468,7 @@ def requestNew():
             offices = Offices().list(), who=session['user'])
 
 @app.route('/requests/<string:_id>', methods=['GET', 'POST'])
-def requestDetail(_id):
+def request_detail(_id):
     """
     This section show an specific request.
     It has options to append updates and documents.
@@ -505,7 +515,7 @@ def requestDetail(_id):
                 who=getRegistedUser())
 
 @app.route('/requests/<string:_id>/edit')
-def requestEdit(_id):
+def request_edit(_id):
     if not 'user' in session:
         return redirect('/requests/%s' % _id)
     user = session['user']

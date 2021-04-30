@@ -1,7 +1,12 @@
 2020-07
 
-Ticket forms included a dynamic key with is validated when data is send. If a
-given key doesn't exist in the system, data is rejected. This is a mechanism to
-avoid data to be sent from other sites (spam).
+- Ticket forms included a dynamic key with is validated when data is send. If a
+  given key doesn't exist in the system, data is rejected. This is a mechanism
+  to avoid data to be sent from other sites (spam).
+
+2020-11
+
+- Request form was updated to automatically include the current date. The
+  respective function (request_new) was refactored and commented.
 
 
