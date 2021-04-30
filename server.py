@@ -24,6 +24,7 @@ from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.web import FallbackHandler, RequestHandler, Application, \
                         StaticFileHandler
+from flask_cors import CORS, cross_origin
 from flask import Flask, request, render_template, redirect, session, \
                   send_file, make_response, jsonify
 from flask_restful import Api
@@ -140,10 +141,16 @@ app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024  # 128 MB
 api = Api(app)
 DEBUG = False
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'docx', 'xlsx', 'jpg', 'pptx', 'txt'])
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # API managers
 api.add_resource(apiclasses.apiRequests, '/api/v1/requests')
+api.add_resource(apiclasses.apiRequest,'/api/v1/request/<request_id>')
+api.add_resource(apiclasses.apiRequestStatistics, '/api/v1/requeststatistics/<option>')
+api.add_resource(apiclasses.apiComplainStatistics, '/api/v1/complainstatistics/<option>')
 api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
+api.add_resource(apiclasses.apiComplain,'/api/v1/complain/<request_id>')
 api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
 api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
 api.add_resource(
@@ -184,6 +191,7 @@ def before_request():
        if not request.url.startswith('https'):      # Is it HTTPS?
            return redirect(request.url.replace('http', 'https'))
 
+"""
 @app.route('/')
 def index():
     if 'user' in session:
@@ -200,6 +208,12 @@ def index():
             return redirect('/')
         else:
             return redirect('/start')
+
+"""
+@app.route('/')
+def catch_all():
+    return render_template('react/index.html')
+
 
 @app.route('/api/v1')
 def apiV1():
@@ -1119,6 +1133,15 @@ def dataRequest():
         data.append(item)
     return jsonify(data)
 
+
+@app.route("/addticket")
+def add_ticket():
+    user = {}
+    if 'user' in session:
+        user = session['user']
+    key = ticket.request_key()
+    return render_template("newticket.html",key=key,who=user)
+
 @app.route("/start")
 def start():
     user = {}
@@ -1268,7 +1291,15 @@ def new_ticket():
     }
     thread_id = DB('threads').new(thread)
     t.get_threads()
-    return render_template("ticket/userform.html", ticket=t, who=user)
+    newkey = ticket.request_key()
+    return render_template("ticket/userform.html", ticket=t, who=user, key=newkey)
+
+@app.route("/getnewkey", methods=['GET'])
+def get_form_key():
+    key = ticket.request_key()
+    response = make_response({"key":key},200)
+    response.mimetype = "application/json"
+    return response
 
 @app.route("/ticket/close", methods=['POST'])
 def close_ticket():
@@ -1406,7 +1437,8 @@ def attachmentUpload():
         t = ticket.Ticket()
         t.get_form(request)
         t.get_threads()
-        return render_template("ticket/userform.html", ticket=t, who=user)
+        newkey = ticket.request_key()
+        return render_template("ticket/userform.html", ticket=t, who=user, key=newkey)
     else:
         return "Failed"
 
