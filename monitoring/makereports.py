@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 import os                           # To access operative system functions
 import requests                     # To get webpages from Internet
@@ -15,8 +17,7 @@ load_dotenv()
 STARTING_DATE = sys.argv[1]
 ENDING_DATE = sys.argv[2]
 
-url = os.getenv('URL') + '/api/v1/tickets'
-data = {
+conn_data = {
     'api_key': os.getenv('API_KEY'),
     'startdate': STARTING_DATE,
     'enddate': ENDING_DATE,
@@ -24,109 +25,116 @@ data = {
     'page': 0
 }
 
-result = requests.post(url, data=data)   # Getting the data from Internet
-content = json.loads(result.content)     # Converting from JSON
-data = pd.DataFrame(content)             # Converting to a dataframe
-data.rename(columns={'_id': 'ticket_id', 'msg': 'title'}, inplace=True)
+def get_tickets_stats():
+    url = os.getenv('URL') + '/api/v1/tickets'
+    result = requests.post(url, data=conn_data)   # Getting the data from Internet
+    content = json.loads(result.content)     # Converting from JSON
+    data = pd.DataFrame(content)             # Converting to a dataframe
+    print("{} requests...".format(len(data)))
+    data.rename(columns={'_id': 'ticket_id', 'msg': 'title'}, inplace=True)
 
-aux = []
-for idx in range(len(data)):
-    row = data.iloc[idx]
-    aux += row.threads
-threads = pd.DataFrame(aux)
-threads = threads[threads.date <= ENDING_DATE]
-threads = threads.merge(data[['ticket_id', 'ticket', 'year', 'title', 'status']], on='ticket_id', how='left')
-threads['month'] = threads.date.apply(lambda x: str(x)[:7])
+    aux = []
+    for idx in range(len(data)):
+        row = data.iloc[idx]
+        aux += row.threads
+    threads = pd.DataFrame(aux)
+    threads = threads[threads.date <= ENDING_DATE]
+    threads = threads.merge(data[['ticket_id', 'ticket', 'year', 'title', 'status']], on='ticket_id', how='left')
+    threads['month'] = threads.date.apply(lambda x: str(x)[:7])
 
-output = threads.copy()
-output['msg'] = threads['msg'].apply(lambda x: str(x)[0:63].replace('\n', ' ').replace('\r', '').strip())
-output['title'] = threads['title'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', '').strip())
-output[['year', 'ticket', 'date', 'title', 'msg', 'status']].sort_values('date').to_csv('data/tickets.csv', index=False)
+    output = threads.copy()
+    output['msg'] = threads['msg'].apply(lambda x: str(x)[0:63].replace('\n', ' ').replace('\r', '').strip())
+    output['title'] = threads['title'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', '').strip())
+    output[['year', 'ticket', 'date', 'title', 'msg', 'status']].sort_values('date').to_csv('data/tickets.csv', index=False)
 
-aux = threads.groupby(['month', 'status']).count()['_id'].fillna(0).reset_index()
-by_month = pd.crosstab(aux.month, aux.status, aux._id, aggfunc=sum).fillna(0)
-by_month['total'] = by_month['closed'] + by_month['openned']
-by_month.to_csv('data/tickets-by-month.csv')
+    aux = threads.groupby(['month', 'status']).count()['_id'].fillna(0).reset_index()
+    by_month = pd.crosstab(aux.month, aux.status, aux._id, aggfunc=sum).fillna(0)
+    by_month['total'] = by_month['closed'] + by_month['openned']
+    by_month.to_csv('data/tickets-by-month.csv')
 
-by_month[['closed', 'openned']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Tickets by month')
-plt.savefig('images/tickets_by_month.png')
+    by_month[['closed', 'openned']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Tickets by month')
+    plt.savefig('images/tickets_by_month.png')
 
-# Information Requests
 
-# Setting the URL to access the Request API
-url = os.getenv('URL') + '/api/v1/requests?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
-# Obtaining the data
-data = pd.read_json(url)
-# Creating new attributes
-data['month'] = data.date.apply(lambda x: str(x)[:7])
-data['reqs'] = data.detail.apply(lambda x: str(x).strip().split('\n'))
-data['num'] = data.reqs.apply(lambda x: len(x))
-# Storing the dataset
-data.to_csv('data/requests.csv', index=False)
+def get_requests_stats():
+    # Setting the URL to access the Request API
+    url = os.getenv('URL') + '/api/v1/requests?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
+    print(url)
+    # Obtaining the data
+    data = pd.read_json(url)
+    print(data.columns)
+    # Creating new attributes
+    data['month'] = data.date.apply(lambda x: str(x)[:7])
+    data['reqs'] = data.overview.apply(lambda x: str(x).strip().split('\n'))
+    data['num'] = data.reqs.apply(lambda x: len(x))
+    # Storing the dataset
+    data.to_csv('data/requests.csv', index=False)
 
-aux = data.groupby(['month', 'status']).sum()['num'].reset_index()
-by_month = pd.crosstab(aux.month, aux.status, aux.num, aggfunc=sum).fillna(0)
-by_month.to_csv('data/requests-by-month.csv')
+    aux = data.groupby(['month', 'status']).sum()['num'].reset_index()
+    by_month = pd.crosstab(aux.month, aux.status, aux.num, aggfunc=sum).fillna(0)
+    by_month.to_csv('data/requests-by-month.csv')
 
-by_month.plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Requests by month')
-plt.savefig('images/requests-by-month.png')
+    by_month.plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Requests by month')
+    plt.savefig('images/requests-by-month.png')
 
-#%% Requests by result
+    #%% Requests by result
 
-by_result = pd.DataFrame(data[data.status == 'Cerrada'].groupby('result').sum()['num'].sort_values(ascending=False))
-by_result.to_csv('data/requests-by-result.csv')
+    by_result = pd.DataFrame(data[data.status == 'Cerrada'].groupby('result').sum()['num'].sort_values(ascending=False))
+    by_result.to_csv('data/requests-by-result.csv')
 
-by_result.plot(kind='bar', figsize=(16,9), alpha=0.5)
-plt.title('Requests by outcomes')
-plt.xlabel('Outcome')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-by-result.png')
+    by_result.plot(kind='bar', figsize=(16,9), alpha=0.5)
+    plt.title('Requests by outcomes')
+    plt.xlabel('Outcome')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-by-result.png')
 
-#%% Requests by offices
+    #%% Requests by offices
 
-aux = data.groupby(['office', 'status']).sum()['num'].reset_index()
-by_office = pd.crosstab(aux.office, aux.status, aux.num, aggfunc=sum).fillna(0)
-by_office['Total'] = by_office['Cerrada'] + by_office['En trámite']
-by_office = by_office.sort_values('Total', ascending=False)
-by_office.reset_index().to_csv('data/requests-by-offices.csv', index=False)
+    aux = data.groupby(['office', 'status']).sum()['num'].reset_index()
+    by_office = pd.crosstab(aux.office, aux.status, aux.num, aggfunc=sum).fillna(0)
+    by_office['Total'] = by_office['Cerrada'] + by_office['En trámite']
+    by_office = by_office.sort_values('Total', ascending=False)
+    by_office.reset_index().to_csv('data/requests-by-offices.csv', index=False)
 
-by_office[0:25][['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Requests by offices')
-plt.xlabel('Offices')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-by-offices.png')
+    by_office[0:25][['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Requests by offices')
+    plt.xlabel('Offices')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-by-offices.png')
 
-#%% Requests by programs
+    #%% Requests by programs
 
-sp = pd.read_csv('sector_programs.csv')
-by_office = sp.merge(by_office, on='office')
+    sp = pd.read_csv('sector_programs.csv')
+    by_office = sp.merge(by_office, on='office')
 
-by_program = by_office.groupby('program').sum().sort_values('Total', ascending=False)
-by_program.to_csv('data/requests-by-program.csv')
-by_program[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Requests by program')
-plt.xlabel('Programs')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-by-program.png')
+    by_program = by_office.groupby('program').sum().sort_values('Total', ascending=False)
+    by_program.to_csv('data/requests-by-program.csv')
+    by_program[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Requests by program')
+    plt.xlabel('Programs')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-by-program.png')
 
-by_sector = by_office.groupby('sector').sum().sort_values('Total', ascending=False)
-by_sector.to_csv('data/requests-by-sector.csv')
-by_sector[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Requests by sector')
-plt.xlabel('Sectors')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-by-sector.png')
+    by_sector = by_office.groupby('sector').sum().sort_values('Total', ascending=False)
+    by_sector.to_csv('data/requests-by-sector.csv')
+    by_sector[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Requests by sector')
+    plt.xlabel('Sectors')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-by-sector.png')
 
-by_function = by_office.groupby('function').sum().sort_values('Total', ascending=False)
-by_function.to_csv('data/requests-by-function.csv')
-by_function[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Requests by function')
-plt.xlabel('Functions')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-by-sector.png')
+    by_function = by_office.groupby('function').sum().sort_values('Total', ascending=False)
+    by_function.to_csv('data/requests-by-function.csv')
+    by_function[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Requests by function')
+    plt.xlabel('Functions')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-by-sector.png')
 
+
+"""
 #%% Actions for requests
 
 aux = []
@@ -326,4 +334,8 @@ ax.set_xlabel('Meses')
 f = ax.get_figure()
 f.savefig('images/website-hists-by-month.png')
 
+"""
 
+if __name__ == "__main__":
+    # get_tickets_stats()
+    get_requests_stats()

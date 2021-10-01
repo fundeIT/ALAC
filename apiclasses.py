@@ -82,7 +82,7 @@ class apiRequests(Resource):
         'touched':0,
         'case_id':0,
         'result':0,
-        'status':0,
+        'status':1,
         }).skip(args['page'] * args['limit']).limit(args['limit'])
         res = []
         for el in ret:
