@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "./static/css/main.f47b5019.chunk.css",
+    "main.js": "./static/js/main.4f740b9c.chunk.js",
+    "main.js.map": "./static/js/main.4f740b9c.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.de55c5b9.js",
+    "runtime-main.js.map": "./static/js/runtime-main.de55c5b9.js.map",
+    "static/css/2.d9ad5f5c.chunk.css": "./static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.0e5f2628.chunk.js": "./static/js/2.0e5f2628.chunk.js",
+    "static/js/2.0e5f2628.chunk.js.map": "./static/js/2.0e5f2628.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.25e6eba75437640960391b48d5bc4b3b.js": "./precache-manifest.25e6eba75437640960391b48d5bc4b3b.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.d9ad5f5c.chunk.css.map": "./static/css/2.d9ad5f5c.chunk.css.map",
+    "static/css/main.f47b5019.chunk.css.map": "./static/css/main.f47b5019.chunk.css.map",
+    "static/js/2.0e5f2628.chunk.js.LICENSE.txt": "./static/js/2.0e5f2628.chunk.js.LICENSE.txt",
+    "static/media/alac-logo.png": "./static/media/alac-logo.fd791415.png",
+    "static/media/document.0688192f.svg": "./static/media/document.0688192f.svg",
+    "static/media/logofunde.png": "./static/media/logofunde.bdcf51c5.png",
+    "static/media/megaphone.cbc1c3a3.svg": "./static/media/megaphone.cbc1c3a3.svg",
+    "static/media/plus.1e71bac7.svg": "./static/media/plus.1e71bac7.svg",
+    "static/media/policeman.49a27809.svg": "./static/media/policeman.49a27809.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.de55c5b9.js",
+    "static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.0e5f2628.chunk.js",
+    "static/css/main.f47b5019.chunk.css",
+    "static/js/main.4f740b9c.chunk.js"
+  ]
+}
