@@ -1,4 +1,4 @@
-# apiclasses.py
+#apiclasses.py
 # Classes for API responses
 # (2020) Fundación Nacional para el Desarrollo
 
@@ -82,7 +82,7 @@ class apiRequests(Resource):
         'touched':0,
         'case_id':0,
         'result':0,
-        'status':1,
+        'status':0,
         }).skip(args['page'] * args['limit']).limit(args['limit'])
         res = []
         for el in ret:
