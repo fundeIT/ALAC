@@ -32,8 +32,8 @@ from werkzeug.utils import secure_filename
 
 ## Data app libraries
 import dash
-from dash import dcc
-from dash import html
+import dash_core_components as dcc
+import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
@@ -171,7 +171,7 @@ def before_request():
     HTTPS.
     """
     # Saving request data to log.txt
-    logfile = './log/hits/' + Dates().getDateByMonth()
+    logfile = trust.log_path + Dates().getDateByMonth()
     f = open(logfile, 'a')
     line = str(datetime.datetime.now()) + ' '       # Date and time
     if request.remote_addr:
@@ -1643,7 +1643,7 @@ if __name__ == "__main__":
         print(str(err))
         sys.exit(2)
     debug = False
-    port = 80
+    port = 443
     for o, a in opts:
         if o in ["-d", "--debug"]:
             debug = True
