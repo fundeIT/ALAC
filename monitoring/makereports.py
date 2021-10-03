@@ -59,7 +59,7 @@ def get_tickets_stats():
 
 def get_requests_stats():
     # Setting the URL to access the Request API
-    url = os.getenv('URL') + '/api/v1/requests?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
+    url = os.getenv('URL') + '/api/v1/requests/full?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
     print(url)
     # Obtaining the data
     data = pd.read_json(url)

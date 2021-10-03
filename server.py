@@ -146,10 +146,12 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 # API managers
 api.add_resource(apiclasses.apiRequests, '/api/v1/requests')
+api.add_resource(apiclasses.apiRequestsFull, '/api/v1/requests/full')
 api.add_resource(apiclasses.apiRequest,'/api/v1/request/<request_id>')
 api.add_resource(apiclasses.apiRequestStatistics, '/api/v1/requeststatistics/<option>')
 api.add_resource(apiclasses.apiComplainStatistics, '/api/v1/complainstatistics/<option>')
 api.add_resource(apiclasses.apiComplains, '/api/v1/complains')
+api.add_resource(apiclasses.apiComplainsFull, '/api/v1/complains/full')
 api.add_resource(apiclasses.apiComplain,'/api/v1/complain/<request_id>')
 api.add_resource(apiclasses.apiTickets, '/api/v1/tickets')
 api.add_resource(apiclasses.apiOffices, '/api/v1/offices')
