@@ -134,160 +134,157 @@ def get_requests_stats():
     plt.savefig('images/requests-by-sector.png')
 
 
-"""
-#%% Actions for requests
+    #%% Actions for requests
 
-aux = []
-for idx in range(len(data)):
-    row = data.iloc[idx]
-    # upd = ast.literal_eval(row.updates)
-    for el in row.updates:
-        el['url'] = row.url
-        el['title'] = row.overview
-        el['office'] = row.office
-        aux.append(el)
+    aux = []
+    for idx in range(len(data)):
+        row = data.iloc[idx]
+        # upd = ast.literal_eval(row.updates)
+        for el in row.updates:
+            el['url'] = row.url
+            el['title'] = row.overview
+            el['office'] = row.office
+            aux.append(el)
 
-data['actions'] = data['updates'].apply(lambda x: len(x))
+    data['actions'] = data['updates'].apply(lambda x: len(x))
 
-updates = pd.DataFrame(aux)
-updates['month'] = updates.date.apply(lambda x: str(x)[:7])
-updates = updates[updates.month <= ENDING_DATE]
+    updates = pd.DataFrame(aux)
+    updates['month'] = updates.date.apply(lambda x: str(x)[:7])
+    updates = updates[updates.month <= ENDING_DATE]
 
-#%% Requests by month
+    #%% Requests by month
 
-upd_by_month = updates.groupby('month').count()['detail']
-upd_by_month.plot(kind='bar', figsize=(16,9), alpha=0.5)
-plt.title('Request Actions')
-plt.xlabel('Actions')
-plt.ylabel('Frequency')
-plt.savefig('images/requests-actions.png')
+    upd_by_month = updates.groupby('month').count()['detail']
+    upd_by_month.plot(kind='bar', figsize=(16,9), alpha=0.5)
+    plt.title('Request Actions')
+    plt.xlabel('Actions')
+    plt.ylabel('Frequency')
+    plt.savefig('images/requests-actions.png')
 
-by_month_summ = by_month.merge(upd_by_month, on='month').rename(columns={'detail': 'Acciones'})
-by_month_summ.to_csv('data/requests-by-month.csv')
+    by_month_summ = by_month.merge(upd_by_month, on='month').rename(columns={'detail': 'Acciones'})
+    by_month_summ.to_csv('data/requests-by-month.csv')
 
 
-data[['date', 'overview', 'office', 'status', 'result', 'num', 'actions', 'url']].to_csv('data/requests.csv', index=False)
-updates['detail'] = updates['detail'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', ''))
-updates[['date', 'office', 'title', 'detail', 'url']].sort_values('date').to_csv('data/requests-actions.csv', index=False)
+    data[['date', 'overview', 'office', 'status', 'result', 'num', 'actions', 'url']].to_csv('data/requests.csv', index=False)
+    updates['detail'] = updates['detail'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', ''))
+    updates[['date', 'office', 'title', 'detail', 'url']].sort_values('date').to_csv('data/requests-actions.csv', index=False)
 
-###############################################################################
-# Legal Resources
-###############################################################################
+def get_complain_stats():
+    # Setting the URL to access the Request API
+    url = os.getenv('URL') + '/api/v1/complains/full?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
+    # Obtaining the data
+    data = pd.read_json(url)
+    ## Creating a new attribute: month
+    data['month'] = data.date.apply(lambda x: str(x)[:7])
 
-# Setting the URL to access the Request API
-url = os.getenv('URL') + '/api/v1/complains?startdate={}&enddate={}&page=0&limit=10000'.format(STARTING_DATE, ENDING_DATE)
-# Obtaining the data
-data = pd.read_json(url)
-## Creating a new attribute: month
-data['month'] = data.date.apply(lambda x: str(x)[:7])
+    #%% Complains by month
 
-#%% Complains by month
+    aux = data.groupby(['month', 'status']).count()['_id'].reset_index()
+    by_month = pd.crosstab(aux.month, aux.status, aux._id, aggfunc=sum).fillna(0)
 
-aux = data.groupby(['month', 'status']).count()['_id'].reset_index()
-by_month = pd.crosstab(aux.month, aux.status, aux._id, aggfunc=sum).fillna(0)
+    ax = by_month.plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Complains by month')
+    plt.xlabel('Complains')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-month.png')
 
-ax = by_month.plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Complains by month')
-plt.xlabel('Complains')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-month.png')
+    by_month['Total'] = by_month['Cerrada'] + by_month['En trámite']
+    by_month.to_csv('data/complains-by-month.csv')
 
-by_month['Total'] = by_month['Cerrada'] + by_month['En trámite']
-by_month.to_csv('data/complains-by-month.csv')
+    #%% Complains by result
 
-#%% Complains by result
+    by_result = data[data.status == 'Cerrada'].groupby('result').count()['_id'].sort_values(ascending=False)
+    by_result.to_csv('data/complains-by-result.csv', header=True)
 
-by_result = data[data.status == 'Cerrada'].groupby('result').count()['_id'].sort_values(ascending=False)
-by_result.to_csv('data/complains-by-result.csv', header=True)
+    by_result.plot(kind='bar', figsize=(16,9), alpha=0.5)
+    plt.title('Complains by result')
+    plt.xlabel('Complains')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-result.png')
 
-by_result.plot(kind='bar', figsize=(16,9), alpha=0.5)
-plt.title('Complains by result')
-plt.xlabel('Complains')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-result.png')
+    #%% Complains by offices
 
-#%% Complains by offices
+    aux = data.groupby(['office', 'status']).count()['_id'].reset_index()
+    by_office = pd.crosstab(aux.office, aux.status, aux._id, aggfunc=sum).fillna(0)
+    by_office['Total'] = by_office['Cerrada'] + by_office['En trámite']
+    by_office = by_office.sort_values('Total', ascending=False)
+    by_office.to_csv('data/complains-by-offices.csv')
 
-aux = data.groupby(['office', 'status']).count()['_id'].reset_index()
-by_office = pd.crosstab(aux.office, aux.status, aux._id, aggfunc=sum).fillna(0)
-by_office['Total'] = by_office['Cerrada'] + by_office['En trámite']
-by_office = by_office.sort_values('Total', ascending=False)
-by_office.to_csv('data/complains-by-offices.csv')
+    by_office[0:25][['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Complains by office')
+    plt.xlabel('Complains')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-office.png')
 
-by_office[0:25][['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Complains by office')
-plt.xlabel('Complains')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-office.png')
+    #%% Complains by program
 
-#%% Complains by program
+    sp = pd.read_csv('sector_programs.csv')
+    by_office = sp.merge(by_office, on='office')
 
-by_office = sp.merge(by_office, on='office')
+    by_program = by_office.groupby('program').sum().sort_values('Total', ascending=False)
+    by_program.to_csv('data/complains-by-program.csv')
+    by_program[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Complains by program')
+    plt.xlabel('Program')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-program.png')
 
-by_program = by_office.groupby('program').sum().sort_values('Total', ascending=False)
-by_program.to_csv('data/complains-by-program.csv')
-by_program[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Complains by program')
-plt.xlabel('Program')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-program.png')
+    by_sector = by_office.groupby('sector').sum().sort_values('Total', ascending=False)
+    by_sector.to_csv('data/complains-by-sector.csv')
+    by_sector[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Complains by sector')
+    plt.xlabel('Sector')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-sector.png')
 
-by_sector = by_office.groupby('sector').sum().sort_values('Total', ascending=False)
-by_sector.to_csv('data/complains-by-sector.csv')
-by_sector[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Complains by sector')
-plt.xlabel('Sector')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-sector.png')
+    by_function = by_office.groupby('function').sum().sort_values('Total', ascending=False)
+    by_function.to_csv('data/complains-by-function.csv')
+    by_function[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
+    plt.title('Complains by function')
+    plt.xlabel('Function')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-by-sector.png')
 
-by_function = by_office.groupby('function').sum().sort_values('Total', ascending=False)
-by_function.to_csv('data/complains-by-function.csv')
-by_function[['Cerrada', 'En trámite']].plot(kind='bar', stacked=True, figsize=(16,9), alpha=0.5)
-plt.title('Complains by function')
-plt.xlabel('Function')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-by-sector.png')
+    aux = data.groupby(['reviewer', 'status']).count()['_id'].reset_index()
+    by_reviewer = pd.crosstab(aux.reviewer, aux.status, aux._id, aggfunc=sum).fillna(0)
+    by_reviewer['Total'] = by_reviewer['Cerrada'] + by_reviewer['En trámite']
+    by_reviewer = by_reviewer.groupby('reviewer').sum().sort_values('Total', ascending=False)
+    by_reviewer.to_csv('data/complains-by-reviewer.csv')
 
-aux = data.groupby(['reviewer', 'status']).count()['_id'].reset_index()
-by_reviewer = pd.crosstab(aux.reviewer, aux.status, aux._id, aggfunc=sum).fillna(0)
-by_reviewer['Total'] = by_reviewer['Cerrada'] + by_reviewer['En trámite']
-by_reviewer = by_reviewer.groupby('reviewer').sum().sort_values('Total', ascending=False)
-by_reviewer.to_csv('data/complains-by-reviewer.csv')
+    #%% Complain Actions
 
-#%% Complain Actions
+    aux = []
+    for idx in range(len(data)):
+        row = data.iloc[idx]
+        # upd = ast.literal_eval(row.updates)
+        for el in row.updates:
+            el['url'] = row.url
+            el['title'] = row.overview
+            el['office'] = row.office
+            aux.append(el)
 
-aux = []
-for idx in range(len(data)):
-    row = data.iloc[idx]
-    # upd = ast.literal_eval(row.updates)
-    for el in row.updates:
-        el['url'] = row.url
-        el['title'] = row.overview
-        el['office'] = row.office
-        aux.append(el)
+    data['actions'] = data['updates'].apply(lambda x: len(x))
 
-data['actions'] = data['updates'].apply(lambda x: len(x))
+    updates = pd.DataFrame(aux)
+    updates['month'] = updates.date.apply(lambda x: str(x)[:7])
+    updates = updates[updates.month <= ENDING_DATE]
 
-updates = pd.DataFrame(aux)
-updates['month'] = updates.date.apply(lambda x: str(x)[:7])
-updates = updates[updates.month <= ENDING_DATE]
+    upd_by_month = updates.groupby('month').count()['detail']
 
-upd_by_month = updates.groupby('month').count()['detail']
+    upd_by_month.plot(kind='bar', figsize=(16,9), alpha=0.5)
+    plt.title('Complain actions by month')
+    plt.xlabel('Complain Actions')
+    plt.ylabel('Frequency')
+    plt.savefig('images/complains-actions-by-month.png')
 
-upd_by_month.plot(kind='bar', figsize=(16,9), alpha=0.5)
-plt.title('Complain actions by month')
-plt.xlabel('Complain Actions')
-plt.ylabel('Frequency')
-plt.savefig('images/complains-actions-by-month.png')
+    by_month_summ = by_month.merge(upd_by_month, on='month').rename(columns={'detail': 'Acciones'})
+    by_month_summ.to_csv('data/complains-actions-by-month.csv')
 
-by_month_summ = by_month.merge(upd_by_month, on='month').rename(columns={'detail': 'Acciones'})
-by_month_summ.to_csv('data/complains-actions-by-month.csv')
+    #%% Saving results
 
-#%% Saving results
-
-data[['date', 'overview', 'office', 'reviewer', 'status', 'result', 'actions', 'url']].to_csv('data/complains.csv', index=False)
-updates['detail'] = updates['detail'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', ''))
-updates[['date', 'office', 'title', 'detail', 'url']].sort_values('date').to_csv('data/complains-actions.csv', index=False)
+    data[['date', 'overview', 'office', 'reviewer', 'status', 'result', 'actions', 'url']].to_csv('data/complains.csv', index=False)
+    updates['detail'] = updates['detail'].apply(lambda x: str(x).replace('\n', ' ').replace('\r', ''))
+    updates[['date', 'office', 'title', 'detail', 'url']].sort_values('date').to_csv('data/complains-actions.csv', index=False)
 
 ###############################################################################
 # Website
@@ -295,47 +292,49 @@ updates[['date', 'office', 'title', 'detail', 'url']].sort_values('date').to_csv
 
 #%% Processing data
 
-base_path = os.getenv('LOG_FILES_PATH')
-month_begin = STARTING_DATE.replace('-', '')[0:6]
-month_end = ENDING_DATE.replace('-', '')[0:6]
 
-lines = []
-for month in os.listdir(base_path):
-    if month >= month_begin and month <= month_end:
-        with open(base_path + '/' + month, 'r') as fd:
-            lines += fd.readlines()
+def get_site_stats():
+    base_path = os.getenv('LOG_FILES_PATH')
+    month_begin = STARTING_DATE.replace('-', '')[0:6]
+    month_end = ENDING_DATE.replace('-', '')[0:6]
 
-data = []
-for item in lines:
-    fields = item.strip().split(' ')
-    if len(fields) >= 3:
-        data.append({"Date": fields[0], "Time": fields[1], "IP": fields[2], "Resource": fields[3]})
+    lines = []
+    for month in os.listdir(base_path):
+        if month >= month_begin and month <= month_end:
+            with open(base_path + '/' + month, 'r') as fd:
+                lines += fd.readlines()
 
-df = pd.DataFrame(data)
+    data = []
+    for item in lines:
+        fields = item.strip().split(' ')
+        if len(fields) > 3:
+            data.append({"Date": fields[0], "Time": fields[1], "IP": fields[2], "Resource": fields[3]})
 
-#%% Hits by day
+    df = pd.DataFrame(data)
 
-plt.figure(figsize=(16,9))
-gb = df.groupby(['Date']).count()
-plt.xticks(rotation=90)
-gb['IP'].plot(kind='area', alpha=0.5)
-plt.savefig('images/website-hits-by-day.png')
+    #%% Hits by day
 
-#%% Hits by month
+    plt.figure(figsize=(16,9))
+    gb = df.groupby(['Date']).count()
+    plt.xticks(rotation=90)
+    gb['IP'].plot(kind='area', alpha=0.5)
+    plt.savefig('images/website-hits-by-day.png')
 
-df['month'] = df.Date.apply(lambda x: x[0:7])
-tbl = df.groupby(['month'])['month'].count()
-tbl.to_csv('data/website-hits-by-month.csv', header=True)
+    #%% Hits by month
 
-plt.figure(figsize=(16,9))
-ax = tbl.plot(kind='bar', alpha=0.5)
-ax.set_ylabel("Hits x 1000")
-ax.set_xlabel('Meses')
-f = ax.get_figure()
-f.savefig('images/website-hists-by-month.png')
+    df['month'] = df.Date.apply(lambda x: x[0:7])
+    tbl = df.groupby(['month'])['month'].count()
+    tbl.to_csv('data/website-hits-by-month.csv', header=True)
 
-"""
+    plt.figure(figsize=(16,9))
+    ax = tbl.plot(kind='bar', alpha=0.5)
+    ax.set_ylabel("Hits x 1000")
+    ax.set_xlabel('Meses')
+    f = ax.get_figure()
+    f.savefig('images/website-hists-by-month.png')
 
 if __name__ == "__main__":
-    # get_tickets_stats()
+    get_tickets_stats()
     get_requests_stats()
+    get_complain_stats()
+    get_site_stats()

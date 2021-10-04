@@ -1,7 +1,10 @@
 result,num
-Respuesta completa,31
-Respuesta parcial,7
-Reservada,2
-Sin respuesta,1
-Oficina no competente,1
+Respuesta completa,49
+Respuesta parcial,23
+Sin respuesta,13
+Inexistente,10
+Reservada,9
+Oficina no competente,4
+Confidencial,2
 Diferente información,1
+No definido,1

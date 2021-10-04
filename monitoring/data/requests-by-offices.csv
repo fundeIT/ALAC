@@ -1,30 +1,62 @@
 office,Cerrada,En trámite,Total
-Ministerio de Salud,8.0,61.0,69.0
-Dirección General de Centros Penales ,0.0,40.0,40.0
-Fiscalía General de la República ,0.0,31.0,31.0
-Ministerio de Hacienda,21.0,8.0,29.0
-Comisión Ejecutiva Portuaria Autonóma,0.0,24.0,24.0
-Ministerio de Gobernación,1.0,22.0,23.0
-Ministerio de Obras Públicas,1.0,21.0,22.0
-Alcaldia Municipal de Santa Ana,5.0,14.0,19.0
-Ministerio de Justicia y Seguridad Pública,0.0,17.0,17.0
-Presidencia de la República,0.0,14.0,14.0
-Alcaldía de San Salvador,0.0,10.0,10.0
-Alcaldia Municipal de Ahuachapan,0.0,8.0,8.0
-Autoridad de Aviación Civil de El Salvador ,0.0,6.0,6.0
-Procuraduría para la Defensa de los Derechos Humanos,0.0,6.0,6.0
-Ministerio de Agricultura y Ganadería,0.0,5.0,5.0
-Ministerio de Relaciones Exteriores,1.0,4.0,5.0
-Alcaldía Municipal de San Miguel,0.0,5.0,5.0
-Alcaldía de Ilopango,0.0,3.0,3.0
+Ministerio de Hacienda,25.0,12.0,37.0
+Fiscalía General de la República ,13.0,12.0,25.0
+Ministerio de Salud,15.0,8.0,23.0
+Presidencia de la República,2.0,18.0,20.0
+Asamblea Legislativa,6.0,12.0,18.0
+Ministerio de Trabajo y Previsión Social,10.0,5.0,15.0
+Corte Suprema de Justicia,7.0,6.0,13.0
+Instituto de Acceso a la Información Pública,1.0,10.0,11.0
+Alcaldia Municipal de Santa Ana,5.0,6.0,11.0
+Alcaldía de San Salvador,2.0,8.0,10.0
+Ministerio de Relaciones Exteriores,4.0,3.0,7.0
+Ministerio de Gobernación,3.0,3.0,6.0
+Dirección General de Centros Penales ,0.0,5.0,5.0
+Ministerio de Economía,4.0,1.0,5.0
+Ministerio de Educación,3.0,2.0,5.0
+Ministerio de Justicia y Seguridad Pública,0.0,4.0,4.0
+Policía Nacional Civil,1.0,3.0,4.0
+Tribunal Supremo Electoral,0.0,4.0,4.0
+Procuraduría para la Defensa de los Derechos Humanos,1.0,2.0,3.0
+Alcaldía de Santa Tecla,0.0,3.0,3.0
+Alcaldía Municipal de San Miguel,0.0,3.0,3.0
+Alcaldia Municipal de Ahuachapan,0.0,3.0,3.0
+Banco Central de Reserva,2.0,1.0,3.0
+Ministerio de Obras Públicas,1.0,2.0,3.0
+Comisión Ejecutiva Portuaria Autonóma,0.0,3.0,3.0
 Corte de Cuentas de la República,0.0,3.0,3.0
-Alcaldia Municipal de Chalchuapa,2.0,0.0,2.0
-Banco Central de Reserva,1.0,1.0,2.0
-Asamblea Legislativa,0.0,2.0,2.0
-Policía Nacional Civil,0.0,2.0,2.0
-Alcaldia San Antonio del Monte,0.0,2.0,2.0
-Ministerio de Desarrollo local,0.0,1.0,1.0
-Ministerio de Economía,1.0,0.0,1.0
-Ministerio de Educación,1.0,0.0,1.0
-Centro Nacional de Registros,0.0,1.0,1.0
+Instituto Salvadoreño del Seguro Social,1.0,1.0,2.0
+Alcaldía de Antiguo Cuscatlán,0.0,2.0,2.0
+Lotería Nacional de Beneficencia ,0.0,2.0,2.0
+Banco de Desarrollo de El Salvador ,1.0,1.0,2.0
+Ministerio de Medio Ambiente y Recursos Naturales,1.0,0.0,1.0
+Ministerio de Agricultura y Ganadería,1.0,0.0,1.0
+Ministerio de Cultura,0.0,1.0,1.0
+Ministerio de Desarrollo local,1.0,0.0,1.0
+Ministerio de la Defensa Nacional,0.0,1.0,1.0
 Ministerio de Vivienda,1.0,0.0,1.0
+Alcadía de Zacatecoluca,0.0,1.0,1.0
+Consejo Nacional de la Niñez y Adolescencia,0.0,1.0,1.0
+Instituto Salvadoreño de Desarrollo Municipal ,0.0,1.0,1.0
+Alcaldía de Ilopango,0.0,1.0,1.0
+Alcaldia Municipal de Chalchuapa,1.0,0.0,1.0
+Alcaldia Municipal de La Unión,0.0,1.0,1.0
+Alcaldia San Antonio del Monte,0.0,1.0,1.0
+Alcaldía Municipal de Chalatenango,0.0,1.0,1.0
+Alcaldía Municipal de Cojutepeque,0.0,1.0,1.0
+Alcaldía Municipal de El Paisnal,0.0,1.0,1.0
+Alcaldía Municipal de San Francisco Gotera,0.0,1.0,1.0
+Alcaldía Municipal de Sensuntepeque,0.0,1.0,1.0
+Alcaldía Municipal de Usulután,0.0,1.0,1.0
+Alcaldía de Nejapa,0.0,1.0,1.0
+Instituto Nacional de los Deportes ,0.0,1.0,1.0
+Alcaldía de San Vicente,0.0,1.0,1.0
+Alcaldía de Sonsonate,0.0,1.0,1.0
+Alcaldía de Soyapango,0.0,1.0,1.0
+Autoridad de Aviación Civil de El Salvador ,0.0,1.0,1.0
+Centro Nacional de Registros,0.0,1.0,1.0
+Comisión Nacional de la Micro y Pequeña Empresa,0.0,1.0,1.0
+Consejo Nacional de la Administración de bienes,0.0,1.0,1.0
+Alcaldia Municipal de Aguilares,0.0,1.0,1.0
+Dirección General de Impuestos Internos,0.0,1.0,1.0
+Tribunal de Ética Gubernamental,0.0,1.0,1.0
