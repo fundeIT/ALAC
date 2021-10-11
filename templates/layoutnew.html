@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="Asesoría legal a peticionarios de infomación y denunciantes de corrupción">
+        <meta name="author" content="FUNDE/TI - El Salvador">
+        <meta name="keywords" content="acceso,información,denuncia,corrupción">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='third/skeleton/css/skeleton.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div id="menubar" class="row center menu uppercase">
+                    <img id="menuheader" src="/static/images/menu.svg">&nbsp&nbsp&nbsp
+                <span>
+                    <a href="/start">Inicio</a>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block about %}{% endblock%}">
+                    <a href="/faq">Sobre ALAC</a>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block dosiers %}{% endblock%}">
+                    <a href="/dosiers">Expedientes</a>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block blog %}{% endblock%}">
+                    <a href="/notes">Blog</a>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block search %}{% endblock%}">
+                    <a href="/search">Buscar</a>
+                </span>&nbsp&nbsp&nbsp
+                <span class="{% block api %}{% endblock%}">
+                    <a href="/api/v1">API</a>
+                </span>
+            </div>
+            {% if who['kind'] %}
+            <div class="row center menu uppercase">
+                    {% if who['kind'] in ['MNG', 'OPR'] %}
+                       <a href="/ticket/openned">Tickets</a> |
+                       <a href="/clients">Usuarios</a> |
+                    {% endif %}
+                    <a href="/requests">Peticiones</a> |
+                    <a href="/complains">Denuncias</a> |
+                    <a href="/offices">Oficinas</a>
+            </div>
+            {% endif %}
+            <div class="row">
+                <strong>{% block super %}{% endblock %}</strong>
+            </div>
+            {% block main %}{% endblock %}
+            <div class="row">
+                <hr/>
+                <small>
+                    <div class="four columns">
+                        <img class="u-full-width" src="/static/images/funde-ti.svg">
+                    </div>
+                   <div class="four columns">
+                       <br/>
+                        ALAC es un servicio de la 
+                        <a href="http://www.funde.org">
+                            Fundación Nacional para el Desarrollo
+                        </a>
+                        (FUNDE), capítulo de 
+                        <a href="http://transparency.org">
+                            Transparencia Internacional
+                        </a> en El Salvador
+                    </div>
+                    <div class="four columns">
+                        <br/>
+                        Telefónos: +503 2209-5324, +503 7987-1688 ||
+                        Correo electrónico: 
+                        <a href="mailto:alac@funde.org">
+                            alac@funde.org
+                        </a> ||
+                        Dirección: <a href="https://goo.gl/maps/vYB8vzGS4Q52"
+                            target="_blank">
+                                Calle Arturo Ambrogi No. 411, Col. Escalón.
+                                San Salvador, El Salvador, C.A.
+                        </a>
+                    </div>
+                </small>
+            </div>
+        </div>
+    </body>
+</html>

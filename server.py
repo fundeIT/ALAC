@@ -1633,8 +1633,6 @@ application = Application([
     (r"/govsearcher", govsearcher.GovSearcher),
     (r"/iaip", iaip.IAIP),
     (r"/iaip/(.+)", iaip.Res),
-    (r"/.well-known/acme-challenge/(.*)", StaticFileHandler, {'path': 'cert'}),
-#    (r"/stats/.*", FallbackHandler, dict(fallback=br)),
     (r".*", FallbackHandler, dict(fallback=tr)),
 ], debug=trust.debug)
 
