@@ -5,7 +5,7 @@
 # These functions are been implemented on Whoosh library, a Python search engine framework.
 # Searches are for requests and complains resources.
 #
-# (2018) Jaime Lopez <jailop AT gmail DOT com>
+# (2018-2021) Jaime Lopez <jailop AT protonmail DOT com>
 
 import unicodedata
 from whoosh.index import create_in, open_dir
@@ -74,6 +74,10 @@ def store_documents(resource, name):
     writer.commit()
 
 def indexer():
+    try:
+        ix = open_dir("index")
+    except:
+        create()
     store_documents(Requests(), "request")
     store_documents(Complains(), "complain")
     store_notes()
