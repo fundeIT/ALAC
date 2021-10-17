@@ -5,16 +5,20 @@
 # These functions are been implemented on Whoosh library, a Python search engine framework.
 # Searches are for requests and complains resources.
 #
-# (2018) Jaime Lopez <jailop AT gmail DOT com>
+# (2018-2021) Jaime Lopez <jailop AT protonmail DOT com>
 
+import os.path
 import unicodedata
+
+# This script uses the Whoosh search engine library
+# Documentation: https://whoosh.readthedocs.io/en/latest/
+
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 from whoosh.fields import *
-import os.path
 
 # Own libraries
-from models import *
+from models import *  # It is used to access the database
 
 def create():
     """
@@ -35,7 +39,13 @@ def indexer():
     counter = 0
     tickets = DB('tickets')
     threads = DB('threads')
-    ix = open_dir("index-ticket")
+    try:
+        ix = open_dir("index-ticket")
+    except:
+        # In case of error, that means the index
+        # has not been created
+        create()
+        ix = open_dir("index-ticket")
     writer = ix.writer()
     for el in tickets.list(limit=-1):
         counter += 1
