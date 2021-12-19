@@ -12,7 +12,13 @@ def suggested_dates():
     return DATE_START, last_month.strftime('%Y-%m-%d')
     
 def prepare_datasets(starting_date, ending_date):
-    ret = sp.run(['python', 'makereports.py', starting_date, ending_date], capture_output=True, cwd='monitoring')
-    ret = sp.run(['zip', '-r', 'monitoring.zip', 'data/', 'images/'], capture_output=True, cwd='monitoring')
+    ret = sp.run([
+        'python', 
+        'makereports.py', 
+        starting_date, 
+        ending_date
+    ], capture_output=True, cwd='monitoring')
+    ret = sp.run(['zip', '-r', 'monitoring.zip', 'data/', 'images/'],
+        capture_output=True, cwd='monitoring')
     
     
