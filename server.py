@@ -914,7 +914,7 @@ def docDownload(_id):
     return send_file(
         d['path'], 
         as_attachment=True, 
-        attachment_filename=d['name']
+        download_name=d['name']
     )
 
 @app.route('/docrels/new/', methods=['POST'])

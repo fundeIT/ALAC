@@ -55,24 +55,24 @@ class DB:
     derivated from this base class."""
     def __init__(self, collection):
         client = pymongo.MongoClient()
-        db = client[trust.db_name]
-        self.collection = db[collection]
+        self.db = client[trust.db_name]
+        self.collection = collection
     def new(self, doc):
-        _id = str(self.collection.insert_one(doc).inserted_id)
+        _id = str(self.db[self.collection].insert_one(doc).inserted_id)
         return _id
     def count(self, sel={}):
-        return self.collection.count(sel)
+        return self.db[self.collection].count(sel)
     def list(self, skip=0, limit=25, filt=None, order=1):
         if limit <= 0:
-            return self.collection.find(filt).sort([('_id', order)])
+            return self.db[self.collection].find(filt).sort([('_id', order)])
         else:
-            return self.collection.find(filt).sort([('_id', order)]).skip(skip).limit(limit)
+            return self.db[self.collection].find(filt).sort([('_id', order)]).skip(skip).limit(limit)
     def raw(self):
-        return self.collection.find().sort([('_id', 1)])
+        return self.db[self.collection].find().sort([('_id', 1)])
     def get(self, _id):
-        return self.collection.find_one({'_id': ObjectId(_id)})
+        return self.db[self.collection].find_one({'_id': ObjectId(_id)})
     def update(self, _id, doc):
-        self.collection.update({'_id': ObjectId(_id)}, {'$set': doc})
+        self.db[self.collection].update_many({'_id': ObjectId(_id)}, {'$set': doc})
 
 # Clases para la consulta y actualización de la base de datos
 
