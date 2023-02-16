@@ -28,5 +28,5 @@ six==1.16.0
 tenacity==8.1.0
 tornado==6.2
 urllib3==1.26.12
-Werkzeug==2.2.2
+Werkzeug==2.2.3
 Whoosh==2.7.4
